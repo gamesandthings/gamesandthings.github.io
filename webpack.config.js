@@ -18,5 +18,5 @@ module.exports = {
     filename: 'launcher.js',
     path: path.resolve(__dirname, ''),
   },
-  mode: "development"
+  //mode: "development"
 };
