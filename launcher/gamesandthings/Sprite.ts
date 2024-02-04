@@ -20,7 +20,7 @@ export default class Sprite extends Rectangle implements IDrawable {
     }
     draw(): void {
         if (this.graphic != null) {
-            let img: HTMLImageElement = (this.graphic.img as HTMLImageElement)
+            let img: HTMLImageElement = (this.graphic.img as HTMLImageElement);
             Launcher.ctx.drawImage(img, this.x, this.y, this.width, this.height);
         }
     }
@@ -63,9 +63,11 @@ export default class Sprite extends Rectangle implements IDrawable {
 
     }
     update(elapsed: number): void {
-        let img: HTMLImageElement = (this.graphic.img as HTMLImageElement)
-        this.width = img.width * this.scale.x;
-        this.height = img.height * this.scale.y;
+        if (this.graphic != null) {
+            let img: HTMLImageElement = (this.graphic.img as HTMLImageElement);
+            this.width = img.width * this.scale.x;
+            this.height = img.height * this.scale.y;
+        }
     }
     destroy(): void {
         this.graphic.destroy();
