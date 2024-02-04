@@ -1,5 +1,6 @@
-export default interface IObject {
-    create():void;
-    update(elapsed:number):void;
-    destroy():void;
+import IDestroyable from "./IDestroyable";
+export default interface IObject extends IDestroyable {
+    create(): void;
+    update(elapsed: number): void;
+    destroy(): void;
 }
