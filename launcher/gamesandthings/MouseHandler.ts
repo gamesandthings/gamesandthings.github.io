@@ -1,3 +1,4 @@
+import Launcher from "../Launcher";
 import { MouseButtons } from "./enums/MouseButtons";
 export default class MouseHandler {
     public x: number = 0;
@@ -22,13 +23,15 @@ export default class MouseHandler {
         });
     }
     onMouseDown(ev: MouseEvent) {
-        this.mouseMap.set(ev.button, true);
+        
+            this.mouseMap.set(ev.button, true);
+            this.getPosFromEvent(ev);
+        
+    }
+    onMouseEnter(ev: MouseEvent) {
         this.getPosFromEvent(ev);
     }
-    onMouseEnter(ev: MouseEvent) { 
-        this.getPosFromEvent(ev);
-    }
-    onMouseLeave(ev: MouseEvent) { 
+    onMouseLeave(ev: MouseEvent) {
         this.getPosFromEvent(ev);
     }
     onMouseMove(ev: MouseEvent) {
@@ -46,7 +49,7 @@ export default class MouseHandler {
         this.getPosFromEvent(ev);
     }
     onContextMenu(ev: MouseEvent) {
-        ev.preventDefault();
+        //ev.preventDefault();
         this.getPosFromEvent(ev);
     }
     isMBDown(button: MouseButtons): boolean {
@@ -71,7 +74,7 @@ export default class MouseHandler {
         this.deltaX = ev.movementX;
         this.deltaY = ev.movementY;
     }
-    resetDeltas(){
+    resetDeltas() {
         this.deltaX = 0;
         this.deltaY = 0;
         this.justPressedMap.clear();

@@ -29,7 +29,7 @@ export default class ArrowSprite extends Sprite {
         if (this.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             this.setGraphicSize(0, Launcher.cnv.offsetHeight * 0.12);
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)){
-                alert("hi");
+                Launcher.openURL("https://gamesandthings.github.io/mc/1.8");
             }
         }
         else {
