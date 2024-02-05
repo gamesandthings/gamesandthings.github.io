@@ -16,7 +16,7 @@ export default class Launcher {
         this.mouse.init();
         Launcher.cnv = (document.getElementById("cnv") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
-        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: true }) as CanvasRenderingContext2D);
+        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: false }) as CanvasRenderingContext2D);
         Launcher.state = state;
         Launcher.state.create();
         Launcher.update(0);
@@ -25,6 +25,7 @@ export default class Launcher {
     static delta: number = 0;
 
     static update(timestep: number) {
+        Launcher.ctx.reset();
         Launcher.cnv.style.width = "100%";
         Launcher.cnv.style.height = "100%";
         Launcher.cnv.setAttribute("width", Launcher.cnv.offsetWidth + "");

@@ -5,6 +5,7 @@ export default class MouseHandler {
     public deltaX: number = 0;
     public deltaY: number = 0;
     private mouseMap: Map<MouseButtons, boolean> = new Map();
+    private justPressedMap: Map<MouseButtons, boolean> = new Map();
 
 
     init(): void {
@@ -41,6 +42,7 @@ export default class MouseHandler {
     }
     onMouseUp(ev: MouseEvent) {
         this.mouseMap.set(ev.button, false);
+        this.justPressedMap.set(ev.button, true);
         this.getPosFromEvent(ev);
     }
     onContextMenu(ev: MouseEvent) {
@@ -52,7 +54,15 @@ export default class MouseHandler {
             return false;
         }
         else {
-            return !!(this.mouseMap.get(button));
+            return (this.mouseMap.get(button) as boolean);
+        }
+    }
+    justPressed(button: MouseButtons): boolean {
+        if (!this.justPressedMap.has(button)) {
+            return false;
+        }
+        else {
+            return (this.justPressedMap.get(button) as boolean);
         }
     }
     getPosFromEvent(ev: MouseEvent) {
@@ -64,5 +74,6 @@ export default class MouseHandler {
     resetDeltas(){
         this.deltaX = 0;
         this.deltaY = 0;
+        this.justPressedMap.clear();
     }
 }

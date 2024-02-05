@@ -11,8 +11,11 @@ export default class Sprite extends Rectangle implements IDrawable {
     public y: number = 0;
     public width: number = 0;
     public height: number = 0;
+    public angle: number = 0;
+    public alpha: number = 1;
     public scale: Vector2 = new Vector2(1, 1);
     public graphic!: Graphic;
+    public flipX: Boolean = false;
     constructor(x: number = 0, y: number = 0) {
         super();
         this.x = x;
@@ -21,7 +24,23 @@ export default class Sprite extends Rectangle implements IDrawable {
     draw(): void {
         if (this.graphic != null) {
             let img: HTMLImageElement = (this.graphic.img as HTMLImageElement);
-            Launcher.ctx.drawImage(img, this.x, this.y, this.width, this.height);
+            Launcher.ctx.globalAlpha = this.alpha;
+            Launcher.ctx.save();
+            if (this.flipX) {
+                Launcher.ctx.translate(this.x + this.width / 2, this.y + this.width / 2);
+                Launcher.ctx.scale(-1, 1);
+                Launcher.ctx.translate(-(this.x + this.width / 2), -(this.y + this.width / 2));
+            }
+            Launcher.ctx.translate(this.x + (this.width / 2), this.y + (this.height / 2));
+            if (!this.flipX) {
+                Launcher.ctx.rotate(this.angle * Math.PI / 180);
+            } 
+            else {
+                Launcher.ctx.rotate(-(this.angle) * Math.PI / 180);
+            }
+            Launcher.ctx.drawImage(img, -this.width / 2, -this.height / 2, this.width, this.height);
+            Launcher.ctx.restore();
+            Launcher.ctx.globalAlpha = 1;
         }
     }
     loadGraphic(path: string) {
