@@ -13,12 +13,11 @@ export default class Launcher {
 
     public static cnv: HTMLCanvasElement;
     public static ctx: CanvasRenderingContext2D;
-    public static backButton: HTMLButtonElement;
+    public static drawer: HTMLDivElement;
     public static iframe: HTMLIFrameElement;
     public static iframeMode: boolean = false;
     static init(state: State) {
 
-        document.writeln('<button id="quit">Quit</button>');
         document.writeln('<iframe frameborder="0" allowfullscreen="true" id="gamewin"></iframe>');
         document.writeln('<canvas id="cnv"></canvas>');
         document.body.style.margin = "0px";
@@ -26,13 +25,24 @@ export default class Launcher {
         Launcher.mouse.init();
         Launcher.keyboard = new KeyboardHandler();
         Launcher.keyboard.init();
-        Launcher.backButton = (document.getElementById("quit") as HTMLButtonElement);
-        Launcher.backButton.addEventListener("click", (ev: MouseEvent) => {
-
-            window.focus();
-            Launcher.closeIframe();
-
+        Launcher.drawer = (document.getElementById("slidymenu") as HTMLDivElement);
+        Launcher.drawer.style.left = "-150px";
+        Launcher.drawer.addEventListener("mouseover", (ev: MouseEvent) => {
+            Launcher.drawer.style.opacity = "1";
+            Launcher.drawer.style.left = "0px";
+            // window.focus();
+            // Launcher.closeIframe();
             //Launcher.iframeMode=!Launcher.iframeMode;
+        });
+        Launcher.drawer.addEventListener("contextmenu", (ev: MouseEvent) => {
+            ev.preventDefault();
+        });
+        Launcher.drawer.addEventListener("mouseout", (ev: MouseEvent) => {
+            Launcher.drawer.style.left = "-150";
+            Launcher.drawer.style.opacity = "0.25";
+        });
+        Launcher.drawer.addEventListener("mousedown", (ev: MouseEvent) => {
+            Launcher.drawer.style.opacity = "1";
         });
         Launcher.cnv = (document.getElementById("cnv") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
@@ -66,12 +76,10 @@ export default class Launcher {
             Launcher.iframe.contentWindow?.focus();
             Launcher.cnv.style.display = "none";
             Launcher.iframe.style.display = "flex";
-            Launcher.backButton.style.display = "block";
         }
         else {
             Launcher.cnv.style.display = "flex";
             Launcher.iframe.style.display = "none";
-            Launcher.backButton.style.display = "none";
         }
         Launcher.ctx.reset();
         Launcher.iframe.style.width = "100%";
