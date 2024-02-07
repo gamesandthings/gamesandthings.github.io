@@ -85,7 +85,7 @@ export default class Launcher {
         }
         else {
             Launcher.cnv.style.display = "flex";
-            Launcher.cnv.style.top = "-" + String(Launcher.cnv.offsetHeight) + "px";
+            Launcher.cnv.style.top = "-" + String(Launcher.iframe.offsetHeight) + "px";
             Launcher.iframe.style.display = "flex";
             Launcher.iframe.style.opacity = "0";
             Launcher.iframe.style.top = "0px";
