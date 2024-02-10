@@ -66,11 +66,11 @@ export default class ContextMenuHandler implements IPositionable {
         if (opt.font != null) {
             text = UniFont.make(text, opt.font);
         }
-        
+
         this.ctxItemMap.set(text, opt.onselect);
         let optElem: HTMLOptionElement = (document.createElement("option") as HTMLOptionElement);
         optElem.value = text;
-        if (opt.desc != null && opt.desc != ""){
+        if (opt.desc != null && opt.desc != "") {
             if (opt.descFont != null) {
                 opt.desc = UniFont.make(opt.desc, opt.descFont);
             }
@@ -96,7 +96,7 @@ export default class ContextMenuHandler implements IPositionable {
         this.ctxItemMap.clear();
     }
     contextOptions: Array<ContextOption> = [];
-    show(options: Array<ContextOption>) {
+    show(options: Array<ContextOption>, x?: number, y?: number) {
         if (!Launcher.mouse.hasClickedAtLeastOnce) return;
         this.contextOptions = options;
 
@@ -105,10 +105,14 @@ export default class ContextMenuHandler implements IPositionable {
             this.add(opt);
         });
         this.add({ text: "Close", font: UniFont.BOLD });
-        this.x = Launcher.mouse.x;
-        this.y = Launcher.mouse.y;
-        this.contextMenuInput.style.left = this.x - 20 + "px";
-        this.contextMenuInput.style.top = this.y - 50 + "px";
+        if (x == null) {
+           x = Launcher.mouse.x;
+        }
+        if (y == null) {
+            y = Launcher.mouse.y;
+        }
+        this.contextMenuInput.style.left = x - 20 + "px";
+        this.contextMenuInput.style.top = y - 50 + "px";
         this.contextMenuInput.showPicker();
         // go away so it doesnt interfere with user input
         this.contextMenuInput.style.top = "-999px";

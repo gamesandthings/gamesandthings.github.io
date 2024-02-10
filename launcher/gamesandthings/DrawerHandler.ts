@@ -26,6 +26,9 @@ export default class DrawerHandler implements IPositionable {
         this.buttonsPressed.set(button.id, false);
         this.buttons.push(button);
         button.addEventListener("click", (ev) => {
+            this.clickX = ev.clientX;
+            this.clickY = ev.clientY;
+
             if (this.isOut) {
                 this.buttonsPressed.set(button.id, true);
             }
@@ -47,6 +50,9 @@ export default class DrawerHandler implements IPositionable {
         });
     }
     create(): void { }
+    clickX: number = 0;
+    clickY: number = 0;
+
     mouseOverCheck(): void {
         if (Launcher.iframeMode) {
             this.mouseOver = false;
@@ -74,6 +80,48 @@ export default class DrawerHandler implements IPositionable {
         vector.x = srcWidth * ratio;
         vector.y = srcHeight * ratio;
         return vector;
+    }
+    fixedResolutionContext() {
+        Launcher.contextMenu.show([
+            {
+                text: "1080p", onselect: () => {
+                    this.screenmode = "1920x1080";
+                },
+            },
+            {
+                text: "720p", onselect: () => {
+                    this.screenmode = "1280x720";
+                },
+            },
+            {
+                text: "480p", onselect: () => {
+                    this.screenmode = "854x480";
+                },
+            },
+            {
+                text: "360p", onselect: () => {
+                    this.screenmode = "640x360";
+                },
+            },
+            {
+                text: "240p", onselect: () => {
+                    this.screenmode = "426x240";
+                },
+            },
+            {
+                text: "144p", onselect: () => {
+                    this.screenmode = "256×144";
+                },
+            },
+            {
+                text: "Custom", onselect: () => {
+                    let prompt: string | null = window.prompt("Enter Resolution:\n(example 1920x1080)");
+                    if (prompt == null) return;
+                    this.screenmode = (prompt as string);
+                },
+                hasSecondary: true
+            }
+        ], this.clickX, this.clickY);
     }
     screenmode: string = "window";
     updateScreenMode() {
@@ -195,7 +243,7 @@ export default class DrawerHandler implements IPositionable {
                     if (Launcher.iframeMode) {
                         Launcher.contextMenu.show([
                             {
-                                text: "Aspect Ratio",
+                                text: "Screen Size ",
                                 onselect: () => {
                                     Launcher.contextMenu.show([
                                         {
@@ -223,17 +271,16 @@ export default class DrawerHandler implements IPositionable {
                                             }
                                         },
                                         {
-                                            text: "Custom Resolution",
+                                            text: "Fixed Resolution",
                                             onselect: () => {
-                                                let prompt: string | null = window.prompt("Enter Resolution:\n(example 1920x1080)");
-                                                if (prompt == null) return;
-                                                this.screenmode = (prompt as string);
-                                            }
+                                                this.fixedResolutionContext();
+                                            },
+                                            hasSecondary: true
                                         },
                                     ]);
                                 },
                                 hasSecondary: true,
-                            }]);
+                            }], this.clickX, this.clickY);
 
                     }
                 }
@@ -249,27 +296,21 @@ export default class DrawerHandler implements IPositionable {
                     if (Launcher.iframeMode) {
                         Launcher.contextMenu.show([{
                             text: "Refresh Games and Stuff", onselect: () => { window.location.reload(); }
-                        }]);
+                        }], this.clickX, this.clickY);
                     }
                 }
                 else if (id == "peekarrow") {
                     if (this.isOut && Launcher.iframeMode) {
                         Launcher.contextMenu.show([{
                             text: "Force Quit Game",
-                            desc: "⚠ Unsaved data will be lost.", 
+                            desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
                                 Launcher.iframeDiv.removeChild(Launcher.iframe);
-                                Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
-                                Launcher.iframeDiv.appendChild(Launcher.iframe);
-                                Launcher.iframe.id = "gamewin";
-                                Launcher.iframe.setAttribute('frameborder', "0");
-                                Launcher.iframe.setAttribute('allowfullscreen', "true");
-                                Launcher.iframe.style.width = "100%";
-                                Launcher.iframe.style.height = "100%";
+                                Launcher.initIframe();
                                 Launcher.closeIframe();
                             }
-                        }]);
+                        }], this.clickX, this.clickY);
                     }
                 }
             }

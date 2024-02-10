@@ -33,15 +33,7 @@ export default class Launcher {
         Launcher.iframeDiv = document.createElement("div");
         document.body.appendChild(Launcher.iframeDiv);
         Launcher.iframeDiv.id = "iframeDiv";
-
-        Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
-        Launcher.iframeDiv.appendChild(Launcher.iframe);
-        Launcher.iframe.id = "gamewin";
-        Launcher.iframe.setAttribute('frameborder', "0");
-        Launcher.iframe.setAttribute('allowfullscreen', "true");
-        Launcher.iframe.style.width = "100%";
-        Launcher.iframe.style.height = "100%";
-
+        Launcher.initIframe();
         // ContextMenu
         Launcher.contextMenu = new ContextMenuHandler();
         // Init Input and other Handlers
@@ -62,12 +54,25 @@ export default class Launcher {
         Launcher.state.create();
         Launcher.update(0);
     }
+    public static initIframe(): void {
+        Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
+        Launcher.iframeDiv.appendChild(Launcher.iframe);
+        Launcher.iframe.id = "gamewin";
+        Launcher.iframe.setAttribute('frameborder', "0");
+        Launcher.iframe.setAttribute('allowfullscreen', "true");
+        Launcher.iframe.style.width = "100%";
+        Launcher.iframe.style.height = "100%";
+    }
     static lastTimestep: number = 0;
     static lastShiftTabTimeStep: number = 0;
-
     static delta: number = 0;
+    public static lastURL: string = "";
+    public static refreshGame() {
+        Launcher.iframe.src = Launcher.lastURL + '';
+    }
     public static openURL(url: string) {
         Launcher.openIframeWindow();
+        Launcher.lastURL = url;
         Launcher.iframe.src = url;
     }
     public static openIframeWindow() {
@@ -107,6 +112,7 @@ export default class Launcher {
             }
         }
         else {
+            Launcher.fullscreenByOS = false;
             Launcher.fullscreen = false;
         }
         Launcher.cnv.style.zIndex = "2";
