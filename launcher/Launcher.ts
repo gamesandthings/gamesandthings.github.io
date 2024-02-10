@@ -21,18 +21,19 @@ export default class Launcher {
     public static contextMenu: ContextMenuHandler;
     public static iframeMode: boolean = false;
     public static fullscreen: boolean = false;
+    public static fullscreenByOS: boolean = false;
     static init(state: State) {
         // canvas and iframe
-        window.addEventListener("error",(ev:ErrorEvent)=>{
-            alert("Error!\n"+ev.message);
+        window.addEventListener("error", (ev: ErrorEvent) => {
+            alert("Error!\n" + ev.message);
         })
-      
+
 
         Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
         document.body.appendChild(Launcher.iframe);
         Launcher.iframe.id = "gamewin";
-        Launcher.iframe.setAttribute('frameborder',"0");
-        Launcher.iframe.setAttribute('allowfullscreen',"true");
+        Launcher.iframe.setAttribute('frameborder', "0");
+        Launcher.iframe.setAttribute('allowfullscreen', "true");
         Launcher.iframe.style.width = "100%";
         Launcher.iframe.style.height = "100%";
 
@@ -81,13 +82,28 @@ export default class Launcher {
                 elem.requestFullscreen().catch((err) => {
                     Launcher.fullscreen = false;
                 });
+                eval("window.navigator.keyboard.lock()");
             } else {
                 Launcher.fullscreen = false;
+                eval("window.navigator.keyboard.unlock()");
                 document.exitFullscreen();
             }
         }
     }
     static update(timestep: number) {
+        if (document.body.offsetWidth == window.screen.availWidth &&
+            document.body.offsetHeight == window.screen.availHeight) {
+            Launcher.fullscreen = true;
+            if (document.fullscreenElement == null) {
+                Launcher.fullscreenByOS = true;
+            }
+            else {
+                Launcher.fullscreenByOS = false;
+            }
+        }
+        else {
+            Launcher.fullscreen = false;
+        }
         Launcher.cnv.style.zIndex = "2";
         Launcher.iframe.style.zIndex = "1";
         Launcher.cnv.style.position = "relative";

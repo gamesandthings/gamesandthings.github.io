@@ -114,8 +114,15 @@ export default class DrawerHandler implements IPositionable {
             }
             if (button.id == "fullscreen") {
                 button.setAttribute("title", "Makes games and things fullscreen.");
+                if (Launcher.fullscreenByOS){
+                    button.setAttribute("title", "Cannot exit fullscreen as fullscreen was toggled\nby your os or browser.");
+
+                }
+                button.setAttribute("disabled", String(Launcher.fullscreenByOS));
+
+
                 let symbol: string = "fullscreen";
-                if (Launcher.fullscreen) {
+                if (Launcher.fullscreen && !(Launcher.fullscreenByOS)) {
                     symbol = "fullscreen_exit";
                 }
                 if (button.innerText != symbol) {
@@ -169,7 +176,9 @@ export default class DrawerHandler implements IPositionable {
                     }
                 }
                 else if (id == "fullscreen") {
-                    Launcher.toggleFullscreen();
+                    if (!Launcher.fullscreenByOS) {
+                        Launcher.toggleFullscreen();
+                    }
                 }
                 else if (id == "refresh") {
                     Launcher.iframe.src += '';
@@ -186,45 +195,45 @@ export default class DrawerHandler implements IPositionable {
                     if (Launcher.iframeMode) {
                         Launcher.contextMenu.show([
                             {
-                            text: "Aspect Ratio",
-                            onselect: () => {
-                                Launcher.contextMenu.show([
-                                    {
-                                        text: "4:3",
-                                        onselect: () => {
-                                            this.screenmode = "4:3";
-                                        }
-                                    },
-                                    {
-                                        text: "16:9",
-                                        onselect: () => {
-                                            this.screenmode = "16:9";
-                                        }
-                                    },
-                                    {
-                                        text: "16:10",
-                                        onselect: () => {
-                                            this.screenmode = "16:10";
-                                        }
-                                    },
-                                    {
-                                        text: "Default",
-                                        onselect: () => {
-                                            this.screenmode = "window";
-                                        }
-                                    },
-                                    {
-                                        text: "Custom Resolution",
-                                        onselect: () => {
-                                            let prompt: string | null = window.prompt("Enter Resolution:\n(example 1920x1080)");
-                                            if (prompt == null) return;
-                                            this.screenmode = (prompt as string);
-                                        }
-                                    },
-                                ]);
-                            },
-                            hasSecondary: true,
-                        }]);
+                                text: "Aspect Ratio",
+                                onselect: () => {
+                                    Launcher.contextMenu.show([
+                                        {
+                                            text: "4:3",
+                                            onselect: () => {
+                                                this.screenmode = "4:3";
+                                            }
+                                        },
+                                        {
+                                            text: "16:9",
+                                            onselect: () => {
+                                                this.screenmode = "16:9";
+                                            }
+                                        },
+                                        {
+                                            text: "16:10",
+                                            onselect: () => {
+                                                this.screenmode = "16:10";
+                                            }
+                                        },
+                                        {
+                                            text: "Default",
+                                            onselect: () => {
+                                                this.screenmode = "window";
+                                            }
+                                        },
+                                        {
+                                            text: "Custom Resolution",
+                                            onselect: () => {
+                                                let prompt: string | null = window.prompt("Enter Resolution:\n(example 1920x1080)");
+                                                if (prompt == null) return;
+                                                this.screenmode = (prompt as string);
+                                            }
+                                        },
+                                    ]);
+                                },
+                                hasSecondary: true,
+                            }]);
 
                     }
                 }
