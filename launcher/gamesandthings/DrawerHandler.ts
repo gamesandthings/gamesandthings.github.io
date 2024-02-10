@@ -114,7 +114,7 @@ export default class DrawerHandler implements IPositionable {
             }
             if (button.id == "fullscreen") {
                 button.setAttribute("title", "Makes games and things fullscreen.");
-                if (Launcher.fullscreenByOS){
+                if (Launcher.fullscreenByOS) {
                     button.setAttribute("title", "Cannot exit fullscreen as fullscreen was toggled\nby your os or browser.");
 
                 }
@@ -255,7 +255,20 @@ export default class DrawerHandler implements IPositionable {
                 else if (id == "peekarrow") {
                     if (this.isOut && Launcher.iframeMode) {
                         Launcher.contextMenu.show([{
-                            text: "Force Quit Game", onselect: () => { Launcher.iframe.src = "about:blank"; }
+                            text: "Force Quit Game",
+                            desc: "⚠ Unsaved data will be lost.", 
+                            descFont: UniFont.ITALIC,
+                            onselect: () => {
+                                Launcher.iframeDiv.removeChild(Launcher.iframe);
+                                Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
+                                Launcher.iframeDiv.appendChild(Launcher.iframe);
+                                Launcher.iframe.id = "gamewin";
+                                Launcher.iframe.setAttribute('frameborder', "0");
+                                Launcher.iframe.setAttribute('allowfullscreen', "true");
+                                Launcher.iframe.style.width = "100%";
+                                Launcher.iframe.style.height = "100%";
+                                Launcher.closeIframe();
+                            }
                         }]);
                     }
                 }

@@ -18,6 +18,8 @@ export default class Launcher {
     public static ctx: CanvasRenderingContext2D;
     public static drawer: DrawerHandler;
     public static iframe: HTMLIFrameElement;
+    public static iframeDiv: HTMLDivElement;
+
     public static contextMenu: ContextMenuHandler;
     public static iframeMode: boolean = false;
     public static fullscreen: boolean = false;
@@ -28,9 +30,12 @@ export default class Launcher {
             alert("Error!\n" + ev.message);
         })
 
+        Launcher.iframeDiv = document.createElement("div");
+        document.body.appendChild(Launcher.iframeDiv);
+        Launcher.iframeDiv.id = "iframeDiv";
 
         Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
-        document.body.appendChild(Launcher.iframe);
+        Launcher.iframeDiv.appendChild(Launcher.iframe);
         Launcher.iframe.id = "gamewin";
         Launcher.iframe.setAttribute('frameborder', "0");
         Launcher.iframe.setAttribute('allowfullscreen', "true");

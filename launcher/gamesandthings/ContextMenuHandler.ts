@@ -4,10 +4,13 @@ import { Font } from "./UniFont";
 import IPositionable from "./interfaces/IPositionable";
 type ContextOption = {
     text: string,
+    desc?: string,
     onselect?: () => void,
     title?: boolean,
     hasSecondary?: boolean,
-    font?: Font;
+    font?: Font,
+    descFont?: Font,
+
 }
 export default class ContextMenuHandler implements IPositionable {
     x: number = 0;
@@ -67,6 +70,13 @@ export default class ContextMenuHandler implements IPositionable {
         this.ctxItemMap.set(text, opt.onselect);
         let optElem: HTMLOptionElement = (document.createElement("option") as HTMLOptionElement);
         optElem.value = text;
+        if (opt.desc != null && opt.desc != ""){
+            if (opt.descFont != null) {
+                opt.desc = UniFont.make(opt.desc, opt.descFont);
+            }
+            optElem.innerHTML = opt.desc;
+        }
+
         this.ctxMenuItems.appendChild(optElem);
     }
     create(): void { }
@@ -79,7 +89,7 @@ export default class ContextMenuHandler implements IPositionable {
         }
         catch { }
         this.ctxMenuItems = (document.createElement("datalist") as HTMLDataListElement);
-        this.ctxMenuItems.id = Math.random().toString(36).substring(0, 5);
+        this.ctxMenuItems.id = Math.random().toString(36).substring(2, 5);
         this.contextMenuInput.setAttribute("list", this.ctxMenuItems.id);
 
         document.body.appendChild(this.ctxMenuItems);

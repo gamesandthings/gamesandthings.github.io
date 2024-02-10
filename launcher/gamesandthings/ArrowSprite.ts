@@ -33,31 +33,31 @@ export default class ArrowSprite extends Sprite {
                     {
                         text: "Minecraft 1.8",
                         onselect: () => {
-                            Launcher.openURL("https://gamesandthings.github.io/mc/1.8");
+                            Launcher.openURL("mc/1.8");
                         }
                     },
                     {
                         text: "Minecraft 1.5",
                         onselect: () => {
-                            Launcher.openURL("https://gamesandthings.github.io/mc/1.5");
+                            Launcher.openURL("mc/1.5");
                         }
                     },
                     {
                         text: "Minecraft 1.3_01",
                         onselect: () => {
-                            Launcher.openURL("https://gamesandthings.github.io/mc/1.3");
+                            Launcher.openURL("mc/1.3");
                         }
                     },
                     {
                         text: "Minecraft Indev",
                         onselect: () => {
-                            Launcher.openURL("https://gamesandthings.github.io/mc/indev");
+                            Launcher.openURL("mc/indev");
                         }
                     },
                     {
                         text: "Minecraft Classic",
                         onselect: () => {
-                            Launcher.openURL("https://gamesandthings.github.io/mc/classic");
+                            Launcher.openURL("mc/classic");
                         }
                     },
                     {
