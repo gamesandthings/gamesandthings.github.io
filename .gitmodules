@@ -1,0 +1,3 @@
+[submodule "mc"]
+	path = mc
+	url = https://github.com/gamesandthings/mc.git
