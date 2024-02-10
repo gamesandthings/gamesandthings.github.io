@@ -63,6 +63,7 @@ export default class ContextMenuHandler implements IPositionable {
         if (opt.font != null) {
             text = UniFont.make(text, opt.font);
         }
+        
         this.ctxItemMap.set(text, opt.onselect);
         let optElem: HTMLOptionElement = (document.createElement("option") as HTMLOptionElement);
         optElem.value = text;

@@ -44,6 +44,7 @@ export default class Launcher {
         Launcher.iframe.setAttribute('allowfullscreen',"true");
         Launcher.iframe.style.width = "100%";
         Launcher.iframe.style.height = "100%";
+        document.body.appendChild(Launcher.iframe);
 
         Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
