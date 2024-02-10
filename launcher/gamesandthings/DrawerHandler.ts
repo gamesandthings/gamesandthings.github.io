@@ -186,11 +186,6 @@ export default class DrawerHandler implements IPositionable {
                     if (Launcher.iframeMode) {
                         Launcher.contextMenu.show([
                             {
-                                text: "Settings ⸻",
-                                title: true,
-                                font: UniFont.SMALL_CAPS
-                            }
-                            ,{
                             text: "Aspect Ratio",
                             onselect: () => {
                                 Launcher.contextMenu.show([
