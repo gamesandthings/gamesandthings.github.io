@@ -1,9 +1,12 @@
 import Launcher from "../Launcher";
+import UniFont from "./UniFont";
 import { MouseButtons } from "./enums/MouseButtons"
 import IPositionable from "./interfaces/IPositionable";
 import Vector2 from "./types/Vector2";
 export default class DrawerHandler implements IPositionable {
     buttonsPressed: Map<string, boolean> = new Map<string, boolean>();
+    buttonsContextMenu: Map<string, boolean> = new Map<string, boolean>();
+    hasClickedAtLeastOnce:boolean = false;
     buttonsMouseOver: Map<string, boolean> = new Map<string, boolean>();
     buttons: Array<HTMLElement> = [];
     mouseOver: Boolean = true;
@@ -39,10 +42,12 @@ export default class DrawerHandler implements IPositionable {
         button.addEventListener("mouseout", (ev) => {
             this.buttonsMouseOver.set(button.id, false);
         });
+        button.addEventListener("contextmenu", (ev) => {
+            this.buttonsContextMenu.set(button.id, true);
+            ev.preventDefault();
+        });
     }
-    create(): void {
-
-    }
+    create(): void { }
     mouseOverCheck(): void {
         if (Launcher.iframeMode) {
             this.mouseOver = false;
@@ -150,7 +155,7 @@ export default class DrawerHandler implements IPositionable {
         }
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
-                console.log(id);
+                this.hasClickedAtLeastOnce = true;
                 this.buttonsPressed.set(id, false);
                 let button: HTMLElement = (document.getElementById(id) as HTMLElement);
                 // for some reason switch case didnt work here for me wtf
@@ -181,19 +186,82 @@ export default class DrawerHandler implements IPositionable {
                 }
                 else if (id == "settings") {
                     if (Launcher.iframeMode) {
-                        let prompt: string | null = window.prompt("Enter dimensions for game.\n(4:3,16:9,window,<w>x<h>)");
-                        if (prompt == null) return;
-                        this.screenmode = (prompt as string);
+                        Launcher.contextMenu.show([
+                            {
+                                text: "Settings ⸻",
+                                title: true,
+                                font: UniFont.SMALL_CAPS
+                            }
+                            ,{
+                            text: "Aspect Ratio",
+                            onselect: () => {
+                                Launcher.contextMenu.show([
+                                    {
+                                        text: "4:3",
+                                        onselect: () => {
+                                            this.screenmode = "4:3";
+                                        }
+                                    },
+                                    {
+                                        text: "16:9",
+                                        onselect: () => {
+                                            this.screenmode = "16:9";
+                                        }
+                                    },
+                                    {
+                                        text: "16:10",
+                                        onselect: () => {
+                                            this.screenmode = "16:10";
+                                        }
+                                    },
+                                    {
+                                        text: "Default",
+                                        onselect: () => {
+                                            this.screenmode = "window";
+                                        }
+                                    },
+                                    {
+                                        text: "Custom Resolution",
+                                        onselect: () => {
+                                            let prompt: string | null = window.prompt("Enter Resolution:\n(example 1920x1080)");
+                                            if (prompt == null) return;
+                                            this.screenmode = (prompt as string);
+                                        }
+                                    },
+                                ]);
+                            },
+                            hasSecondary: true,
+                        }]);
+
                     }
                 }
                 else if (button.id == "forum") {
                     window.open("https://discord.com/invite/up7VmmCPhn");
                 }
             }
-            this.elem.style.opacity = String(this.alpha);
-            this.elem.style.left = String(this.x) + "px";
-            this.elem.style.top = String(this.y) + "px";
         });
+        this.buttonsContextMenu.forEach((rdown: boolean, id: string) => {
+            if (rdown) {
+                this.buttonsContextMenu.set(id, false);
+                if (id == "refresh") {
+                    if (Launcher.iframeMode) {
+                        Launcher.contextMenu.show([{
+                            text: "Refresh Games and Stuff", onselect: () => { window.location.reload(); }
+                        }]);
+                    }
+                }
+                else if (id == "peekarrow") {
+                    if (this.isOut && Launcher.iframeMode) {
+                        Launcher.contextMenu.show([{
+                            text: "Force Quit Game", onselect: () => { Launcher.iframe.src = "about:blank"; }
+                        }]);
+                    }
+                }
+            }
+        });
+        this.elem.style.opacity = String(this.alpha);
+        this.elem.style.left = String(this.x) + "px";
+        this.elem.style.top = String(this.y) + "px";
     }
     destroy(): void {
         // throw new Error("Method not implemented.");

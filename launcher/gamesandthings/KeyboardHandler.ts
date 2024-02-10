@@ -13,15 +13,19 @@ export default class KeyboardHandler {
         });
     }
     onKeyDown(ev: KeyboardEvent, preventDefault: boolean = true) {
-        this.pressedMap.set(ev.key.toLowerCase(), true);
-        if (preventDefault) {
-            ev.preventDefault();
+        if (ev.key != null) {
+            this.pressedMap.set(ev.key.toLowerCase(), true);
+            if (preventDefault) {
+                ev.preventDefault();
+            }
         }
     }
     onKeyUp(ev: KeyboardEvent, preventDefault: boolean = true) {
-        this.pressedMap.set(ev.key.toLowerCase(), false);
-        if (preventDefault) {
-            ev.preventDefault();
+        if (ev.key != null) {
+            this.pressedMap.set(ev.key.toLowerCase(), false);
+            if (preventDefault) {
+                ev.preventDefault();
+            }
         }
     }
     isDown(button: string): boolean {
@@ -32,7 +36,7 @@ export default class KeyboardHandler {
             return (this.pressedMap.get(button.toLowerCase()) as boolean);
         }
     }
-    resetPressed(){
+    resetPressed() {
         this.pressedMap.clear();
     }
 }

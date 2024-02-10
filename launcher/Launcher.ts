@@ -3,6 +3,7 @@ import State from "./gamesandthings/State";
 import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
+import ContextMenuHandler from "./gamesandthings/ContextMenuHandler";
 
 
 
@@ -17,11 +18,18 @@ export default class Launcher {
     public static ctx: CanvasRenderingContext2D;
     public static drawer: DrawerHandler;
     public static iframe: HTMLIFrameElement;
+    public static contextMenu: ContextMenuHandler;
     public static iframeMode: boolean = false;
     public static fullscreen: boolean = false;
     static init(state: State) {
-        document.writeln('<iframe frameborder="0" allowfullscreen="true" id="gamewin"></iframe>');
-        document.writeln('<canvas id="cnv"></canvas>');
+        // canvas and iframe
+        window.addEventListener("error",(ev:ErrorEvent)=>{
+            alert("Error!\n"+ev.message);
+        })
+      
+        // ContextMenu
+        Launcher.contextMenu = new ContextMenuHandler();
+        // Init Input and other Handlers
         document.body.style.margin = "0px";
         Launcher.mouse = new MouseHandler();
         Launcher.mouse.init();
@@ -29,12 +37,18 @@ export default class Launcher {
         Launcher.keyboard.init();
         Launcher.drawer = new DrawerHandler(document.getElementById("slidymenu") as HTMLDivElement);
         Launcher.drawer.elem.style.left = "-150px";
-        Launcher.cnv = (document.getElementById("cnv") as HTMLCanvasElement)
-        Launcher.cnv.id = "cnv";
-        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: false }) as CanvasRenderingContext2D);
-        Launcher.iframe = (document.getElementById("gamewin") as HTMLIFrameElement);
+
+        Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
+        Launcher.iframe.id = "gamewin";
+        Launcher.iframe.setAttribute('frameborder',"0");
+        Launcher.iframe.setAttribute('allowfullscreen',"true");
         Launcher.iframe.style.width = "100%";
         Launcher.iframe.style.height = "100%";
+
+        Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
+        Launcher.cnv.id = "cnv";
+        document.body.appendChild(Launcher.cnv);
+        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: false }) as CanvasRenderingContext2D);
         Launcher.state = state;
         Launcher.state.create();
         Launcher.update(0);
@@ -50,7 +64,7 @@ export default class Launcher {
     public static openIframeWindow() {
         Launcher.keyboard.resetPressed();
         Launcher.iframeMode = true;
-        Launcher.drawer.isOut = false;
+        //Launcher.drawer.isOut = false;
         // Launcher.iframe.src = url;
     }
     public static closeIframe(): void {
@@ -58,15 +72,16 @@ export default class Launcher {
     }
     public static toggleFullscreen(): void {
         let elem: HTMLElement = document.body;
-
-        if (!document.fullscreenElement) {
-            Launcher.fullscreen = true;
-            elem.requestFullscreen().catch((err) => {
+        if (!!elem.requestFullscreen) {
+            if (!document.fullscreenElement) {
+                Launcher.fullscreen = true;
+                elem.requestFullscreen().catch((err) => {
+                    Launcher.fullscreen = false;
+                });
+            } else {
                 Launcher.fullscreen = false;
-            });
-        } else {
-            Launcher.fullscreen = false;
-            document.exitFullscreen();
+                document.exitFullscreen();
+            }
         }
     }
     static update(timestep: number) {
@@ -103,6 +118,7 @@ export default class Launcher {
         Launcher.cnv.setAttribute("height", Launcher.cnv.offsetHeight + "");
         Launcher.delta = ((timestep - Launcher.lastTimestep) / 1000);
         Launcher.drawer.update(Launcher.delta);
+        Launcher.contextMenu.update(Launcher.delta);
         if (!Launcher.iframeMode) {
             Launcher.ctx.fillStyle = "black";
             Launcher.ctx.fillRect(0, 0, Launcher.cnv.width, Launcher.cnv.height);
@@ -110,13 +126,15 @@ export default class Launcher {
             Launcher.ctx.fillStyle = "white";
             Launcher.ctx.font = "25px sans-serif";
             Launcher.ctx.textBaseline = "hanging";
-            Launcher.ctx.fillText("This is the new games and stuff, ",0,35);
-            Launcher.ctx.fillText("currently in very early development.",0,65)            
+            Launcher.ctx.fillText("This is the new games and stuff, ", 0, 35);
+            Launcher.ctx.fillText("currently in very early development.", 0, 65)
+            Launcher.ctx.fillText("Mobile devices will be supported soon.", 0, 95)
+
             Launcher.state.update(Launcher.delta);
-            if (Launcher.iframe.contentDocument != null){
-                Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem)=>{
-                  let child:HTMLElement = (elem as HTMLElement);
-                  child.style.cursor = "normal";
+            if (Launcher.iframe.contentDocument != null) {
+                Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
+                    let child: HTMLElement = (elem as HTMLElement);
+                    child.style.cursor = "normal";
                 });
             }
         }
