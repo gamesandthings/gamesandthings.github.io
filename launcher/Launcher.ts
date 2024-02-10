@@ -52,7 +52,7 @@ export default class Launcher {
         Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
         document.body.appendChild(Launcher.cnv);
-        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: false }) as CanvasRenderingContext2D);
+        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: true, preserveDrawingBuffer: true }) as CanvasRenderingContext2D);
         Launcher.state = state;
         Launcher.state.create();
         Launcher.update(0);
