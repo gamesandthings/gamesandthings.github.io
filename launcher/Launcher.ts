@@ -49,7 +49,8 @@ export default class Launcher {
         Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
         document.body.appendChild(Launcher.cnv);
-        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: true, preserveDrawingBuffer: true }) as CanvasRenderingContext2D);
+        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: true, preserveDrawingBuffer: true,willReadFrequently: false }) as CanvasRenderingContext2D);
+        Launcher.ctx.imageSmoothingEnabled = false;
         Launcher.state = state;
         Launcher.state.create();
         Launcher.update(0);
@@ -150,6 +151,7 @@ export default class Launcher {
         Launcher.drawer.update(Launcher.delta);
         Launcher.contextMenu.update(Launcher.delta);
         if (!Launcher.iframeMode) {
+            
             Launcher.ctx.fillStyle = "black";
             Launcher.ctx.fillRect(0, 0, Launcher.cnv.width, Launcher.cnv.height);
             Launcher.state.draw();

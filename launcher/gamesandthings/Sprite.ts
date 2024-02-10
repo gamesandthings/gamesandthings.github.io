@@ -27,11 +27,11 @@ export default class Sprite extends Rectangle implements IDrawable {
             Launcher.ctx.globalAlpha = this.alpha;
             Launcher.ctx.save();
             if (this.flipX) {
-                Launcher.ctx.translate(this.x + this.width / 2, this.y + this.width / 2);
+                Launcher.ctx.translate(Math.floor(this.x + this.width / 2), Math.floor(this.y + this.width / 2));
                 Launcher.ctx.scale(-1, 1);
-                Launcher.ctx.translate(-(this.x + this.width / 2), -(this.y + this.width / 2));
+                Launcher.ctx.translate(Math.floor(-(this.x + this.width / 2)), Math.floor(-(this.y + this.width / 2)));
             }
-            Launcher.ctx.translate(this.x + (this.width / 2), this.y + (this.height / 2));
+            Launcher.ctx.translate(Math.floor(this.x + (this.width / 2)), Math.floor(this.y + (this.height / 2)));
             if (!this.flipX) {
                 Launcher.ctx.rotate(this.angle * Math.PI / 180);
             } 
