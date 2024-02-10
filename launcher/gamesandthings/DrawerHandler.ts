@@ -45,6 +45,8 @@ export default class DrawerHandler implements IPositionable {
             this.buttonsMouseOver.set(button.id, false);
         });
         button.addEventListener("contextmenu", (ev) => {
+            this.clickX = ev.clientX;
+            this.clickY = ev.clientY;
             this.buttonsContextMenu.set(button.id, true);
             ev.preventDefault();
         });

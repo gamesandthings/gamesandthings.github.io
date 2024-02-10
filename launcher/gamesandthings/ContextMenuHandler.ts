@@ -28,8 +28,8 @@ export default class ContextMenuHandler implements IPositionable {
         */
         this.contextMenuInput.setAttribute("name", 'ContextMenu');
 
-        this.contextMenuInput.style.width = "50px";
-        this.contextMenuInput.style.height = "50px";
+        this.contextMenuInput.style.width = "0px";
+        this.contextMenuInput.style.height = "0px";
         this.contextMenuInput.style.position = "absolute";
         this.contextMenuInput.style.zIndex = "10";
         this.contextMenuInput.style.backgroundColor = "black";
@@ -111,12 +111,16 @@ export default class ContextMenuHandler implements IPositionable {
         if (y == null) {
             y = Launcher.mouse.y;
         }
+        this.contextMenuInput.style.width = "50px";
+        this.contextMenuInput.style.height = "50px";
         this.contextMenuInput.style.left = x - 20 + "px";
         this.contextMenuInput.style.top = y - 50 + "px";
         this.contextMenuInput.showPicker();
         // go away so it doesnt interfere with user input
         this.contextMenuInput.style.top = "-999px";
         this.contextMenuInput.style.left = "-999px";
+        this.contextMenuInput.style.width = "0px";
+        this.contextMenuInput.style.height = "0px";
     }
     destroy(): void {
 
