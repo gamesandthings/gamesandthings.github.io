@@ -86,7 +86,7 @@ export default class ContextMenuHandler implements IPositionable {
     }
     contextOptions: Array<ContextOption> = [];
     show(options: Array<ContextOption>) {
-        if (!Launcher.drawer.hasClickedAtLeastOnce) return;
+        if (!Launcher.mouse.hasClickedAtLeastOnce) return;
         this.contextOptions = options;
 
         this.clear();

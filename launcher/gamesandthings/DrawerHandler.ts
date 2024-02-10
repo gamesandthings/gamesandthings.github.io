@@ -6,7 +6,6 @@ import Vector2 from "./types/Vector2";
 export default class DrawerHandler implements IPositionable {
     buttonsPressed: Map<string, boolean> = new Map<string, boolean>();
     buttonsContextMenu: Map<string, boolean> = new Map<string, boolean>();
-    hasClickedAtLeastOnce:boolean = false;
     buttonsMouseOver: Map<string, boolean> = new Map<string, boolean>();
     buttons: Array<HTMLElement> = [];
     mouseOver: Boolean = true;
@@ -155,7 +154,6 @@ export default class DrawerHandler implements IPositionable {
         }
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
-                this.hasClickedAtLeastOnce = true;
                 this.buttonsPressed.set(id, false);
                 let button: HTMLElement = (document.getElementById(id) as HTMLElement);
                 // for some reason switch case didnt work here for me wtf

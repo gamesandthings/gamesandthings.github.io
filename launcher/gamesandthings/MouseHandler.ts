@@ -7,7 +7,7 @@ export default class MouseHandler {
     public deltaY: number = 0;
     private mouseMap: Map<MouseButtons, boolean> = new Map();
     private justPressedMap: Map<MouseButtons, boolean> = new Map();
-
+    public hasClickedAtLeastOnce:Boolean = false;
 
     init(): void {
         window.addEventListener("mousedown", (ev) => { this.onMouseDown(ev) });
@@ -23,7 +23,7 @@ export default class MouseHandler {
         });
     }
     onMouseDown(ev: MouseEvent) {
-        
+            this.hasClickedAtLeastOnce = true;
             this.mouseMap.set(ev.button, true);
             this.getPosFromEvent(ev);
         
