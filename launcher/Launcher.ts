@@ -27,6 +27,15 @@ export default class Launcher {
             alert("Error!\n"+ev.message);
         })
       
+
+        Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
+        document.body.appendChild(Launcher.iframe);
+        Launcher.iframe.id = "gamewin";
+        Launcher.iframe.setAttribute('frameborder',"0");
+        Launcher.iframe.setAttribute('allowfullscreen',"true");
+        Launcher.iframe.style.width = "100%";
+        Launcher.iframe.style.height = "100%";
+
         // ContextMenu
         Launcher.contextMenu = new ContextMenuHandler();
         // Init Input and other Handlers
@@ -38,13 +47,6 @@ export default class Launcher {
         Launcher.drawer = new DrawerHandler(document.getElementById("slidymenu") as HTMLDivElement);
         Launcher.drawer.elem.style.left = "-150px";
 
-        Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
-        Launcher.iframe.id = "gamewin";
-        Launcher.iframe.setAttribute('frameborder',"0");
-        Launcher.iframe.setAttribute('allowfullscreen',"true");
-        Launcher.iframe.style.width = "100%";
-        Launcher.iframe.style.height = "100%";
-        document.body.appendChild(Launcher.iframe);
 
         Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
