@@ -40,7 +40,8 @@ export default class ArrowSprite extends Sprite {
                     {
                         text: "Custom",
                         onselect: () => {
-                            let debugPrompt: string = (prompt("Enter URL to open:\n") as string);
+                            let debugPrompt: string | null = prompt("Enter URL to open:\n");
+                            if (debugPrompt == null) return;
                             if (!debugPrompt.startsWith("http://") || !debugPrompt.startsWith("https://")) {
                                 debugPrompt = "http://" + debugPrompt;
                             }
@@ -50,7 +51,7 @@ export default class ArrowSprite extends Sprite {
                     },
 
                 ]);
-            
+
             }
         }
         else {
