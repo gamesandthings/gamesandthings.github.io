@@ -143,11 +143,12 @@ export default class DrawerHandler implements IPositionable {
     }
     screenmode: string = "window";
     async updateScreenMode() {
+        if (this == null) return;
         if (this.screenmode.includes("/") || this.screenmode.includes(":")) {
             this.screenmode.replace(":", "/");
             let actualHeight = window.outerHeight;
             Launcher.iframe.style.aspectRatio = this.screenmode;
-            if (window.innerWidth >= actualHeight && window.outerWidth >= Launcher.iframe.offsetWidth && window.outerHeight >= Launcher.iframe.offsetHeight) {
+            if (window.innerWidth >= actualHeight) {
                 Launcher.iframe.style.width = "auto";
                 Launcher.iframe.style.height = window.innerHeight + "";
             }
@@ -159,8 +160,8 @@ export default class DrawerHandler implements IPositionable {
             if (Launcher.iframe.offsetWidth > window.innerWidth
                 || Launcher.iframe.offsetHeight > window.innerHeight) {
                 Launcher.iframe.style.width = "100%";
-               // Launcher.iframe.style.height = "100%";
-                Launcher.iframe.style.aspectRatio = "";
+                // Launcher.iframe.style.height = "100%";
+                // Launcher.iframe.style.aspectRatio = "";
             }
 
         }
