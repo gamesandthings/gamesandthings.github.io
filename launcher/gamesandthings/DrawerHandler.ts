@@ -230,24 +230,28 @@ export default class DrawerHandler implements IPositionable {
                                             text: "4:3",
                                             onselect: () => {
                                                 this.screenmode = "4/3";
+                                                this.updateScreenMode();
                                             }
                                         },
                                         {
                                             text: "16:9",
                                             onselect: () => {
                                                 this.screenmode = "16/9";
+                                                this.updateScreenMode();
                                             }
                                         },
                                         {
                                             text: "16:10",
                                             onselect: () => {
                                                 this.screenmode = "16/10";
+                                                this.updateScreenMode();
                                             }
                                         },
                                         {
                                             text: "Fit to window",
                                             onselect: () => {
                                                 this.screenmode = "window";
+                                                this.updateScreenMode();
                                             }
                                         },
                                         {
