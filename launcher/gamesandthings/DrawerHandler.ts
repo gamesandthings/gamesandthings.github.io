@@ -1,4 +1,7 @@
 import Launcher from "../Launcher";
+import ContextMenuHandler from "./ContextMenuHandler";
+import { ContextOption } from "./ContextMenuHandler";
+
 import UniFont from "./UniFont";
 import { MouseButtons } from "./enums/MouseButtons"
 import IPositionable from "./interfaces/IPositionable";
@@ -49,6 +52,9 @@ export default class DrawerHandler implements IPositionable {
             this.clickY = ev.clientY;
             this.buttonsContextMenu.set(button.id, true);
             ev.preventDefault();
+        });
+        button.addEventListener("blur", (ev: FocusEvent) => {
+            this.isOut = false;
         });
     }
     create(): void { }
@@ -156,40 +162,7 @@ export default class DrawerHandler implements IPositionable {
         this.mouseOverCheck();
         this.updateScreenMode();
         this.buttons.forEach((button) => {
-            if (button.getAttribute("disabled") == "true") {
-                button.style.color = "rgba(255,255,255,0.25)";
-            }
-            else {
-                button.style.color = "white";
-            }
-            if (button.id == "fullscreen") {
-                button.setAttribute("title", "Makes games and things fullscreen.");
-                if (Launcher.fullscreenByOS) {
-                    button.setAttribute("title", "Cannot exit fullscreen as fullscreen was toggled\nby your os or browser.");
-
-                }
-                button.setAttribute("disabled", String(Launcher.fullscreenByOS));
-
-
-                let symbol: string = "fullscreen";
-                if (Launcher.fullscreen && !(Launcher.fullscreenByOS)) {
-                    symbol = "fullscreen_exit";
-                }
-                if (button.innerText != symbol) {
-                    button.innerText = symbol;
-                }
-            }
-            else if (button.id == "arrow_back") {
-                if (!Launcher.iframeMode) {
-                    button.setAttribute("title", "Return to game.");
-                    button.innerText = "play_arrow";
-                }
-                else {
-                    button.setAttribute("title", "Return to games and st.");
-                    button.innerText = "pause";
-                }
-            }
-            else if (button.id == "peekarrow") {
+            if (button.id == "peekarrow") {
                 button.setAttribute("disabled", String(!Launcher.iframeMode));
                 if (!Launcher.iframeMode) {
                     button.innerText = "close";
@@ -198,9 +171,52 @@ export default class DrawerHandler implements IPositionable {
                     button.innerText = "chevron_right";
                 }
             }
-            else if (button.id == "settings") {
-                button.setAttribute("disabled", String(!Launcher.iframeMode));
+            if (this.isOut) {
+                button.style.opacity = "1";
+                if (button.getAttribute("disabled") == "true") {
+                    button.style.color = "rgba(255,255,255,0.25)";
+                }
+                else {
+                    button.style.color = "white";
+                }
+                if (button.id == "fullscreen") {
+                    button.setAttribute("title", "Makes games and things fullscreen.");
+                    if (Launcher.fullscreenByOS) {
+                        button.setAttribute("title", "Cannot exit fullscreen as fullscreen was toggled\nby your os or browser.");
+
+                    }
+                    button.setAttribute("disabled", String(Launcher.fullscreenByOS));
+
+
+                    let symbol: string = "fullscreen";
+                    if (Launcher.fullscreen || Launcher.fullscreenByOS) {
+                        symbol = "fullscreen_exit";
+                    }
+                    if (button.innerText != symbol) {
+                        button.innerText = symbol;
+                    }
+                }
+                else if (button.id == "arrow_back") {
+                    if (!Launcher.iframeMode) {
+                        button.setAttribute("title", "Return to game.");
+                        button.innerText = "play_arrow";
+                    }
+                    else {
+                        button.setAttribute("title", "Return to games and st.");
+                        button.innerText = "pause";
+                    }
+                }
+
+                else if (button.id == "settings") {
+                    button.setAttribute("disabled", String(!Launcher.iframeMode));
+                }
             }
+            else {
+                if (button.id != "peekarrow") {
+                    button.style.opacity = "0";
+                }
+            }
+
 
         });
         if (!this.isOut) {
@@ -225,7 +241,8 @@ export default class DrawerHandler implements IPositionable {
                         }
                     }
                 }
-                else if (id == "fullscreen") {
+                if (!this.isOut) return;
+                if (id == "fullscreen") {
                     if (!Launcher.fullscreenByOS) {
                         Launcher.toggleFullscreen();
                     }
@@ -243,7 +260,7 @@ export default class DrawerHandler implements IPositionable {
                 }
                 else if (id == "settings") {
                     if (Launcher.iframeMode) {
-                        Launcher.contextMenu.show([
+                        let options: Array<ContextOption> = [
                             {
                                 text: "Screen Size ",
                                 onselect: () => {
@@ -282,7 +299,29 @@ export default class DrawerHandler implements IPositionable {
                                     ]);
                                 },
                                 hasSecondary: true,
-                            }], this.clickX, this.clickY);
+                            }
+                        ];
+                        if (Launcher.game != null && Launcher.game.versions.length > 1) {
+                            options.push({
+                                text: "Set Version ",
+                                hasSecondary: true,
+                                onselect: () => {
+                                    let versions: Array<ContextOption> = [];
+                                    Launcher.game?.versions.forEach((version) => {
+                                        versions.push(
+                                            {
+                                                text: version.title,
+                                                onselect: () => {
+                                                    Launcher.openURL(Launcher.game?.prefix + version.url)
+                                                }
+                                            }
+                                        );
+                                    })
+                                    Launcher.contextMenu.show(versions);
+                                }
+                            });
+                        }
+                        Launcher.contextMenu.show(options, this.clickX, this.clickY);
 
                     }
                 }
@@ -294,15 +333,8 @@ export default class DrawerHandler implements IPositionable {
         this.buttonsContextMenu.forEach((rdown: boolean, id: string) => {
             if (rdown) {
                 this.buttonsContextMenu.set(id, false);
-                if (id == "refresh") {
+                if (id == "peekarrow") {
                     if (Launcher.iframeMode) {
-                        Launcher.contextMenu.show([{
-                            text: "Refresh Games and Stuff", onselect: () => { window.location.reload(); }
-                        }], this.clickX, this.clickY);
-                    }
-                }
-                else if (id == "peekarrow") {
-                    if (this.isOut && Launcher.iframeMode) {
                         Launcher.contextMenu.show([{
                             text: "Force Quit Game",
                             desc: "⚠ Unsaved data will be lost.",
@@ -313,6 +345,38 @@ export default class DrawerHandler implements IPositionable {
                                 Launcher.closeIframe();
                             }
                         }], this.clickX, this.clickY);
+                    }
+                }
+                if (!this.isOut) return;
+                if (id == "refresh") {
+                    if (Launcher.iframeMode) {
+                        Launcher.contextMenu.show([
+                            {
+                                text: "Refresh Games and Stuff",
+                                onselect: () => {
+                                    window.location.reload();
+                                }
+                            },
+                            {
+                                text: "Force Refresh",
+                                desc: "⚠ Unsaved data will be lost.",
+                                descFont: UniFont.ITALIC,
+                                onselect: () => {
+                                    Launcher.iframeDiv.removeChild(Launcher.iframe);
+                                    Launcher.initIframe();
+                                    Launcher.openURL(Launcher.lastURL);
+                                }
+                            },
+                            {
+                                text: "Force Refresh All",
+                                desc: "⚠ Unsaved data will be lost.",
+                                descFont: UniFont.ITALIC,
+                                onselect: () => {
+                                    Launcher.iframeDiv.removeChild(Launcher.iframe);
+                                    window.location.reload();
+                                }
+                            },
+                        ], this.clickX, this.clickY);
                     }
                 }
             }

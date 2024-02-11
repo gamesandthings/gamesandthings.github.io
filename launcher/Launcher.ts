@@ -4,6 +4,7 @@ import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
 import ContextMenuHandler from "./gamesandthings/ContextMenuHandler";
+import { Game } from "./gamesandthings/Games";
 
 
 
@@ -19,7 +20,7 @@ export default class Launcher {
     public static drawer: DrawerHandler;
     public static iframe: HTMLIFrameElement;
     public static iframeDiv: HTMLDivElement;
-
+    public static game:Game|null;
     public static contextMenu: ContextMenuHandler;
     public static iframeMode: boolean = false;
     public static fullscreen: boolean = false;
@@ -71,6 +72,10 @@ export default class Launcher {
     public static refreshGame() {
         Launcher.iframe.src = Launcher.lastURL + '';
     }
+    public static openGame(game: Game) {
+        Launcher.game = game;
+        Launcher.openURL(game.prefix + game.versions[0].url);
+    }
     public static openURL(url: string) {
         Launcher.openIframeWindow();
         Launcher.lastURL = url;
@@ -102,8 +107,8 @@ export default class Launcher {
         }
     }
     static update(timestep: number) {
-        if (document.body.offsetWidth == window.screen.availWidth &&
-            document.body.offsetHeight == window.screen.availHeight) {
+        if ((document.body.offsetWidth >= window.screen.availWidth &&
+            document.body.offsetHeight >= window.screen.availHeight)) {
             Launcher.fullscreen = true;
             if (document.fullscreenElement == null) {
                 Launcher.fullscreenByOS = true;

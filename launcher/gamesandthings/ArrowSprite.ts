@@ -1,4 +1,5 @@
 import Launcher from "../Launcher";
+import Games from "./Games";
 import Sprite from "./Sprite";
 import { Axes } from "./enums/Axes";
 import { MouseButtons } from "./enums/MouseButtons";
@@ -31,46 +32,9 @@ export default class ArrowSprite extends Sprite {
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
                 Launcher.contextMenu.show([
                     {
-                        text: "Minecraft 1.8.8",
+                        text: "Minecraft",
                         onselect: () => {
-                            Launcher.openURL("mc/1.8.8");
-                        }
-                    },
-                    {
-                        text: "Minecraft 1.5.2",
-                        onselect: () => {
-                            Launcher.openURL("mc/1.5.2");
-                        }
-                    },
-                    {
-                        text: "Minecraft b1.3_01",
-                        onselect: () => {
-                            Launcher.openURL("mc/b1.3_01");
-                        }
-                    },
-                    {
-                        text: "Minecraft a1.2.6",
-                        onselect: () => {
-                            Launcher.openURL("mc/a1.2.6");
-                        }
-                    },
-                    {
-                        text: "Minecraft Indev-20100223",
-                        onselect: () => {
-                            Launcher.openURL("mc/indev-20100223");
-                        }
-                    },
-                    
-                    {
-                        text: "Minecraft c0.30",
-                        onselect: () => {
-                            Launcher.openURL("mc/c0.30");
-                        }
-                    },
-                    {
-                        text: "Minecraft c0.0.23a_01",
-                        onselect: () => {
-                            Launcher.openURL("mc/c0.0.23a_01");
+                            Launcher.openGame(Games.games[0]);
                         }
                     },
                     {
@@ -80,6 +44,7 @@ export default class ArrowSprite extends Sprite {
                             if (!debugPrompt.startsWith("http://") || !debugPrompt.startsWith("https://")) {
                                 debugPrompt = "http://" + debugPrompt;
                             }
+                            Launcher.game = null;
                             Launcher.openURL(debugPrompt);
                         }
                     },

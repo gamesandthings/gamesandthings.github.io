@@ -2,7 +2,7 @@ import Launcher from "../Launcher";
 import UniFont from "./UniFont";
 import { Font } from "./UniFont";
 import IPositionable from "./interfaces/IPositionable";
-type ContextOption = {
+export type ContextOption = {
     text: string,
     desc?: string,
     onselect?: () => void,
