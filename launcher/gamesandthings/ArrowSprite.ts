@@ -2,6 +2,7 @@ import Launcher from "../Launcher";
 import { ContextOption } from "./ContextMenuHandler";
 import Games from "./Games";
 import Sprite from "./Sprite";
+import UniFont from "./UniFont";
 import { Axes } from "./enums/Axes";
 import { MouseButtons } from "./enums/MouseButtons";
 export default class ArrowSprite extends Sprite {
@@ -34,7 +35,10 @@ export default class ArrowSprite extends Sprite {
                 let gamesCtx: Array<ContextOption> = [];
                 Games.games.forEach((game) => {
                     gamesCtx.push({
-                        text: game.title, onselect: () => {
+                        text: game.title, 
+                        desc: game.creator,
+                        descFont: UniFont.ITALIC,
+                        onselect: () => {
                             Launcher.openGame(game);
                         }
                     });

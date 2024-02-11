@@ -4,7 +4,8 @@ import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
 import ContextMenuHandler from "./gamesandthings/ContextMenuHandler";
-import { Game } from "./gamesandthings/Games";
+import { Game, GameVersion } from "./gamesandthings/Games";
+import Vector2 from "./gamesandthings/types/Vector2";
 
 
 
@@ -72,10 +73,29 @@ export default class Launcher {
     public static refreshGame() {
         Launcher.iframe.src = Launcher.lastURL + '';
     }
-    public static openGame(game: Game) {
+    public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
+        if (game == null) return; // it will never be called if its null but typescript i guess
         Launcher.game = game;
-        Launcher.drawer.screenmode = game.screenmode;
-        Launcher.openURL(game.prefix + game.versions[0].url);
+        document.title = game.title;
+        if (game.screenmode != null) {
+            Launcher.drawer.screenmode = game.screenmode;
+        }
+        else {
+            Launcher.drawer.screenmode = "window";
+        }
+        let link: string = game.prefix;
+        if (version == null && game.versions == null) {
+            link += "/";
+        }
+        else if (version == null && game.versions != null) {
+            document.title += " - " + game.versions[0].title;
+            link += game.versions[0].url;
+        }
+        else if (version != null) {
+            document.title += " - " + version.title;
+            link += version.url;
+        }
+        Launcher.openURL(link);
     }
     public static openURL(url: string) {
         Launcher.lastURL = url;
@@ -181,15 +201,20 @@ export default class Launcher {
                 });
             }
         }
-        else {
-            if (Launcher.iframe.contentWindow != null) {
-                document.title = Launcher.iframe.contentWindow.document.title;
-            }
-        }
         Launcher.lastTimestep = timestep;
         Launcher.mouse.resetDeltas();
         requestAnimationFrame(Launcher.update);
     }
-
+    public static screenshot(): void {
+        if (Launcher.iframe.contentWindow != null && Launcher.iframeMode) {
+            let cnvs: HTMLCollectionOf<HTMLCanvasElement> = Launcher.iframe.contentWindow.document.getElementsByTagName("canvas");
+            if (cnvs.length == 0) return;
+            let a: HTMLAnchorElement = document.createElement("a");
+            a.download = "Games and Things - " + document.title + " " + new Date(Date.now()).toLocaleString() + ".png";
+            a.href = cnvs[cnvs.length-1].toDataURL("image/png").replace("image/png", "image/octet-stream");
+            a.click();
+            a.remove();
+        }
+    }
 }
 Launcher.init(new LauncherState());

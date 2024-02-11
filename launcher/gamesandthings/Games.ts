@@ -1,8 +1,9 @@
 export type Game = {
     title: string,
+    creator: string,
     prefix: string,
-    screenmode: string,
-    versions: Array<GameVersion>
+    screenmode?: string,
+    versions?: Array<GameVersion> | null
 }
 export type GameVersion = {
     url: string,
@@ -12,6 +13,7 @@ export default class Games {
     public static games: Array<Game> = [
         {
             title: "Minecraft",
+            creator: "Mojang Studios",
             prefix: "mc/",
             screenmode: "16:9",
             versions: [
@@ -46,14 +48,9 @@ export default class Games {
         },
         {
             title: "Super Mario 64",
+            creator: "Nintendo",
             prefix: "app-sm64/",
-            screenmode: "16:9",
-            versions: [
-                {
-                    url: "",
-                    title: "Super Mario 64"
-                }
-            ]
+            screenmode: "4:3",
         },
     ];
 }

@@ -307,26 +307,34 @@ export default class DrawerHandler implements IPositionable {
                                 hasSecondary: true,
                             }
                         ];
-                        if (Launcher.game != null && Launcher.game.versions.length > 1) {
+                        if (Launcher.game != null && Launcher.game.versions != null && Launcher.game.versions.length > 1) {
                             options.push({
                                 text: "Set Version ",
                                 hasSecondary: true,
                                 onselect: () => {
                                     let versions: Array<ContextOption> = [];
-                                    Launcher.game?.versions.forEach((version) => {
-                                        versions.push(
-                                            {
-                                                text: version.title,
-                                                onselect: () => {
-                                                    Launcher.openURL(Launcher.game?.prefix + version.url)
+                                    if (Launcher.game != null && Launcher.game?.versions != null) {
+                                        Launcher.game.versions.forEach((version) => {
+                                            versions.push(
+                                                {
+                                                    text: version.title,
+                                                    onselect: () => {
+                                                        Launcher.openGame(Launcher.game, version);
+                                                    }
                                                 }
-                                            }
-                                        );
-                                    })
-                                    Launcher.contextMenu.show(versions);
+                                            );
+                                        })
+                                        Launcher.contextMenu.show(versions);
+                                    }
                                 }
                             });
                         }
+                        options.push({
+                            text: "Screenshot",
+                            onselect: ()=>{
+                                Launcher.screenshot();
+                            }
+                        });
                         Launcher.contextMenu.show(options, this.clickX, this.clickY);
 
                     }

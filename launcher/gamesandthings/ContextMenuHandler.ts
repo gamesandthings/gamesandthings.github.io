@@ -106,7 +106,7 @@ export default class ContextMenuHandler implements IPositionable {
         });
         this.add({ text: "Close", font: UniFont.BOLD });
         if (x == null) {
-           x = Launcher.mouse.x;
+            x = Launcher.mouse.x;
         }
         if (y == null) {
             y = Launcher.mouse.y;
@@ -115,7 +115,10 @@ export default class ContextMenuHandler implements IPositionable {
         this.contextMenuInput.style.height = "50px";
         this.contextMenuInput.style.left = x - 20 + "px";
         this.contextMenuInput.style.top = y - 50 + "px";
-        this.contextMenuInput.showPicker();
+        try {
+            this.contextMenuInput.showPicker();
+        }
+        catch { }
         // go away so it doesnt interfere with user input
         this.contextMenuInput.style.top = "-999px";
         this.contextMenuInput.style.left = "-999px";
