@@ -20,7 +20,7 @@ export default class Launcher {
     public static drawer: DrawerHandler;
     public static iframe: HTMLIFrameElement;
     public static iframeDiv: HTMLDivElement;
-    public static game:Game|null;
+    public static game: Game | null;
     public static contextMenu: ContextMenuHandler;
     public static iframeMode: boolean = false;
     public static fullscreen: boolean = false;
@@ -50,7 +50,7 @@ export default class Launcher {
         Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
         document.body.appendChild(Launcher.cnv);
-        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: true, preserveDrawingBuffer: true,willReadFrequently: false }) as CanvasRenderingContext2D);
+        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: true, preserveDrawingBuffer: true, willReadFrequently: false }) as CanvasRenderingContext2D);
         Launcher.ctx.imageSmoothingEnabled = false;
         Launcher.state = state;
         Launcher.state.create();
@@ -78,9 +78,11 @@ export default class Launcher {
         Launcher.openURL(game.prefix + game.versions[0].url);
     }
     public static openURL(url: string) {
-        Launcher.openIframeWindow();
         Launcher.lastURL = url;
-        Launcher.iframe.src = url;
+        if (this.lastURL != "") {
+            Launcher.openIframeWindow();
+            Launcher.iframe.src = url;
+        }
     }
     public static openIframeWindow() {
         Launcher.keyboard.resetPressed();
@@ -108,7 +110,7 @@ export default class Launcher {
         }
     }
     static update(timestep: number) {
-        if(window && 'navigator' in window && 'windowControlsOverlay' in window.navigator){
+        if (window && 'navigator' in window && 'windowControlsOverlay' in window.navigator) {
 
         }
         if ((document.body.offsetWidth >= window.screen.availWidth &&
@@ -180,7 +182,7 @@ export default class Launcher {
             }
         }
         else {
-            if (Launcher.iframe.contentWindow != null){
+            if (Launcher.iframe.contentWindow != null) {
                 document.title = Launcher.iframe.contentWindow.document.title;
             }
         }
