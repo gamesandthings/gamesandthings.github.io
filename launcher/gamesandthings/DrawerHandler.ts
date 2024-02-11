@@ -148,11 +148,6 @@ export default class DrawerHandler implements IPositionable {
             Launcher.iframe.style.width = fitDimensions.x + "px";
             Launcher.iframe.style.height = fitDimensions.y + "px";
         }
-        else if (this.screenmode == "32:9") {
-            let fitDimensions: Vector2 = this.aspectRatioFit(3840, 1080, document.body.offsetWidth, document.body.offsetHeight);
-            Launcher.iframe.style.width = fitDimensions.x + "px";
-            Launcher.iframe.style.height = fitDimensions.y + "px";
-        }
         else if (this.screenmode.includes("x")) {
             Launcher.iframe.style.width = this.screenmode.split("x")[0] + "px";
             Launcher.iframe.style.height = this.screenmode.split("x")[1] + "px";
@@ -288,12 +283,6 @@ export default class DrawerHandler implements IPositionable {
                                             text: "16:10",
                                             onselect: () => {
                                                 this.screenmode = "16:10";
-                                            }
-                                        },
-                                        {
-                                            text: "32∶9 (Superwide)",
-                                            onselect: () => {
-                                                this.screenmode = "32∶9";
                                             }
                                         },
                                         {
