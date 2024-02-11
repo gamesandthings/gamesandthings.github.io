@@ -1,4 +1,5 @@
 import Launcher from "../Launcher";
+import { ContextOption } from "./ContextMenuHandler";
 import Games from "./Games";
 import Sprite from "./Sprite";
 import { Axes } from "./enums/Axes";
@@ -30,27 +31,27 @@ export default class ArrowSprite extends Sprite {
         if (this.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             this.setGraphicSize(0, Launcher.cnv.offsetHeight * 0.12);
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
-                Launcher.contextMenu.show([
-                    {
-                        text: "Minecraft",
-                        onselect: () => {
-                            Launcher.openGame(Games.games[0]);
+                let gamesCtx: Array<ContextOption> = [];
+                Games.games.forEach((game) => {
+                    gamesCtx.push({
+                        text: game.title, onselect: () => {
+                            Launcher.openGame(game);
                         }
-                    },
-                    {
-                        text: "Custom",
-                        onselect: () => {
-                            let debugPrompt: string | null = prompt("Enter URL to open:\n");
-                            if (debugPrompt == null) return;
-                            if (!debugPrompt.startsWith("http://") || !debugPrompt.startsWith("https://")) {
-                                debugPrompt = "http://" + debugPrompt;
-                            }
-                            Launcher.game = null;
-                            Launcher.openURL(debugPrompt);
+                    });
+                });
+                gamesCtx.push({
+                    text: "Custom",
+                    onselect: () => {
+                        let debugPrompt: string | null = prompt("Enter URL to open:\n");
+                        if (debugPrompt == null) return;
+                        if (!(debugPrompt.startsWith("http://")) && !(debugPrompt.startsWith("https://"))) {
+                            debugPrompt = "http://" + debugPrompt;
                         }
-                    },
-
-                ]);
+                        Launcher.game = null;
+                        Launcher.openURL(debugPrompt);
+                    }
+                });
+                Launcher.contextMenu.show(gamesCtx);
 
             }
         }

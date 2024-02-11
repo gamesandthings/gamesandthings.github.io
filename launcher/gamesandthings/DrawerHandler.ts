@@ -118,7 +118,7 @@ export default class DrawerHandler implements IPositionable {
             },
             {
                 text: "144p", onselect: () => {
-                    this.screenmode = "256×144";
+                    this.screenmode = "256x144";
                 },
             },
             {
@@ -196,7 +196,9 @@ export default class DrawerHandler implements IPositionable {
                         button.innerText = symbol;
                     }
                 }
-                else if (button.id == "arrow_back") {
+                else if (button.id == "pause") {
+                    button.setAttribute("disabled", String(Launcher.iframe.src == ""));
+
                     if (!Launcher.iframeMode) {
                         button.setAttribute("title", "Return to game.");
                         button.innerText = "play_arrow";
@@ -205,8 +207,8 @@ export default class DrawerHandler implements IPositionable {
                         button.setAttribute("title", "Return to games and st.");
                         button.innerText = "pause";
                     }
-                }
 
+                }
                 else if (button.id == "settings") {
                     button.setAttribute("disabled", String(!Launcher.iframeMode));
                 }
@@ -252,12 +254,14 @@ export default class DrawerHandler implements IPositionable {
                         Launcher.iframe.src += '';
                     }
                 }
-                else if (id == "arrow_back") {
-                    if (Launcher.iframeMode) {
-                        Launcher.closeIframe();
-                    }
-                    else {
-                        Launcher.openIframeWindow();
+                else if (id == "pause") {
+                    if (Launcher.iframe.src != "") {
+                        if (Launcher.iframeMode) {
+                            Launcher.closeIframe();
+                        }
+                        else {
+                            Launcher.openIframeWindow();
+                        }
                     }
                 }
                 else if (id == "settings") {

@@ -1,3 +1,6 @@
 [submodule "mc"]
 	path = mc
 	url = https://github.com/gamesandthings/mc.git
+[submodule "app-sm64"]
+	path = app-sm64
+	url = https://github.com/gamesandthings/app-sm64

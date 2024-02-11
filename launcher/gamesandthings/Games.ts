@@ -44,5 +44,16 @@ export default class Games {
                 },
             ]
         },
+        {
+            title: "Super Mario 64",
+            prefix: "app-sm64/",
+            screenmode: "16:9",
+            versions: [
+                {
+                    url: "",
+                    title: "Super Mario 64"
+                }
+            ]
+        },
     ];
 }
