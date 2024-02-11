@@ -161,72 +161,6 @@ export default class DrawerHandler implements IPositionable {
         window.devicePixelRatio = 4;
         this.mouseOverCheck();
         this.updateScreenMode();
-        this.buttons.forEach((button) => {
-            if (button.id == "peekarrow") {
-                button.setAttribute("disabled", String(!Launcher.iframeMode));
-                if (!Launcher.iframeMode) {
-                    button.innerText = "close";
-                }
-                if (!this.isOut && button.innerText == "close") {
-                    button.innerText = "chevron_right";
-                }
-            }
-            if (this.isOut) {
-                button.style.opacity = "1";
-                if (button.getAttribute("disabled") == "true") {
-                    button.style.color = "rgba(255,255,255,0.25)";
-                }
-                else {
-                    button.style.color = "white";
-                }
-                if (button.id == "fullscreen") {
-                    button.setAttribute("title", "Makes games and things fullscreen.");
-                    if (Launcher.fullscreenByOS) {
-                        button.setAttribute("title", "Cannot exit fullscreen as fullscreen was toggled\nby your os or browser.");
-
-                    }
-                    button.setAttribute("disabled", String(Launcher.fullscreenByOS));
-
-
-                    let symbol: string = "fullscreen";
-                    if (Launcher.fullscreen || Launcher.fullscreenByOS) {
-                        symbol = "fullscreen_exit";
-                    }
-                    if (button.innerText != symbol) {
-                        button.innerText = symbol;
-                    }
-                }
-                else if (button.id == "pause") {
-                    button.setAttribute("disabled", String(Launcher.iframe.src == ""));
-
-                    if (!Launcher.iframeMode) {
-                        button.setAttribute("title", "Return to game.");
-                        button.innerText = "play_arrow";
-                    }
-                    else {
-                        button.setAttribute("title", "Return to games and st.");
-                        button.innerText = "pause";
-                    }
-
-                }
-                else if (button.id == "settings") {
-                    button.setAttribute("disabled", String(!Launcher.iframeMode));
-                }
-            }
-            else {
-                if (button.id != "peekarrow") {
-                    button.style.opacity = "0";
-                }
-            }
-
-
-        });
-        if (!this.isOut) {
-            this.x = -this.elem.offsetWidth + 25;
-        }
-        else {
-            this.x = 5;
-        }
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
                 this.buttonsPressed.set(id, false);
@@ -268,7 +202,7 @@ export default class DrawerHandler implements IPositionable {
                     if (Launcher.iframeMode) {
                         let options: Array<ContextOption> = [
                             {
-                                text: "Screen Size ",
+                                text: "Screen Size                       ",
                                 onselect: () => {
                                     Launcher.contextMenu.show([
                                         {
@@ -331,7 +265,25 @@ export default class DrawerHandler implements IPositionable {
                         }
                         options.push({
                             text: "Screenshot",
-                            onselect: ()=>{
+                            onselect: () => {
+                                Launcher.screenshot();
+                            }
+                        });
+                        let performanceModeText: string = "Enable Performance Mode";
+                        if (Launcher.performanceMode) {
+                            performanceModeText = "Disable Performance Mode"
+                        }
+                        options.push({
+                            text: performanceModeText,
+                            desc: "Runs launcher menu at a low fps.",
+                            descFont: UniFont.ITALIC,
+                            onselect: () => {
+                                Launcher.performanceMode = !Launcher.performanceMode;
+                            }
+                        })
+                        options.push({
+                            text: "Screenshot",
+                            onselect: () => {
                                 Launcher.screenshot();
                             }
                         });
@@ -344,6 +296,71 @@ export default class DrawerHandler implements IPositionable {
                 }
             }
         });
+        this.buttons.forEach((button) => {
+            if (button.id == "peekarrow") {
+                button.setAttribute("disabled", String(!Launcher.iframeMode));
+                if (!Launcher.iframeMode) {
+                    button.innerText = "close";
+                }
+                if (!this.isOut && button.innerText == "close") {
+                    button.innerText = "chevron_right";
+                }
+            }
+            if (this.isOut) {
+                button.style.opacity = "1";
+                if (button.getAttribute("disabled") == "true") {
+                    button.style.color = "rgba(255,255,255,0.25)";
+                }
+                else {
+                    button.style.color = "white";
+                }
+                if (button.id == "fullscreen") {
+                    button.setAttribute("title", "Makes games and things fullscreen.");
+                    if (Launcher.fullscreenByOS) {
+                        button.setAttribute("title", "Cannot exit fullscreen as fullscreen was toggled\nby your os or browser.");
+
+                    }
+                    button.setAttribute("disabled", String(Launcher.fullscreenByOS));
+
+
+                    let symbol: string = "fullscreen";
+                    if (Launcher.fullscreen || Launcher.fullscreenByOS) {
+                        symbol = "fullscreen_exit";
+                    }
+                    if (button.innerText != symbol) {
+                        button.innerText = symbol;
+                    }
+                }
+                else if (button.id == "pause") {
+                    button.setAttribute("disabled", String(Launcher.iframe.src == ""));
+
+                    if (!Launcher.iframeMode) {
+                        button.setAttribute("title", "Return to game.");
+                        button.innerText = "play_arrow";
+                    }
+                    else {
+                        button.setAttribute("title", "Return to games and st.");
+                        button.innerText = "pause";
+                    }
+
+                }
+                else if (button.id == "settings") {
+                    button.setAttribute("disabled", String(!Launcher.iframeMode));
+                }
+            }
+            else {
+                if (button.id != "peekarrow") {
+                    button.style.opacity = "0";
+                }
+            }
+        });
+        if (!this.isOut) {
+            this.x = -this.elem.offsetWidth + 25;
+        }
+        else {
+            this.x = 5;
+        }
+    
         this.buttonsContextMenu.forEach((rdown: boolean, id: string) => {
             if (rdown) {
                 this.buttonsContextMenu.set(id, false);

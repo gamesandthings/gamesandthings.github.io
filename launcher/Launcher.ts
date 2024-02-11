@@ -15,7 +15,6 @@ export default class Launcher {
     public static state: State;
     public static mouse: MouseHandler;
     public static keyboard: KeyboardHandler;
-
     public static cnv: HTMLCanvasElement;
     public static ctx: CanvasRenderingContext2D;
     public static drawer: DrawerHandler;
@@ -26,6 +25,8 @@ export default class Launcher {
     public static iframeMode: boolean = false;
     public static fullscreen: boolean = false;
     public static fullscreenByOS: boolean = false;
+    public static performanceMode: boolean = false;
+
     static init(state: State) {
         // canvas and iframe
         window.addEventListener("error", (ev: ErrorEvent) => {
@@ -130,9 +131,6 @@ export default class Launcher {
         }
     }
     static update(timestep: number) {
-        if (window && 'navigator' in window && 'windowControlsOverlay' in window.navigator) {
-
-        }
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {
             Launcher.fullscreen = true;
@@ -200,10 +198,16 @@ export default class Launcher {
                     child.style.cursor = "normal";
                 });
             }
+            Launcher.lastTimestep = timestep;
+            Launcher.mouse.resetDeltas();
+            requestAnimationFrame(Launcher.update);
         }
-        Launcher.lastTimestep = timestep;
-        Launcher.mouse.resetDeltas();
-        requestAnimationFrame(Launcher.update);
+        else if (Launcher.performanceMode) {
+            setTimeout(Launcher.update,1000/10);
+        }
+        else {
+            requestAnimationFrame(Launcher.update);
+        }
     }
     public static screenshot(): void {
         if (Launcher.iframe.contentWindow != null && Launcher.iframeMode) {
@@ -211,7 +215,7 @@ export default class Launcher {
             if (cnvs.length == 0) return;
             let a: HTMLAnchorElement = document.createElement("a");
             a.download = "Games and Things - " + document.title + " " + new Date(Date.now()).toLocaleString() + ".png";
-            a.href = cnvs[cnvs.length-1].toDataURL("image/png").replace("image/png", "image/octet-stream");
+            a.href = cnvs[cnvs.length - 1].toDataURL("image/png").replace("image/png", "image/octet-stream");
             a.click();
             a.remove();
         }
