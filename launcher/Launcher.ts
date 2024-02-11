@@ -74,6 +74,7 @@ export default class Launcher {
     }
     public static openGame(game: Game) {
         Launcher.game = game;
+        Launcher.drawer.screenmode = game.screenmode;
         Launcher.openURL(game.prefix + game.versions[0].url);
     }
     public static openURL(url: string) {
