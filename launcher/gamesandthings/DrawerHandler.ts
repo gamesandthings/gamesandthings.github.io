@@ -248,7 +248,9 @@ export default class DrawerHandler implements IPositionable {
                     }
                 }
                 else if (id == "refresh") {
-                    Launcher.iframe.src += '';
+                    if (Launcher.iframe.src != '') {
+                        Launcher.iframe.src += '';
+                    }
                 }
                 else if (id == "arrow_back") {
                     if (Launcher.iframeMode) {
@@ -349,35 +351,27 @@ export default class DrawerHandler implements IPositionable {
                 }
                 if (!this.isOut) return;
                 if (id == "refresh") {
-                    if (Launcher.iframeMode) {
-                        Launcher.contextMenu.show([
-                            {
-                                text: "Refresh Games and Stuff",
-                                onselect: () => {
-                                    window.location.reload();
-                                }
-                            },
-                            {
-                                text: "Force Refresh",
-                                desc: "⚠ Unsaved data will be lost.",
-                                descFont: UniFont.ITALIC,
-                                onselect: () => {
-                                    Launcher.iframeDiv.removeChild(Launcher.iframe);
-                                    Launcher.initIframe();
-                                    Launcher.openURL(Launcher.lastURL);
-                                }
-                            },
-                            {
-                                text: "Force Refresh All",
-                                desc: "⚠ Unsaved data will be lost.",
-                                descFont: UniFont.ITALIC,
-                                onselect: () => {
-                                    Launcher.iframeDiv.removeChild(Launcher.iframe);
-                                    window.location.reload();
-                                }
-                            },
-                        ], this.clickX, this.clickY);
-                    }
+                    Launcher.contextMenu.show([
+                        {
+                            text: "Force Refresh Game",
+                            desc: "⚠ Unsaved data will be lost.",
+                            descFont: UniFont.ITALIC,
+                            onselect: () => {
+                                Launcher.iframeDiv.removeChild(Launcher.iframe);
+                                Launcher.initIframe();
+                                Launcher.openURL(Launcher.lastURL);
+                            }
+                        },
+                        {
+                            text: "Force Refresh All",
+                            desc: "⚠ Unsaved data will be lost.",
+                            descFont: UniFont.ITALIC,
+                            onselect: () => {
+                                Launcher.iframeDiv.removeChild(Launcher.iframe);
+                                window.location.reload();
+                            }
+                        },
+                    ], this.clickX, this.clickY);
                 }
             }
         });

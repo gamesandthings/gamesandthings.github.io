@@ -5,13 +5,14 @@
     <meta
       name="theme-color"
       media="(prefers-color-scheme: dark)"
-      content="black"
+      content="#000000"
     />
     <title>Games And Things</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
+    <link rel="manifest" href="manifest.json" />
     <style>
       * {
         user-select: none;
@@ -22,6 +23,8 @@
         image-rendering: crisp-edges;
         font-smooth: never;
         -webkit-font-smoothing: none;
+        titlebar-area-width: 0px;
+        titlebar-area-height: 0px;
       }
       canvas {
         image-rendering: pixelated; 

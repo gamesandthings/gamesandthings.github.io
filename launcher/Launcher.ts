@@ -107,6 +107,9 @@ export default class Launcher {
         }
     }
     static update(timestep: number) {
+        if(window && 'navigator' in window && 'windowControlsOverlay' in window.navigator){
+
+        }
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {
             Launcher.fullscreen = true;
@@ -156,16 +159,16 @@ export default class Launcher {
         Launcher.drawer.update(Launcher.delta);
         Launcher.contextMenu.update(Launcher.delta);
         if (!Launcher.iframeMode) {
-            
+            document.title = "Games And Things";
             Launcher.ctx.fillStyle = "black";
             Launcher.ctx.fillRect(0, 0, Launcher.cnv.width, Launcher.cnv.height);
             Launcher.state.draw();
             Launcher.ctx.fillStyle = "white";
-            Launcher.ctx.font = "25px sans-serif";
+            Launcher.ctx.font = "15px sans-serif";
             Launcher.ctx.textBaseline = "hanging";
             Launcher.ctx.fillText("This is the new games and stuff, ", 0, 35);
-            Launcher.ctx.fillText("currently in very early development.", 0, 65)
-            Launcher.ctx.fillText("Mobile devices will be supported soon.", 0, 95)
+            Launcher.ctx.fillText("currently in very early development.", 0, 55)
+            Launcher.ctx.fillText("Mobile devices will be supported soon.", 0, 75)
 
             Launcher.state.update(Launcher.delta);
             if (Launcher.iframe.contentDocument != null) {
@@ -173,6 +176,11 @@ export default class Launcher {
                     let child: HTMLElement = (elem as HTMLElement);
                     child.style.cursor = "normal";
                 });
+            }
+        }
+        else {
+            if (Launcher.iframe.contentWindow != null){
+                document.title = Launcher.iframe.contentWindow.document.title;
             }
         }
         Launcher.lastTimestep = timestep;
