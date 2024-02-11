@@ -145,21 +145,33 @@ export default class DrawerHandler implements IPositionable {
     async updateScreenMode() {
         if (this == null) return;
         if (this.screenmode.includes("/") || this.screenmode.includes(":")) {
-            this.screenmode.replace(":", "/");
+            this.screenmode = this.screenmode.replace(":", "/");
             let actualHeight = window.outerHeight;
             Launcher.iframe.style.aspectRatio = this.screenmode;
-            if (window.innerWidth >= actualHeight) {
+            if (window.innerWidth >= actualHeight && !Launcher.iframe.style.left.includes("-")) {
                 Launcher.iframe.style.width = "auto";
                 Launcher.iframe.style.height = window.innerHeight + "";
             }
-            else {
+            else if (actualHeight >= window.innerWidth) {
                 Launcher.iframe.style.height = "auto";
                 Launcher.iframe.style.width = window.innerWidth + "";
             }
+            // all of the code below this line is pure ass, but it works
             // doesnt fully make it ratio but whatever it fixes bouncing bug
+            if (Launcher.iframe.offsetWidth == window.innerWidth)
+                return;
+            
             if (Launcher.iframe.offsetWidth > window.innerWidth
-                || Launcher.iframe.offsetHeight > window.innerHeight) {
-                Launcher.iframe.style.width = "100%";
+                || Launcher.iframe.offsetHeight > window.outerHeight) {
+                if (actualHeight > window.innerWidth) {
+                    //Launcher.iframe.style.width = "100%";
+                    Launcher.iframe.style.height = actualHeight+"px";
+                }
+                else {
+                    Launcher.iframe.style.width = window.innerWidth+"px";
+                    Launcher.iframe.style.height = "auto";
+
+                }
                 // Launcher.iframe.style.height = "100%";
                 // Launcher.iframe.style.aspectRatio = "";
             }
@@ -179,9 +191,9 @@ export default class DrawerHandler implements IPositionable {
     update(elapsed: number): void {
         window.devicePixelRatio = 4;
         this.mouseOverCheck();
-        if (Launcher.fullscreen) {
+      //  if (Launcher.fullscreen) {
             this.updateScreenMode();
-        }
+      //  }
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
                 this.buttonsPressed.set(id, false);

@@ -135,6 +135,8 @@ export default class Launcher {
         Launcher.drawer.updateScreenMode();
     }
     static update(timestep: number) {
+
+        Launcher.drawer.update(Launcher.delta);
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {
             Launcher.fullscreen = true;
@@ -181,7 +183,7 @@ export default class Launcher {
         Launcher.cnv.setAttribute("width", Launcher.cnv.offsetWidth + "");
         Launcher.cnv.setAttribute("height", Launcher.cnv.offsetHeight + "");
         Launcher.delta = ((timestep - Launcher.lastTimestep) / 1000);
-        Launcher.drawer.update(Launcher.delta);
+        
         Launcher.contextMenu.update(Launcher.delta);
         if (!Launcher.iframeMode) {
             document.title = "Games And Things";
@@ -199,9 +201,16 @@ export default class Launcher {
             if (Launcher.iframe.contentDocument != null) {
                 Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
                     let child: HTMLElement = (elem as HTMLElement);
-                    child.style.cursor = "normal";
-                    child.style.fontKerning = "none";
-                    child.style.imageRendering = "pixelated";
+                    if (child.style.cursor != "normal") { // no uneccesary dom manip
+                        child.style.cursor = "normal";
+                    }
+                    if (child.style.fontKerning != "none") {
+                        child.style.fontKerning = "none";
+                    }
+                    if (child.style.fontKerning != "pixelated") {
+                        child.style.fontKerning = "pixelated";
+                    }
+
                 });
             }
             Launcher.lastTimestep = timestep;
@@ -209,7 +218,6 @@ export default class Launcher {
             requestAnimationFrame(Launcher.update);
         }
         else if (Launcher.performanceMode) {
-
             setTimeout(Launcher.update, 1000 / 5);
         }
         else {
