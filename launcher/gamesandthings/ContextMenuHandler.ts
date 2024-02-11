@@ -52,7 +52,7 @@ export default class ContextMenuHandler implements IPositionable {
         let text: string = opt.text;
         if (opt.hasSecondary != null) {
             if (opt.hasSecondary) {
-                text = text + "\u2003\u2003\u2003\u2003\u200F\u2630"
+                text = "\u2630\u2001" + text;
             }
         }
         if (opt.onselect == null) {
@@ -104,7 +104,11 @@ export default class ContextMenuHandler implements IPositionable {
         options.forEach((opt) => {
             this.add(opt);
         });
-        this.add({ text: "Close", font: UniFont.BOLD });
+        this.add({
+            text: "Close", font: UniFont.BOLD, onselect: () => {
+                this.clear();
+            }
+        });
         if (x == null) {
             x = Launcher.mouse.x;
         }

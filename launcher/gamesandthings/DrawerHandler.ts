@@ -202,7 +202,7 @@ export default class DrawerHandler implements IPositionable {
                     if (Launcher.iframeMode) {
                         let options: Array<ContextOption> = [
                             {
-                                text: "Screen Size                       ",
+                                text: "Screen Size",
                                 onselect: () => {
                                     Launcher.contextMenu.show([
                                         {
@@ -243,7 +243,9 @@ export default class DrawerHandler implements IPositionable {
                         ];
                         if (Launcher.game != null && Launcher.game.versions != null && Launcher.game.versions.length > 1) {
                             options.push({
-                                text: "Set Version ",
+                                text: "Set Version",
+                                desc: "⚠ If you change versions, unsaved data will be lost.",
+                                descFont: UniFont.ITALIC,
                                 hasSecondary: true,
                                 onselect: () => {
                                     let versions: Array<ContextOption> = [];
@@ -253,6 +255,8 @@ export default class DrawerHandler implements IPositionable {
                                                 {
                                                     text: version.title,
                                                     onselect: () => {
+                                                        Launcher.iframeDiv.removeChild(Launcher.iframe);
+                                                        Launcher.initIframe();
                                                         Launcher.openGame(Launcher.game, version);
                                                     }
                                                 }
@@ -360,7 +364,7 @@ export default class DrawerHandler implements IPositionable {
         else {
             this.x = 5;
         }
-    
+
         this.buttonsContextMenu.forEach((rdown: boolean, id: string) => {
             if (rdown) {
                 this.buttonsContextMenu.set(id, false);
