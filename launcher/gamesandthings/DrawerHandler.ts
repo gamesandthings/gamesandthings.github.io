@@ -133,33 +133,34 @@ export default class DrawerHandler implements IPositionable {
     }
     screenmode: string = "window";
     updateScreenMode() {
-        if (this.screenmode == "16:9") {
-            let fitDimensions: Vector2 = this.aspectRatioFit(1280, 720, document.body.offsetWidth, document.body.offsetHeight);
-            Launcher.iframe.style.width = fitDimensions.x + "px";
-            Launcher.iframe.style.height = fitDimensions.y + "px";
-        }
-        else if (this.screenmode == "16:10") {
-            let fitDimensions: Vector2 = this.aspectRatioFit(1680, 1050, document.body.offsetWidth, document.body.offsetHeight);
-            Launcher.iframe.style.width = fitDimensions.x + "px";
-            Launcher.iframe.style.height = fitDimensions.y + "px";
-        }
-        else if (this.screenmode == "4:3") {
-            let fitDimensions: Vector2 = this.aspectRatioFit(800, 600, document.body.offsetWidth, document.body.offsetHeight);
-            Launcher.iframe.style.width = fitDimensions.x + "px";
-            Launcher.iframe.style.height = fitDimensions.y + "px";
+        if (this.screenmode.includes("/") || this.screenmode.includes(":")) {
+            this.screenmode.replace(":","/");
+            if (document.body.offsetWidth >= document.body.offsetHeight) {
+                Launcher.iframe.style.width = "auto";
+                Launcher.iframe.style.height = document.body.offsetHeight + "";
+            }
+            else {
+                Launcher.iframe.style.height = "auto";
+                Launcher.iframe.style.width = document.body.offsetWidth + "";
+            }
+            if (Launcher.iframe.style.aspectRatio == this.screenmode) return;
+            Launcher.iframe.style.aspectRatio = this.screenmode;
         }
         else if (this.screenmode.includes("x")) {
-            Launcher.iframe.style.width = this.screenmode.split("x")[0] + "px";
-            Launcher.iframe.style.height = this.screenmode.split("x")[1] + "px";
+            Launcher.iframe.style.width = this.screenmode.split("x")[0] + "";
+            Launcher.iframe.style.height = this.screenmode.split("x")[1] + "";
+            Launcher.iframe.style.aspectRatio = "";
         }
         else {
             Launcher.iframe.style.width = "100%";
             Launcher.iframe.style.height = "100%";
+            Launcher.iframe.style.aspectRatio = "";
         }
     }
     update(elapsed: number): void {
         window.devicePixelRatio = 4;
         this.mouseOverCheck();
+        this.updateScreenMode();
         this.updateScreenMode();
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
@@ -208,19 +209,19 @@ export default class DrawerHandler implements IPositionable {
                                         {
                                             text: "4:3",
                                             onselect: () => {
-                                                this.screenmode = "4:3";
+                                                this.screenmode = "4/3";
                                             }
                                         },
                                         {
                                             text: "16:9",
                                             onselect: () => {
-                                                this.screenmode = "16:9";
+                                                this.screenmode = "16/9";
                                             }
                                         },
                                         {
                                             text: "16:10",
                                             onselect: () => {
-                                                this.screenmode = "16:10";
+                                                this.screenmode = "16/10";
                                             }
                                         },
                                         {
@@ -267,12 +268,6 @@ export default class DrawerHandler implements IPositionable {
                                 }
                             });
                         }
-                        options.push({
-                            text: "Screenshot",
-                            onselect: () => {
-                                Launcher.screenshot();
-                            }
-                        });
                         let performanceModeText: string = "Enable Performance Mode";
                         if (Launcher.performanceMode) {
                             performanceModeText = "Disable Performance Mode"

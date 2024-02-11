@@ -196,6 +196,8 @@ export default class Launcher {
                 Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
                     let child: HTMLElement = (elem as HTMLElement);
                     child.style.cursor = "normal";
+                    child.style.fontKerning = "none";
+                    child.style.imageRendering = "pixelated";
                 });
             }
             Launcher.lastTimestep = timestep;
@@ -203,7 +205,7 @@ export default class Launcher {
             requestAnimationFrame(Launcher.update);
         }
         else if (Launcher.performanceMode) {
-            setTimeout(Launcher.update,1000/10);
+            setTimeout(Launcher.update,1000/5);
         }
         else {
             requestAnimationFrame(Launcher.update);

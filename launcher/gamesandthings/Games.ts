@@ -15,7 +15,7 @@ export default class Games {
             title: "Minecraft",
             creator: "Mojang Studios",
             prefix: "mc/",
-            screenmode: "16:9",
+            screenmode: "16/9",
             versions: [
                 {
                     url: "1.8.8",
@@ -50,7 +50,7 @@ export default class Games {
             title: "Super Mario 64",
             creator: "Nintendo",
             prefix: "app-sm64/",
-            screenmode: "4:3",
+            screenmode: "4/3",
         },
     ];
 }
