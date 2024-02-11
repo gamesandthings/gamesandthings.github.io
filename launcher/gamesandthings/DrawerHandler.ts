@@ -170,6 +170,7 @@ export default class DrawerHandler implements IPositionable {
     update(elapsed: number): void {
         window.devicePixelRatio = 4;
         this.mouseOverCheck();
+        this.updateScreenMode();
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
                 this.buttonsPressed.set(id, false);
