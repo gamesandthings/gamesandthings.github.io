@@ -24,6 +24,9 @@ export default class DrawerHandler implements IPositionable {
             let button: HTMLElement = (b as HTMLElement);
             this.addMouseListeners(button);
         });
+        window.addEventListener("resize", (event) => {
+            this.updateScreenMode();
+        });
     }
     addMouseListeners(button: HTMLElement): void {
         this.buttonsPressed.set(button.id, false);
@@ -94,31 +97,37 @@ export default class DrawerHandler implements IPositionable {
             {
                 text: "1080p", onselect: () => {
                     this.screenmode = "1920x1080";
+                    this.updateScreenMode();
                 },
             },
             {
                 text: "720p", onselect: () => {
                     this.screenmode = "1280x720";
+                    this.updateScreenMode();
                 },
             },
             {
                 text: "480p", onselect: () => {
                     this.screenmode = "854x480";
+                    this.updateScreenMode();
                 },
             },
             {
                 text: "360p", onselect: () => {
                     this.screenmode = "640x360";
+                    this.updateScreenMode();
                 },
             },
             {
                 text: "240p", onselect: () => {
                     this.screenmode = "426x240";
+                    this.updateScreenMode();
                 },
             },
             {
                 text: "144p", onselect: () => {
                     this.screenmode = "256x144";
+                    this.updateScreenMode();
                 },
             },
             {
@@ -126,6 +135,7 @@ export default class DrawerHandler implements IPositionable {
                     let prompt: string | null = window.prompt("Enter Resolution:\n(example 1920x1080)");
                     if (prompt == null) return;
                     this.screenmode = (prompt as string);
+                    this.updateScreenMode();
                 },
                 hasSecondary: true
             }
@@ -135,15 +145,15 @@ export default class DrawerHandler implements IPositionable {
     updateScreenMode() {
         if (this.screenmode.includes("/") || this.screenmode.includes(":")) {
             this.screenmode.replace(":","/");
-            if (document.body.offsetWidth >= document.body.offsetHeight) {
+            let actualHeight = window.outerHeight;
+            if (window.innerWidth >= actualHeight && window.innerWidth >= Launcher.iframe.offsetWidth ) {
                 Launcher.iframe.style.width = "auto";
-                Launcher.iframe.style.height = document.body.offsetHeight + "";
+                Launcher.iframe.style.height = window.innerHeight + "";
             }
             else {
                 Launcher.iframe.style.height = "auto";
-                Launcher.iframe.style.width = document.body.offsetWidth + "";
+                Launcher.iframe.style.width = window.innerWidth + "";
             }
-            if (Launcher.iframe.style.aspectRatio == this.screenmode) return;
             Launcher.iframe.style.aspectRatio = this.screenmode;
         }
         else if (this.screenmode.includes("x")) {
@@ -160,8 +170,6 @@ export default class DrawerHandler implements IPositionable {
     update(elapsed: number): void {
         window.devicePixelRatio = 4;
         this.mouseOverCheck();
-        this.updateScreenMode();
-        this.updateScreenMode();
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
                 this.buttonsPressed.set(id, false);
