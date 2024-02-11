@@ -26,8 +26,8 @@ export default class Launcher {
     static init(state: State) {
         // canvas and iframe
         window.addEventListener("error", (ev: ErrorEvent) => {
-           alert("Error!\n" + ev.message 
-            + "\nPlease report this bug in the games and things discord!\nAttempting to continue..."); 
+            alert("Error!\n" + ev.message
+                + "\nPlease report this bug in the games and things discord!\nAttempting to continue...");
             Launcher.update(0);
         })
 
@@ -82,6 +82,7 @@ export default class Launcher {
         else {
             Launcher.drawer.screenmode = "window";
         }
+        Launcher.drawer.updateScreenMode();
         let link: string = game.prefix;
         if (version == null && game.versions == null) {
             link += "/";
@@ -120,13 +121,18 @@ export default class Launcher {
                 elem.requestFullscreen().catch((err) => {
                     Launcher.fullscreen = false;
                 });
-                eval("window.navigator.keyboard.lock()");
+                if ("keyboard" in window.navigator) {
+                    eval("window.navigator.keyboard.lock()");
+                }
             } else {
                 Launcher.fullscreen = false;
-                eval("window.navigator.keyboard.unlock()");
+                if ("keyboard" in window.navigator) {
+                    eval("window.navigator.keyboard.unlock()");
+                }
                 document.exitFullscreen();
             }
         }
+        Launcher.drawer.updateScreenMode();
     }
     static update(timestep: number) {
         if ((document.body.offsetWidth >= window.screen.availWidth &&
@@ -203,8 +209,8 @@ export default class Launcher {
             requestAnimationFrame(Launcher.update);
         }
         else if (Launcher.performanceMode) {
-            
-            setTimeout(Launcher.update,1000/5);
+
+            setTimeout(Launcher.update, 1000 / 5);
         }
         else {
             requestAnimationFrame(Launcher.update);
