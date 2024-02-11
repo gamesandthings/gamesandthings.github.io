@@ -22,7 +22,7 @@ export default class Sprite extends Rectangle implements IDrawable {
         this.y = y;
     }
     draw(): void {
-        if (this.graphic != null) {
+        if (this.graphic != null && this.graphic.loaded) {
             let img: HTMLImageElement = (this.graphic.img as HTMLImageElement);
             Launcher.ctx.globalAlpha = this.alpha;
             Launcher.ctx.save();

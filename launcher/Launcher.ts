@@ -7,10 +7,6 @@ import ContextMenuHandler from "./gamesandthings/ContextMenuHandler";
 import { Game, GameVersion } from "./gamesandthings/Games";
 import Vector2 from "./gamesandthings/types/Vector2";
 
-
-
-
-
 export default class Launcher {
     public static state: State;
     public static mouse: MouseHandler;
@@ -30,7 +26,9 @@ export default class Launcher {
     static init(state: State) {
         // canvas and iframe
         window.addEventListener("error", (ev: ErrorEvent) => {
-            alert("Error!\n" + ev.message);
+           alert("Error!\n" + ev.message 
+            + "\nPlease report this bug in the games and things discord!\nAttempting to continue..."); 
+            Launcher.update(0);
         })
 
         Launcher.iframeDiv = document.createElement("div");
@@ -205,6 +203,7 @@ export default class Launcher {
             requestAnimationFrame(Launcher.update);
         }
         else if (Launcher.performanceMode) {
+            
             setTimeout(Launcher.update,1000/5);
         }
         else {

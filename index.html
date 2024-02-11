@@ -1,116 +1,116 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="theme-color"
-      media="(prefers-color-scheme: dark)"
-      content="#000000"
-    />
-    <title>Games And Things</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet"
-    />
-    <link rel="manifest" href="manifest.json" />
-    <style>
-      * {
-        user-select: none;
-        overflow: hidden;
-        image-rendering: pixelated; 
-        image-rendering: crisp-edges;
-        font-kerning: none;
-        font-smooth: never;
-        -webkit-font-smoothing: none;
-        titlebar-area-width: 0px;
-        titlebar-area-height: 0px;
-      }
-      #iframediv {
-        width: 100%;
-        height: 100%;
-      }
-      canvas {
-        image-rendering: pixelated; 
-        image-rendering: crisp-edges;
-        width: 100%;
-        height: 100%;
-      }
-      body {
-        background-color: black;
-        width: 100%;
-        height: 100%;
-      }
-      button {
-        z-index: 4;
-        width: 50px;
-        height: 20px;
-        border-radius: 25px;
-        border: 0;
-        background-color: black;
-        font-family: sans-serif;
-        color: white;
-        position: absolute;
-      }
-      input {
-        font-size: 0;
-        font-family: monospace;
-      }
-      #slidymenu {
-        z-index: 6;
-        width: 175px;
-        height: 25px;
-        top: 15px;
-        border-radius: 25px;
-        border: 0px;
-        left: -150px;
-        opacity: 0.25;
-        background-color: black;
-        font-family: sans-serif;
-        color: white;
-        position: absolute;
-      }
 
-      .material-symbols-outlined {
-        height: 25px;
-        text-align: center;
-        font-size: 15px;
-        line-height: 25px;
-        display: inline-block;
-        justify-content: center;
-        width: 25px;
-        background-color: black;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000" />
+  <title>Games And Things</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    * {
+      user-select: none;
+      overflow: hidden;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      font-kerning: none;
+      font-smooth: never;
+      -webkit-font-smoothing: none;
+      titlebar-area-width: 0px;
+      titlebar-area-height: 0px;
+    }
 
-      .material-symbols-outlined:hover {
-        height: 25px;
-        text-align: center;
-        font-size: 15px;
-        line-height: 25px;
-        display: inline-block;
-        justify-content: center;
-        width: 25px;
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-    </style>
-  </head>
+    #iframediv {
+      width: 100%;
+      height: 100%;
+    }
 
-  <body>
-    <!--Launcher Code-->
-    <div id="slidymenu">
-      <span class="material-symbols-outlined" id="pause">
-        play_arrow
-      </span>
-      <span class="material-symbols-outlined" id="fullscreen">
-        fullscreen
-      </span>
-      <span class="material-symbols-outlined" id="refresh"> refresh </span>
-      <span class="material-symbols-outlined" id="settings"> settings </span>
-      <span class="material-symbols-outlined" id="forum"> forum </span>
-      <span class="material-symbols-outlined" id="peekarrow">
-        chevron_right
-      </span>
-    </div>
-    <script src="launcher.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/Fyrd/purejs-datalist-polyfill@master/datalist.polyfill.min.js"></script>
-  </body>
+    canvas {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      background-color: black;
+      width: 100%;
+      height: 100%;
+    }
+
+    button {
+      z-index: 4;
+      width: 50px;
+      height: 20px;
+      border-radius: 25px;
+      border: 0;
+      background-color: black;
+      font-family: sans-serif;
+      color: white;
+      position: absolute;
+    }
+
+    input {
+      font-size: 0;
+      font-family: monospace;
+    }
+
+    #slidymenu {
+      z-index: 6;
+      width: 175px;
+      height: 25px;
+      top: 15px;
+      border-radius: 25px;
+      border: 0px;
+      left: -150px;
+      opacity: 0.25;
+      background-color: black;
+      font-family: sans-serif;
+      color: white;
+      position: absolute;
+    }
+
+    .material-symbols-outlined {
+      height: 25px;
+      text-align: center;
+      font-size: 15px;
+      line-height: 25px;
+      display: inline-block;
+      justify-content: center;
+      width: 25px;
+      background-color: black;
+    }
+
+    .material-symbols-outlined:hover {
+      height: 25px;
+      text-align: center;
+      font-size: 15px;
+      line-height: 25px;
+      display: inline-block;
+      justify-content: center;
+      width: 25px;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <!--Launcher Code-->
+  <div id="slidymenu">
+    <span class="material-symbols-outlined" id="pause">
+      play_arrow
+    </span>
+    <span class="material-symbols-outlined" id="fullscreen">
+      fullscreen
+    </span>
+    <span class="material-symbols-outlined" id="refresh"> refresh </span>
+    <span class="material-symbols-outlined" id="settings"> settings </span>
+    <span class="material-symbols-outlined" id="forum"> forum </span>
+    <span class="material-symbols-outlined" id="peekarrow">
+      chevron_right
+    </span>
+  </div>
+  <script src="./launcher.js"></script>
+</body>
+
 </html>
