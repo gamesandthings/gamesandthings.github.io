@@ -30,7 +30,6 @@ export default class Launcher {
                 + "\nPlease report this bug in the games and things discord!\nAttempting to continue...");
             Launcher.update(0);
         })
-
         Launcher.iframeDiv = document.createElement("div");
         document.body.appendChild(Launcher.iframeDiv);
         Launcher.iframeDiv.id = "iframeDiv";
@@ -56,24 +55,39 @@ export default class Launcher {
         Launcher.state.create();
         Launcher.update(0);
     }
-    public static initIframe(): void {
-        Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
-        Launcher.iframeDiv.appendChild(Launcher.iframe);
+    public static initIframe(recreate: boolean = true): void {
+        if (recreate) {
+            Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
+            Launcher.iframeDiv.appendChild(Launcher.iframe);
+        }
         Launcher.iframe.id = "gamewin";
         Launcher.iframe.setAttribute('frameborder', "0");
         Launcher.iframe.setAttribute('allowfullscreen', "true");
         Launcher.iframe.style.width = "100%";
         Launcher.iframe.style.height = "100%";
+        Launcher.iframe.addEventListener("load", (ev) => {
+            console.clear();
+            window.eval("window.gameLogs = [];");
+            Launcher.updateInjection();
+        });
+        Launcher.iframe.addEventListener("beforeunload", (ev: BeforeUnloadEvent) => {
+            Launcher.injectedScript = false;
+        });
     }
     static lastTimestep: number = 0;
     static lastShiftTabTimeStep: number = 0;
     static delta: number = 0;
     public static lastURL: string = "";
     public static refreshGame() {
+        console.clear();
+        window.eval("window.gameLogs = [];");
         Launcher.iframe.src = Launcher.lastURL + '';
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
         if (game == null) return; // it will never be called if its null but typescript i guess
+        if (game.fixes != null) {
+            window.eval("window.gameData =" + JSON.stringify(game) + ";");
+        }
         Launcher.game = game;
         document.title = game.title;
         if (game.screenmode != null) {
@@ -98,6 +112,7 @@ export default class Launcher {
         Launcher.openURL(link);
     }
     public static openURL(url: string) {
+        Launcher.initIframe(false);
         Launcher.lastURL = url;
         if (this.lastURL != "") {
             Launcher.openIframeWindow();
@@ -134,8 +149,8 @@ export default class Launcher {
         }
         Launcher.drawer.updateScreenMode();
     }
+    static injectedScript: Boolean = false;
     static update(timestep: number) {
-
         Launcher.drawer.update(Launcher.delta);
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {
@@ -183,7 +198,6 @@ export default class Launcher {
         Launcher.cnv.setAttribute("width", Launcher.cnv.offsetWidth + "");
         Launcher.cnv.setAttribute("height", Launcher.cnv.offsetHeight + "");
         Launcher.delta = ((timestep - Launcher.lastTimestep) / 1000);
-        
         Launcher.contextMenu.update(Launcher.delta);
         if (!Launcher.iframeMode) {
             document.title = "Games And Things";
@@ -198,21 +212,6 @@ export default class Launcher {
             Launcher.ctx.fillText("Mobile devices will be supported soon.", 0, 75)
 
             Launcher.state.update(Launcher.delta);
-            if (Launcher.iframe.contentDocument != null) {
-                Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
-                    let child: HTMLElement = (elem as HTMLElement);
-                    if (child.style.cursor != "normal") { // no uneccesary dom manip
-                        child.style.cursor = "normal";
-                    }
-                    if (child.style.fontKerning != "none") {
-                        child.style.fontKerning = "none";
-                    }
-                    if (child.style.fontKerning != "pixelated") {
-                        child.style.fontKerning = "pixelated";
-                    }
-
-                });
-            }
             Launcher.lastTimestep = timestep;
             Launcher.mouse.resetDeltas();
             requestAnimationFrame(Launcher.update);
@@ -224,15 +223,85 @@ export default class Launcher {
             requestAnimationFrame(Launcher.update);
         }
     }
+    static injectScript: string = ""
+    public static updateInjection() {
+        if (Launcher.iframe.contentWindow != null) {
+            //console.log("updating iframe");
+            if (!Launcher.injectedScript) {
+                Launcher.injectedScript = true;
+                if (Launcher.injectScript == "") {
+                    const url = "/iframe_inject.js"
+                    fetch(url)
+                        .then(r => r.text())
+                        .then((t) => {
+                            Launcher.injectScript = t;
+                            if (Launcher.iframe.contentWindow == null) return;
+                            Launcher.iframe.contentWindow.window.eval(t);
+                        });
+                }
+                else {
+                    Launcher.iframe.contentWindow.window.eval(Launcher.injectScript);
+                }
+            }
+        }
+        if (Launcher.iframe.contentDocument != null) {
+            Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
+                let child: HTMLElement = (elem as HTMLElement);
+
+                if (child.style.cursor != "normal") { // no uneccesary dom manip
+                    child.style.cursor = "normal";
+                }
+                if (child.style.fontKerning != "none") {
+                    child.style.fontKerning = "none";
+                }
+                if (child.style.imageRendering != "pixelated") {
+                    child.style.imageRendering = "pixelated";
+                }
+
+            });
+        }
+    }
     public static screenshot(): void {
         if (Launcher.iframe.contentWindow != null && Launcher.iframeMode) {
             let cnvs: HTMLCollectionOf<HTMLCanvasElement> = Launcher.iframe.contentWindow.document.getElementsByTagName("canvas");
             if (cnvs.length == 0) return;
             let a: HTMLAnchorElement = document.createElement("a");
             a.download = "Games and Things - " + document.title + " " + new Date(Date.now()).toLocaleString() + ".png";
-            a.href = cnvs[cnvs.length - 1].toDataURL("image/png").replace("image/png", "image/octet-stream");
-            a.click();
-            a.remove();
+            for (let x = 0; x < cnvs.length; x += 1) {
+                let offscreenCanvas = new OffscreenCanvas(cnvs[0].offsetWidth, cnvs[0].offsetHeight);
+                const offscreenCtx: OffscreenCanvasRenderingContext2D | null = offscreenCanvas.getContext("2d");
+                if (offscreenCtx == null) return;
+                let ctx: OffscreenCanvasRenderingContext2D = (offscreenCtx as OffscreenCanvasRenderingContext2D);
+                let cnvImage = new Image();
+                cnvImage.src = cnvs[x].toDataURL("image/png");
+                cnvImage.onload = (ev) => {
+                    ctx.drawImage(cnvImage, 0, 0);
+                    const data: Uint8ClampedArray = ctx.getImageData(0, 0,
+                        offscreenCanvas.width, offscreenCanvas.height).data;
+                    let lastColor: string = "";
+                    let canTakeScreenshot: boolean = false;
+                    for (let i = 0; i < data.length; i += 4) {
+                        let arr: string = [data[i], data[i + 1], data[i + 2]].toString();
+                        if (lastColor != "" && lastColor != arr) {
+                            canTakeScreenshot = true;
+                            break;
+                        }
+                        else {
+                            lastColor = arr;
+                        }
+
+                    }
+                    if (!canTakeScreenshot) {
+                        console.log("could not save canvas id " + x)
+                    }
+                    else {
+                        a.href = cnvs[x].toDataURL("image/png").replace("image/png", "image/octet-stream");
+                        a.click();
+                        a.remove();
+                    }
+                }
+            }
+
         }
     }
 }

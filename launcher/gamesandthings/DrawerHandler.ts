@@ -143,7 +143,9 @@ export default class DrawerHandler implements IPositionable {
     }
     screenmode: string = "window";
     async updateScreenMode() {
-        if (this == null) return;
+        if (this == null) return; 
+
+
         if (this.screenmode.includes("/") || this.screenmode.includes(":")) {
             this.screenmode = this.screenmode.replace(":", "/");
             let actualHeight = window.outerHeight;
@@ -160,15 +162,15 @@ export default class DrawerHandler implements IPositionable {
             // doesnt fully make it ratio but whatever it fixes bouncing bug
             if (Launcher.iframe.offsetWidth == window.innerWidth)
                 return;
-            
+
             if (Launcher.iframe.offsetWidth > window.innerWidth
                 || Launcher.iframe.offsetHeight > window.outerHeight) {
                 if (actualHeight > window.innerWidth) {
                     //Launcher.iframe.style.width = "100%";
-                    Launcher.iframe.style.height = actualHeight+"px";
+                    Launcher.iframe.style.height = actualHeight + "px";
                 }
                 else {
-                    Launcher.iframe.style.width = window.innerWidth+"px";
+                    Launcher.iframe.style.width = window.innerWidth + "px";
                     Launcher.iframe.style.height = "auto";
 
                 }
@@ -191,9 +193,9 @@ export default class DrawerHandler implements IPositionable {
     update(elapsed: number): void {
         window.devicePixelRatio = 4;
         this.mouseOverCheck();
-      //  if (Launcher.fullscreen) {
-            this.updateScreenMode();
-      //  }
+        //  if (Launcher.fullscreen) {
+        this.updateScreenMode();
+        //  }
         this.buttonsPressed.forEach((mdown: boolean, id: string) => {
             if (mdown) {
                 this.buttonsPressed.set(id, false);
@@ -293,7 +295,7 @@ export default class DrawerHandler implements IPositionable {
                                                     text: version.title,
                                                     onselect: () => {
                                                         Launcher.iframeDiv.removeChild(Launcher.iframe);
-                                                        Launcher.initIframe();
+                                                        Launcher.initIframe(false);
                                                         Launcher.openGame(Launcher.game, version);
                                                     }
                                                 }

@@ -120,9 +120,15 @@ export default class ContextMenuHandler implements IPositionable {
         this.contextMenuInput.style.left = x - 20 + "px";
         this.contextMenuInput.style.top = y - 50 + "px";
         try {
-            this.contextMenuInput.showPicker();
+            if ("showPicker" in this.contextMenuInput) {
+                this.contextMenuInput.showPicker();
+            }
+            else {
+                alert("Your browser does not support context menus at the moment,\n");
+                alert("Please join discord (chat icon) for updates.");
+            }
         }
-        catch { }
+        catch {}
         // go away so it doesnt interfere with user input
         this.contextMenuInput.style.top = "-999px";
         this.contextMenuInput.style.left = "-999px";

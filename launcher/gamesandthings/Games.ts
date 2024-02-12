@@ -3,11 +3,16 @@ export type Game = {
     creator: string,
     prefix: string,
     screenmode?: string,
-    versions?: Array<GameVersion> | null
+    versions?: Array<GameVersion> | null,
+    fixes?: Fixes | null
 }
 export type GameVersion = {
     url: string,
     title: string,
+}
+export type Fixes = {
+    runsAtSetFrameRate:boolean,
+    preserveDrawingBuffer:boolean,
 }
 export default class Games {
     public static games: Array<Game> = [
@@ -44,13 +49,21 @@ export default class Games {
                     url: "c0.0.23a_01",
                     title: "c0.0.23a_01"
                 },
-            ]
+            ],
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+            }
         },
         {
             title: "Super Mario 64",
             creator: "Nintendo",
             prefix: "app-sm64/",
             screenmode: "4/3",
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: true,
+            }
         },
     ];
 }
