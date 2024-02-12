@@ -297,7 +297,6 @@ export default class DrawerHandler implements IPositionable {
                                                         Launcher.iframeDiv.removeChild(Launcher.iframe);
                                                         Launcher.initIframe();
                                                         Launcher.openGame(Launcher.game, version);
-                                                        Launcher.initIframe(false);
                                                     }
                                                 }
                                             );

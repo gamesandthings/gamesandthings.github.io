@@ -45,7 +45,6 @@ export default class Launcher {
         Launcher.drawer = new DrawerHandler(document.getElementById("slidymenu") as HTMLDivElement);
         Launcher.drawer.elem.style.left = "-150px";
 
-
         Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
         Launcher.cnv.id = "cnv";
         document.body.appendChild(Launcher.cnv);
@@ -53,9 +52,17 @@ export default class Launcher {
         Launcher.ctx.imageSmoothingEnabled = false;
         Launcher.state = state;
         Launcher.state.create();
-        Launcher.update(0);
+        const url = "/iframe_inject.js"
+        fetch(url)
+            .then(r => r.text())
+            .then((t) => {
+                Launcher.injectScript = t;
+                setInterval(Launcher.updateInjection, 1000 * 10);
+                Launcher.update(0);
+            });
     }
     public static initIframe(recreate: boolean = true): void {
+        Launcher.injectedScript = false;
         if (recreate) {
             Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
             Launcher.iframeDiv.appendChild(Launcher.iframe);
@@ -68,6 +75,9 @@ export default class Launcher {
         Launcher.iframe.addEventListener("load", (ev) => {
             console.clear();
             window.eval("window.gameLogs = [];");
+            Launcher.updateInjection();
+        });
+        Launcher.iframe.addEventListener("DOMContentLoaded", (ev) => {
             Launcher.updateInjection();
         });
         Launcher.iframe.addEventListener("beforeunload", (ev: BeforeUnloadEvent) => {
@@ -217,13 +227,24 @@ export default class Launcher {
             requestAnimationFrame(Launcher.update);
         }
         else if (Launcher.performanceMode) {
+            if (Launcher.iframe.contentDocument != null) {
+                Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
+                    if (Launcher.elemsToRemove.includes(elem.tagName.toLowerCase())) {
+                        elem.remove();
+                        return;
+                    };
+                });
+            }
             setTimeout(Launcher.update, 1000 / 5);
         }
         else {
             requestAnimationFrame(Launcher.update);
         }
     }
-    static injectScript: string = ""
+    static injectScript: string = "";
+    static elemsToOptimize: string[] = ["canvas", "p", "h1", "h2", "h3"];
+    static elemsToRemove: string[] = ["title", "meta"];
+
     public static updateInjection() {
         if (Launcher.iframe.contentWindow != null) {
             //console.log("updating iframe");
@@ -246,6 +267,20 @@ export default class Launcher {
         }
         if (Launcher.iframe.contentDocument != null) {
             Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
+                elem.getAttribute("style")?.trim();
+                if (elem.tagName.toLowerCase() == "script") {
+                    let scriptTag: HTMLScriptElement = (elem as HTMLScriptElement);
+                    if (scriptTag.innerText.includes("window.eaglercraftXClientSignature =")
+                        && scriptTag.innerText.includes("window.eaglercraftXClientBundle =") && eval("document.getElementById('gamewin').contentWindow.window.__isEaglerX188Running") == "yes") {
+                        scriptTag.remove();
+                        return;
+                    }
+                    let type: string | null = elem.getAttribute("type")
+                    if (type != null) {
+                        elem.removeAttribute("type");
+                    }
+                }
+                if (!Launcher.elemsToOptimize.includes(elem.tagName.toLowerCase())) return;
                 let child: HTMLElement = (elem as HTMLElement);
 
                 if (child.style.cursor != "normal") { // no uneccesary dom manip
