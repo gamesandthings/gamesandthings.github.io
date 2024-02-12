@@ -22,6 +22,8 @@ export default class Launcher {
     public static fullscreen: boolean = false;
     public static fullscreenByOS: boolean = false;
     public static performanceMode: boolean = false;
+    static gameAudioContexts: AudioContext[] = [];
+    static gameLogs: string[] = [];
 
     static init(state: State) {
         // canvas and iframe
@@ -52,6 +54,13 @@ export default class Launcher {
         Launcher.ctx.imageSmoothingEnabled = false;
         Launcher.state = state;
         Launcher.state.create();
+        this.initInject();
+        (window as any).gameAudioContexts = [];
+        Launcher.gameAudioContexts = (window as any).gameAudioContexts;
+        (window as any).gameLogs = [];
+        Launcher.gameLogs = (window as any).gameLogs;
+    }
+    public static initInject() {
         const url = "/iframe_inject.js"
         fetch(url)
             .then(r => r.text())
@@ -59,10 +68,19 @@ export default class Launcher {
                 Launcher.injectScript = t;
                 setInterval(Launcher.updateInjection, 1000 * 10);
                 Launcher.update(0);
-            });
+            })
+    }
+    public static finalInject() {
+        //  Launcher.injectedScript = false;
+        console.clear();
+        window.eval("window.gameLogs = [];");
+        (window as any).gameAudioContexts = [];
+        Launcher.gameAudioContexts = (window as any).gameAudioContexts;
+        (window as any).gameLogs = [];
+        Launcher.gameLogs = (window as any).gameLogs;
+        Launcher.updateInjection();
     }
     public static initIframe(recreate: boolean = true): void {
-        Launcher.injectedScript = false;
         if (recreate) {
             Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
             Launcher.iframeDiv.appendChild(Launcher.iframe);
@@ -73,12 +91,18 @@ export default class Launcher {
         Launcher.iframe.style.width = "100%";
         Launcher.iframe.style.height = "100%";
         Launcher.iframe.addEventListener("load", (ev) => {
-            console.clear();
-            window.eval("window.gameLogs = [];");
-            Launcher.updateInjection();
+
+            if (Launcher.game != null && Launcher.game.injectTime == 'load') {
+                Launcher.finalInject();
+            }
+            else if (Launcher.game == null) {
+                Launcher.finalInject();
+            }
         });
         Launcher.iframe.addEventListener("DOMContentLoaded", (ev) => {
-            Launcher.updateInjection();
+            if (Launcher.game != null && Launcher.game.injectTime == 'DOMContentLoaded') {
+                Launcher.finalInject();
+            }
         });
         Launcher.iframe.addEventListener("beforeunload", (ev: BeforeUnloadEvent) => {
             Launcher.injectedScript = false;
@@ -91,9 +115,15 @@ export default class Launcher {
     public static refreshGame() {
         console.clear();
         window.eval("window.gameLogs = [];");
+        window.eval("window.gameAudioContexts = [];");
+
         Launcher.iframe.src = Launcher.lastURL + '';
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
+        console.clear();
+        window.eval("window.gameLogs = [];");
+        window.eval("window.gameAudioContexts = [];");
+        Launcher.injectedScript = false;
         if (game == null) return; // it will never be called if its null but typescript i guess
         if (game.fixes != null) {
             window.eval("window.gameData =" + JSON.stringify(game) + ";");
@@ -161,6 +191,18 @@ export default class Launcher {
     }
     static injectedScript: Boolean = false;
     static update(timestep: number) {
+        Launcher.gameAudioContexts.forEach((audctx) => {
+            if (audctx.onstatechange == undefined) {
+                audctx.onstatechange = (ev) => {
+                    if (audctx.state == "closed") {
+                        Launcher.gameAudioContexts.splice(Launcher.gameAudioContexts.indexOf(audctx), 1);
+                    }
+                }
+            }
+            if (audctx.state == "closed") {
+                Launcher.gameAudioContexts.splice(Launcher.gameAudioContexts.indexOf(audctx), 1);
+            }
+        });
         Launcher.drawer.update(Launcher.delta);
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {

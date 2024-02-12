@@ -6,7 +6,7 @@ console.log = ((origFn) => {
             if ("gameLogs" in window.top) {
                 window.top.gameLogs.push(v);
             }
-            v = prefix + " " + v;
+            v = prefix + " " + v.replace(prefix, "");
         }
         return origFn.call(this, v);
     };
@@ -18,7 +18,7 @@ console.info = ((origFn) => {
             if ("gameLogs" in window.top) {
                 window.top.gameLogs.push(v);
             }
-            v = prefix + " " + v;
+            v = prefix + " " + v.replace(prefix, "");
         }
         return origFn.call(this, v);
     };
@@ -46,3 +46,43 @@ HTMLCanvasElement.prototype.getContext = ((origFn) => {
         return origFn.call(this, type, attributes);
     };
 })(HTMLCanvasElement.prototype.getContext);
+AudioContext.prototype.createScriptProcessor = ((origFn) => {
+    return function (bufferSize, numberOfInputChannels, numberOfOutputChannels) {
+        window.top.gameAudioContexts.push(this);
+        return origFn.call(this, bufferSize, numberOfInputChannels, numberOfOutputChannels);
+    };
+})(AudioContext.prototype.createScriptProcessor);
+AudioContext.prototype.createMediaStreamSource = ((origFn) => {
+    return function (element) {
+        window.top.gameAudioContexts.push(this);
+        return origFn.call(this, element);
+    };
+})(AudioContext.prototype.createMediaStreamSource);
+
+OfflineAudioContext.prototype.createScriptProcessor = ((origFn) => {
+    return function (bufferSize, numberOfInputChannels, numberOfOutputChannels) {
+        window.top.gameAudioContexts.push(this);
+        return origFn.call(this, bufferSize, numberOfInputChannels, numberOfOutputChannels);
+    };
+})(OfflineAudioContext.prototype.createScriptProcessor);
+OfflineAudioContext.prototype.createBuffer = ((origFn) => {
+    return function (numberOfChannels, length, sampleRate) {
+        window.top.gameAudioContexts.push(this);
+        return origFn.call(this, numberOfChannels, length, sampleRate);
+    };
+})(OfflineAudioContext.prototype.createBuffer);
+
+
+Object.defineProperty(HTMLAudioElement.prototype, 'srcObject', {
+    configurable: true,
+    get: function () {
+        console.log(this.constructor.name);
+        return this.srcObject;
+
+    }.bind(window),
+    set: function (value) {
+        console.log(this.constructor.name);
+        this.srcObject = value;
+
+    }.bind(window)
+});

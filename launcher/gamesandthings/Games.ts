@@ -2,6 +2,7 @@ export type Game = {
     title: string,
     creator: string,
     prefix: string,
+    injectTime: "DOMContentLoaded" | "load",
     screenmode?: string,
     versions?: Array<GameVersion> | null,
     fixes?: Fixes | null
@@ -19,6 +20,7 @@ export default class Games {
         {
             title: "Minecraft",
             creator: "Mojang Studios",
+            injectTime: 'DOMContentLoaded',
             prefix: "mc/",
             screenmode: "16/9",
             versions: [
@@ -60,6 +62,7 @@ export default class Games {
             creator: "Nintendo",
             prefix: "app-sm64/",
             screenmode: "4/3",
+            injectTime: 'load',
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
