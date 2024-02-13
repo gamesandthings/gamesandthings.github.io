@@ -46,32 +46,6 @@ HTMLCanvasElement.prototype.getContext = ((origFn) => {
         return origFn.call(this, type, attributes);
     };
 })(HTMLCanvasElement.prototype.getContext);
-AudioContext.prototype.createScriptProcessor = ((origFn) => {
-    return function (bufferSize, numberOfInputChannels, numberOfOutputChannels) {
-        window.top.gameAudioContexts.push(this);
-        return origFn.call(this, bufferSize, numberOfInputChannels, numberOfOutputChannels);
-    };
-})(AudioContext.prototype.createScriptProcessor);
-AudioContext.prototype.createMediaStreamSource = ((origFn) => {
-    return function (element) {
-        window.top.gameAudioContexts.push(this);
-        return origFn.call(this, element);
-    };
-})(AudioContext.prototype.createMediaStreamSource);
-
-OfflineAudioContext.prototype.createScriptProcessor = ((origFn) => {
-    return function (bufferSize, numberOfInputChannels, numberOfOutputChannels) {
-        window.top.gameAudioContexts.push(this);
-        return origFn.call(this, bufferSize, numberOfInputChannels, numberOfOutputChannels);
-    };
-})(OfflineAudioContext.prototype.createScriptProcessor);
-OfflineAudioContext.prototype.createBuffer = ((origFn) => {
-    return function (numberOfChannels, length, sampleRate) {
-        window.top.gameAudioContexts.push(this);
-        return origFn.call(this, numberOfChannels, length, sampleRate);
-    };
-})(OfflineAudioContext.prototype.createBuffer);
-
 
 Object.defineProperty(HTMLAudioElement.prototype, 'srcObject', {
     configurable: true,

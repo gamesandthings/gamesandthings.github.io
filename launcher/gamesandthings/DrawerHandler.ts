@@ -1,15 +1,17 @@
 import Launcher from "../Launcher";
 import ContextMenuHandler from "./ContextMenuHandler";
 import { ContextOption } from "./ContextMenuHandler";
-
 import UniFont from "./UniFont";
+import CanvasRecorder from "./CanvasRecorder";
 import { MouseButtons } from "./enums/MouseButtons"
 import IPositionable from "./interfaces/IPositionable";
 import Vector2 from "./types/Vector2";
+
 export default class DrawerHandler implements IPositionable {
     buttonsPressed: Map<string, boolean> = new Map<string, boolean>();
     buttonsContextMenu: Map<string, boolean> = new Map<string, boolean>();
     buttonsMouseOver: Map<string, boolean> = new Map<string, boolean>();
+    recorder: CanvasRecorder | undefined = undefined;
     buttons: Array<HTMLElement> = [];
     mouseOver: Boolean = true;
     x: number = -150;
@@ -143,7 +145,7 @@ export default class DrawerHandler implements IPositionable {
     }
     screenmode: string = "window";
     async updateScreenMode() {
-        if (this == null) return; 
+        if (this == null) return;
 
 
         if (this.screenmode.includes("/") || this.screenmode.includes(":")) {
@@ -324,8 +326,65 @@ export default class DrawerHandler implements IPositionable {
                                 Launcher.screenshot();
                             }
                         });
+                        if (this.recorder == null) this.recorder = new CanvasRecorder();
+                        if (!this.recorder.recording) {
+                            options.push({
+                                text: "Start Recording (with audio)",
+                                desc: "Choose your screen under screen tab and share system audio for audio to work.",
+                                onselect: async () => {
+                                    if (Launcher.iframe.contentWindow == null) return;
+                                    let cnvs: HTMLCollectionOf<HTMLCanvasElement> = Launcher.iframe.contentWindow.document.getElementsByTagName("canvas");
+                                    const displayMediaOptions = {
+                                        video: true,
+                                        audio: {
+                                            autoGainControl: false,
+                                            googAutoGainControl: false,
+                                            echoCancellation: false,
+                                            noiseSuppression: false,
+                                            sampleRate: 44100,
+                                            suppressLocalAudioPlayback: false,
+                                        },
+                                        
+                                        monitorTypeSurfaces: "include",
+                                        surfaceSwitching: "include",
+                                        selfBrowserSurface: "include",
+                                        preferCurrentTab: false,
+                                        systemAudio: "include",
+                                    };
+                                    let userMedia: MediaStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+                                    userMedia.addEventListener("removetrack", (ev) => { this.recorder?.stopRecording() })
+                                    this.recorder = new CanvasRecorder(userMedia);
+                                    if (cnvs.length != 0) {
+                                        this.recorder.setCanvasStream(cnvs[0]);
+                                    }
+                                    this.recorder.startRecording();
+                                }
+                            });
+                            options.push({
+                                text: "Start Recording (without audio)",
+                                onselect: async () => {
+                                    if (Launcher.iframe.contentWindow == null) return;
+                                    let cnvs: HTMLCollectionOf<HTMLCanvasElement> = Launcher.iframe.contentWindow.document.getElementsByTagName("canvas");
+                                    this.recorder = new CanvasRecorder();
+                                    if (cnvs.length != 0) {
+                                        this.recorder.setCanvasStream(cnvs[0]);
+                                    }
+                                    this.recorder.startRecording();
+                                }
+                            });
+                        }
+                        else {
+                            options.push({
+                                text: "Stop Recording",
+                                onselect: () => {
+                                    if (Launcher.iframe.contentWindow == null) return;
+                                    if (this.recorder != undefined) {
+                                        this.recorder.stopRecording();
+                                    }
+                                }
+                            });
+                        }
                         Launcher.contextMenu.show(options, this.clickX, this.clickY);
-
                     }
                 }
                 else if (button.id == "forum") {
