@@ -17,7 +17,7 @@ export default class CanvasRecorder {
     private mediaRecorder: MediaRecorder | null = null;
     public recording: boolean = false;
     video_bits_per_sec!: number;
-    constructor(stream?: MediaStream | null, video_bits_per_sec: number = 4000000) {
+    constructor(stream?: MediaStream | null, video_bits_per_sec: number = 4500000) {
         this.stream = stream;
         this.recordedBlobs = [];
         this.supportedType = undefined;
@@ -31,9 +31,19 @@ export default class CanvasRecorder {
         this.canvasStream = canvas.captureStream();
     }
     async startRecording() {
+        let types:string[] = [
+            "video/webm",
+            'video/webm,codecs=vp9',
+            "video/webm\;codecs=vp8",
+            "video/webm\;codecs=daala",
+            "video/webm\;codecs=h264",
+        ];
 
-        if (MediaRecorder.isTypeSupported("video/webm")) {
-            this.supportedType = "video/webm";
+        for (let i in types) {
+            if (MediaRecorder.isTypeSupported(types[i])) {
+                this.supportedType = types[i];
+                break;
+            }
         }
 
         if (this.supportedType == null) {
@@ -112,7 +122,7 @@ export default class CanvasRecorder {
 
     download(file_name?: string): void {
         if (file_name == undefined) {
-            file_name = "Games and Things - " + document.title + " " + new Date(Date.now()).toLocaleString() + ".webm";
+            file_name = "Games and Things - " + document.title.valueOf() + " " + new Date(this.startTime).toLocaleString() + ".webm";
         }
         const blob = new Blob(this.recordedBlobs, { type: this.supportedType });
         var duration = Date.now() - this.startTime;
