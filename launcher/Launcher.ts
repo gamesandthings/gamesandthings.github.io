@@ -22,7 +22,7 @@ export default class Launcher {
     public static fullscreen: boolean = false;
     public static fullscreenByOS: boolean = false;
     public static performanceMode: boolean = false;
-    static gameAudioContexts: AudioContext[] = [];
+    static gameMediaStreams: MediaStream[] = [];
     static gameLogs: string[] = [];
 
     static init(state: State) {
@@ -55,8 +55,8 @@ export default class Launcher {
         Launcher.state = state;
         Launcher.state.create();
         this.initInject();
-        (window as any).gameAudioContexts = [];
-        Launcher.gameAudioContexts = (window as any).gameAudioContexts;
+        (window as any).gameMediaStreams = [];
+        Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
         Launcher.gameLogs = (window as any).gameLogs;
     }
@@ -74,8 +74,8 @@ export default class Launcher {
         //  Launcher.injectedScript = false;
         console.clear();
         window.eval("window.gameLogs = [];");
-        (window as any).gameAudioContexts = [];
-        Launcher.gameAudioContexts = (window as any).gameAudioContexts;
+        (window as any).gameMediaStreams = [];
+        Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
         Launcher.gameLogs = (window as any).gameLogs;
         Launcher.updateInjection();
@@ -115,14 +115,14 @@ export default class Launcher {
     public static refreshGame() {
         console.clear();
         window.eval("window.gameLogs = [];");
-        window.eval("window.gameAudioContexts = [];");
+        window.eval("window.gameMediaStreams = [];");
 
         Launcher.iframe.src = Launcher.lastURL + '';
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
         console.clear();
         window.eval("window.gameLogs = [];");
-        window.eval("window.gameAudioContexts = [];");
+        window.eval("window.gameMediaStreams = [];");
         Launcher.injectedScript = false;
         if (game == null) return; // it will never be called if its null but typescript i guess
         if (game.fixes != null) {
@@ -191,18 +191,6 @@ export default class Launcher {
     }
     static injectedScript: Boolean = false;
     static update(timestep: number) {
-        Launcher.gameAudioContexts.forEach((audctx) => {
-            if (audctx.onstatechange == undefined) {
-                audctx.onstatechange = (ev) => {
-                    if (audctx.state == "closed") {
-                        Launcher.gameAudioContexts.splice(Launcher.gameAudioContexts.indexOf(audctx), 1);
-                    }
-                }
-            }
-            if (audctx.state == "closed") {
-                Launcher.gameAudioContexts.splice(Launcher.gameAudioContexts.indexOf(audctx), 1);
-            }
-        });
         Launcher.drawer.update(Launcher.delta);
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {
@@ -348,6 +336,7 @@ export default class Launcher {
                 let offscreenCanvas = new OffscreenCanvas(cnvs[0].offsetWidth, cnvs[0].offsetHeight);
                 const offscreenCtx: OffscreenCanvasRenderingContext2D | null = offscreenCanvas.getContext("2d");
                 if (offscreenCtx == null) return;
+                offscreenCtx.imageSmoothingEnabled = false;
                 let ctx: OffscreenCanvasRenderingContext2D = (offscreenCtx as OffscreenCanvasRenderingContext2D);
                 let cnvImage = new Image();
                 cnvImage.src = cnvs[x].toDataURL("image/png");
