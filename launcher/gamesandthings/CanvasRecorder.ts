@@ -31,7 +31,7 @@ export default class CanvasRecorder {
         this.canvasStream = canvas.captureStream();
     }
     async startRecording() {
-        let types:string[] = [
+        let types: string[] = [
             "video/webm",
             'video/webm,codecs=vp9',
             "video/webm\;codecs=vp8",
@@ -69,10 +69,16 @@ export default class CanvasRecorder {
             else if (this.canvasStream != null && this.stream != null) {
                 mediaStream = new MediaStream(this.canvasStream);
                 if (this.stream.getAudioTracks().length != 0) {
+                    this.stream.getVideoTracks()[0].stop();
                     mediaStream.addTrack(this.stream.getAudioTracks()[0]);
                     this.stream.getAudioTracks()[0].onended = (ev) => {
                         this.stopRecording();
                     }
+                }
+                else {
+                    this.handleStop(undefined);
+                    window.alert("Audio permission was not granted!\nTry again with share system audio toggle on.")
+                    return;
                 }
             }
         } catch (e) {
@@ -103,19 +109,25 @@ export default class CanvasRecorder {
         if (ev.data != null && ev.data.size > 0) {
             this.recordedBlobs.push(ev.data);
         }
-
-
     }
 
-    handleStop(ev: Event): void {
+    handleStop(ev: any): void {
         this.recording = false;
         console.log('Recorder stopped: ', ev);
         this.download();
+        if (this.stream == null) return;
+        this.stream.getTracks().forEach(function (track) {
+            track.stop();
+        });
     }
 
     stopRecording(): void {
         this.recording = false;
         this.mediaRecorder?.stop();
+        if (this.stream == null) return;
+        this.stream.getTracks().forEach(function (track) {
+            track.stop();
+        });
         console.log('Recorded Blobs: ', this.recordedBlobs);
         this.stream = null;
     }
@@ -124,12 +136,23 @@ export default class CanvasRecorder {
         if (file_name == undefined) {
             file_name = "Games and Things - " + document.title.valueOf() + " " + new Date(this.startTime).toLocaleString() + ".webm";
         }
+        if (!(this.recordedBlobs.length > 0)) return;
         const blob = new Blob(this.recordedBlobs, { type: this.supportedType });
         var duration = Date.now() - this.startTime;
         fixWebmDuration(blob, duration, { logger: false })
             .then(function (fixedBlob) {
-                if (file_name == undefined) {return;}
                 const url = window.URL.createObjectURL(fixedBlob);
+                let previewWindow:Window | null = window.open(url);
+                if (previewWindow == null) return;
+                previewWindow.addEventListener("DOMContentLoaded", (ev)=>{
+                    if (previewWindow == null) return;
+                    if (file_name == undefined) { return; }
+                    previewWindow.document.title = file_name;
+                })
+                previewWindow.onclose = (ev) => {
+                    window.URL.revokeObjectURL(url);
+                };
+                if (file_name == undefined) { return; }
                 const a: HTMLAnchorElement = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
@@ -138,8 +161,8 @@ export default class CanvasRecorder {
                 a.click();
                 setTimeout(() => {
                     a.remove();
-                    window.URL.revokeObjectURL(url);
-                }, 100);
+                }, 100); 
+                
             });
 
     }
