@@ -162,8 +162,8 @@ export default class CanvasRecorder {
                 setTimeout(() => {
                     a.remove();
                 }, 100); 
-                
-            });
 
+            });
+            this.recordedBlobs = [];
     }
 }
