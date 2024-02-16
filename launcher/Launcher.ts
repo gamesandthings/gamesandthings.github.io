@@ -260,7 +260,7 @@ export default class Launcher {
             Launcher.ctx.textBaseline = "hanging";
             Launcher.ctx.fillText("This is the new games and stuff, ", 0, 35);
             Launcher.ctx.fillText("currently in very early development.", 0, 55)
-            Launcher.ctx.fillText("Mobile devices will be supported soon.", 0, 75)
+            Launcher.ctx.fillText("Mobile devices are supported now!", 0, 75)
 
             Launcher.state.update(Launcher.delta);
             Launcher.lastTimestep = timestep;
