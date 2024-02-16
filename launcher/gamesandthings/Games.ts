@@ -21,6 +21,7 @@ export type GameVersion = {
 export type Fixes = {
     runsAtSetFrameRate: boolean,
     preserveDrawingBuffer: boolean,
+    removeVsync: boolean,
 }
 export default class Games {
     public static games: Array<Game> = [
@@ -62,6 +63,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
+                removeVsync:false,
             },
             assets: {
                 bg: 'bg.png',
@@ -78,6 +80,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
+                removeVsync:false,
             },
             assets: {
                 bg: 'blank',
@@ -95,6 +98,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
+                removeVsync:false,
             },
         },
         {
@@ -107,6 +111,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
+                removeVsync:true,
             },
         },
     ];

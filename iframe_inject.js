@@ -37,8 +37,14 @@ HTMLCanvasElement.prototype.getContext = ((origFn) => {
                     preserveDrawingBuffer: true,
                 });
             }
+            if (window.top.gameData.fixes.removeVsync) {
+                attributes = Object.assign({}, attributes, {
+                    desynchronized: true,
+                });
+            }
             attributes = Object.assign({}, attributes, {
                 antialias: false,
+                powerPreference: "high-performance",
             });
         }
 
