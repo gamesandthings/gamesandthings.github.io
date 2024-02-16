@@ -4,6 +4,7 @@ export type Game = {
     prefix: string,
     injectTime: "DOMContentLoaded" | "load",
     screenmode?: string,
+    forcescreenmode?: boolean,
     versions?: Array<GameVersion> | null,
     fixes?: Fixes | null,
     assets?: GameAssets,
@@ -84,5 +85,17 @@ export default class Games {
                 logoPos: 'center'
             }
         },
+        {
+            title: "Mari0",
+            creator: "Stabyourself.net",
+            prefix: "app-mari0/",
+            screenmode: "16/9",
+            forcescreenmode: true,
+            injectTime: 'load',
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: true,
+            },
+        }
     ];
 }

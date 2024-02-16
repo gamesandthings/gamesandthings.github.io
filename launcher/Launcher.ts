@@ -151,6 +151,7 @@ export default class Launcher {
         else {
             Launcher.drawer.screenmode = "window";
         }
+        
         if (this.state instanceof LauncherState) {
             if (game.assets != null) {
                 this.state.loadGameAssets(game.assets);

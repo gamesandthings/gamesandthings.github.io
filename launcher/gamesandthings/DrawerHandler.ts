@@ -258,51 +258,53 @@ export default class DrawerHandler implements IPositionable {
                 }
                 else if (id == "settings") {
                     if (Launcher.iframeMode) {
-                        let options: Array<ContextOption> = [
-                            {
-                                text: "Screen Size",
-                                onselect: () => {
-                                    Launcher.contextMenu.show([
-                                        {
-                                            text: "4:3",
-                                            onselect: () => {
-                                                this.screenmode = "4/3";
-                                                this.updateScreenMode();
-                                            }
-                                        },
-                                        {
-                                            text: "16:9",
-                                            onselect: () => {
-                                                this.screenmode = "16/9";
-                                                this.updateScreenMode();
-                                            }
-                                        },
-                                        {
-                                            text: "16:10",
-                                            onselect: () => {
-                                                this.screenmode = "16/10";
-                                                this.updateScreenMode();
-                                            }
-                                        },
-                                        {
-                                            text: "Fit to window",
-                                            onselect: () => {
-                                                this.screenmode = "window";
-                                                this.updateScreenMode();
-                                            }
-                                        },
-                                        {
-                                            text: "Fixed Resolution",
-                                            onselect: () => {
-                                                this.fixedResolutionContext();
+                        let options: Array<ContextOption> = [];
+                        if (!Launcher.game?.forcescreenmode) {
+                            options.push(
+                                {
+                                    text: "Screen Size",
+                                    onselect: () => {
+                                        Launcher.contextMenu.show([
+                                            {
+                                                text: "4:3",
+                                                onselect: () => {
+                                                    this.screenmode = "4/3";
+                                                    this.updateScreenMode();
+                                                }
                                             },
-                                            hasSecondary: true
-                                        },
-                                    ]);
-                                },
-                                hasSecondary: true,
-                            }
-                        ];
+                                            {
+                                                text: "16:9",
+                                                onselect: () => {
+                                                    this.screenmode = "16/9";
+                                                    this.updateScreenMode();
+                                                }
+                                            },
+                                            {
+                                                text: "16:10",
+                                                onselect: () => {
+                                                    this.screenmode = "16/10";
+                                                    this.updateScreenMode();
+                                                }
+                                            },
+                                            {
+                                                text: "Fit to window",
+                                                onselect: () => {
+                                                    this.screenmode = "window";
+                                                    this.updateScreenMode();
+                                                }
+                                            },
+                                            {
+                                                text: "Fixed Resolution",
+                                                onselect: () => {
+                                                    this.fixedResolutionContext();
+                                                },
+                                                hasSecondary: true
+                                            },
+                                        ]);
+                                    },
+                                    hasSecondary: true,
+                                });
+                        }
                         if (Launcher.game != null && Launcher.game.versions != null && Launcher.game.versions.length > 1) {
                             options.push({
                                 text: "Set Version",
