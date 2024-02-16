@@ -9,6 +9,8 @@ import Graphic from "./Graphic";
 export default class Sprite extends Rectangle implements IDrawable {
     public x: number = 0;
     public y: number = 0;
+    public imgWidth: number = 0;
+    public imgHeight: number = 0;
     public width: number = 0;
     public height: number = 0;
     public angle: number = 0;
@@ -22,7 +24,7 @@ export default class Sprite extends Rectangle implements IDrawable {
         this.y = y;
     }
     draw(): void {
-        if (this.graphic != null && this.graphic.loaded) {
+        if (this.graphic != null && this.graphic.loaded && this.alpha != 0) {
             let img: HTMLImageElement = (this.graphic.img as HTMLImageElement);
             Launcher.ctx.globalAlpha = this.alpha;
             Launcher.ctx.save();
@@ -48,12 +50,14 @@ export default class Sprite extends Rectangle implements IDrawable {
             this.graphic.img = img;
             this.width = img.width;
             this.height = img.height;
+            this.imgWidth = img.width;
+            this.imgHeight = img.height;
             this.onGraphicLoad();
         });
 
     }
     onGraphicLoad() { }
-    screenCenter(axis: Axes) {
+    screenCenter(axis?: Axes) {
         if (axis == Axes.X) {
             this.x = (Launcher.cnv.offsetWidth - this.width) / 2;
         }

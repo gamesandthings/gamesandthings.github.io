@@ -464,7 +464,7 @@ export default class DrawerHandler implements IPositionable {
                         button.innerText = "play_arrow";
                     }
                     else {
-                        button.setAttribute("title", "Return to games and st.");
+                        button.setAttribute("title", "Return to games and things.");
                         button.innerText = "pause";
                     }
 

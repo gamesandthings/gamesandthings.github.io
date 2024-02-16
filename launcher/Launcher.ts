@@ -40,7 +40,7 @@ export default class Launcher {
         Launcher.iframeDiv.id = "iframeDiv";
         Launcher.initIframe();
         // ContextMenu
-        if (navigator.userAgent.includes('Valve')){
+        if (navigator.userAgent.includes('Valve')) {
             Launcher.contextMenu = new CustomContextMenuHandler();
         }
         else if ("chrome" in window) { // Chromium browsers
@@ -69,6 +69,7 @@ export default class Launcher {
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
+        (window as any).gameData = [];
         Launcher.gameLogs = (window as any).gameLogs;
     }
     public static initInject() {
@@ -149,6 +150,13 @@ export default class Launcher {
         }
         else {
             Launcher.drawer.screenmode = "window";
+        }
+        if (this.state instanceof LauncherState) {
+            if (game.assets != null) {
+                this.state.loadGameAssets(game.assets);
+            }
+            else
+                this.state.loadOriginalAssets();
         }
         Launcher.drawer.updateScreenMode();
         let link: string = game.prefix;
@@ -346,43 +354,13 @@ export default class Launcher {
             if (cnvs.length == 0) return;
             let a: HTMLAnchorElement = document.createElement("a");
             a.download = "Games and Things - " + document.title + " " + new Date(Date.now()).toLocaleString() + ".png";
-            for (let x = 0; x < cnvs.length; x += 1) {
-                let offscreenCanvas = new OffscreenCanvas(cnvs[0].offsetWidth, cnvs[0].offsetHeight);
-                const offscreenCtx: OffscreenCanvasRenderingContext2D | null = offscreenCanvas.getContext("2d");
-                if (offscreenCtx == null) return;
-                offscreenCtx.imageSmoothingEnabled = false;
-                let ctx: OffscreenCanvasRenderingContext2D = (offscreenCtx as OffscreenCanvasRenderingContext2D);
-                let cnvImage = new Image();
-                cnvImage.src = cnvs[x].toDataURL("image/png");
-                cnvImage.onload = (ev) => {
-                    ctx.drawImage(cnvImage, 0, 0);
-                    const data: Uint8ClampedArray = ctx.getImageData(0, 0,
-                        offscreenCanvas.width, offscreenCanvas.height).data;
-                    let lastColor: string = "";
-                    let canTakeScreenshot: boolean = false;
-                    for (let i = 0; i < data.length; i += 4) {
-                        let arr: string = [data[i], data[i + 1], data[i + 2]].toString();
-                        if (lastColor != "" && lastColor != arr) {
-                            canTakeScreenshot = true;
-                            break;
-                        }
-                        else {
-                            lastColor = arr;
-                        }
-
-                    }
-                    if (!canTakeScreenshot) {
-                        console.log("could not save canvas id " + x)
-                    }
-                    else {
-                        a.href = cnvs[x].toDataURL("image/png").replace("image/png", "image/octet-stream");
-                        a.click();
-                        a.remove();
-                    }
-                }
-            }
-
+            a.href = cnvs[0].toDataURL("image/png").replace("image/png", "image/octet-stream");
+            a.click();
+            a.remove();
         }
     }
+
+
+
 }
 Launcher.init(new LauncherState());

@@ -5,22 +5,28 @@ export type Game = {
     injectTime: "DOMContentLoaded" | "load",
     screenmode?: string,
     versions?: Array<GameVersion> | null,
-    fixes?: Fixes | null
+    fixes?: Fixes | null,
+    assets?: GameAssets,
+}
+export type GameAssets = {
+    bg: string,
+    logo: string,
+    logoPos: 'center' | 'default',
 }
 export type GameVersion = {
     url: string,
     title: string,
 }
 export type Fixes = {
-    runsAtSetFrameRate:boolean,
-    preserveDrawingBuffer:boolean,
+    runsAtSetFrameRate: boolean,
+    preserveDrawingBuffer: boolean,
 }
 export default class Games {
     public static games: Array<Game> = [
         {
             title: "Minecraft",
             creator: "Mojang Studios",
-            injectTime: 'DOMContentLoaded',
+            injectTime: 'load',
             prefix: "mc/",
             screenmode: "16/9",
             versions: [
@@ -55,6 +61,11 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
+            },
+            assets: {
+                bg: 'bg.png',
+                logo: 'logo.svg',
+                logoPos: 'default'
             }
         },
         {
@@ -66,6 +77,11 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
+            },
+            assets: {
+                bg: 'blank',
+                logo: 'logo.png',
+                logoPos: 'center'
             }
         },
     ];
