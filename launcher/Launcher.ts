@@ -172,6 +172,7 @@ export default class Launcher {
             document.title += " - " + version.title;
             link += version.url;
         }
+        link += "/";
         Launcher.openURL(link);
     }
     public static openURL(url: string) {
@@ -182,7 +183,7 @@ export default class Launcher {
         Launcher.lastURL = url;
         if (this.lastURL != "") {
             Launcher.openIframeWindow();
-            Launcher.iframe.src = url;
+            Launcher.iframe.setAttribute('src',url);
         }
     }
     public static openIframeWindow() {
