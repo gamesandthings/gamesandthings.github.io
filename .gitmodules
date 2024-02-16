@@ -10,3 +10,6 @@
 [submodule "app-hl"]
 	path = app-hl
 	url = https://github.com/gamesandthings/app-hl.git
+[submodule "app-sbwysrf"]
+	path = app-sbwysrf
+	url = https://github.com/gamesandthings/app-sbwysrf.git
