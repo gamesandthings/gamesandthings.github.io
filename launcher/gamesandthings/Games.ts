@@ -96,6 +96,18 @@ export default class Games {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
             },
-        }
+        },
+        {
+            title: "Half-Life",
+            creator: "Valve",
+            prefix: "app-hl/xash.html#150",
+            screenmode: "16/9",
+            forcescreenmode: true,
+            injectTime: 'load',
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: true,
+            },
+        },
     ];
 }
