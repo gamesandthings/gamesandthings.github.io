@@ -123,6 +123,9 @@ export default class Launcher {
         console.clear();
         window.eval("window.gameLogs = [];");
         window.eval("window.gameMediaStreams = [];");
+        if (Launcher.drawer.recorder?.recording){
+            Launcher.drawer.recorder.stopRecording();
+        }
         Launcher.injectedScript = false;
         if (game == null) return; // it will never be called if its null but typescript i guess
         if (game.fixes != null) {
@@ -152,6 +155,9 @@ export default class Launcher {
         Launcher.openURL(link);
     }
     public static openURL(url: string) {
+        if (Launcher.drawer.recorder?.recording){
+            Launcher.drawer.recorder.stopRecording();
+        }
         Launcher.initIframe(false);
         Launcher.lastURL = url;
         if (this.lastURL != "") {

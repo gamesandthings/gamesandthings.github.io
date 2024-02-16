@@ -296,6 +296,9 @@ export default class DrawerHandler implements IPositionable {
                                                 {
                                                     text: version.title,
                                                     onselect: () => {
+                                                        if (this.recorder?.recording){
+                                                            this.recorder.stopRecording();
+                                                        }
                                                         Launcher.iframeDiv.removeChild(Launcher.iframe);
                                                         Launcher.initIframe();
                                                         Launcher.openGame(Launcher.game, version);
@@ -368,8 +371,11 @@ export default class DrawerHandler implements IPositionable {
                                     this.recorder = new CanvasRecorder();
                                     if (cnvs.length != 0) {
                                         this.recorder.setCanvasStream(cnvs[0]);
+                                        this.recorder.startRecording();
                                     }
-                                    this.recorder.startRecording();
+                                    else {
+                                        alert("Game is loading, cannot record now!");
+                                    }
                                 }
                             });
                         }
@@ -467,6 +473,9 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
+                                if (this.recorder?.recording){
+                                    this.recorder.stopRecording();
+                                }
                                 Launcher.iframeDiv.removeChild(Launcher.iframe);
                                 Launcher.initIframe();
                                 Launcher.closeIframe();
@@ -482,6 +491,9 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
+                                if (this.recorder?.recording){
+                                    this.recorder.stopRecording();
+                                }
                                 Launcher.iframeDiv.removeChild(Launcher.iframe);
                                 Launcher.initIframe();
                                 Launcher.openURL(Launcher.lastURL);
@@ -492,6 +504,9 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
+                                if (this.recorder?.recording){
+                                    this.recorder.stopRecording();
+                                }
                                 Launcher.iframeDiv.removeChild(Launcher.iframe);
                                 window.location.reload();
                             }
