@@ -45,6 +45,7 @@ HTMLCanvasElement.prototype.getContext = ((origFn) => {
             attributes = Object.assign({}, attributes, {
                 antialias: false,
                 powerPreference: "high-performance",
+                preferLowPowerToHighPerformance: false,
             });
             if (window.top.gameData.fixes.pointerLockFix) {
                 this.addEventListener("click", async () => {

@@ -119,5 +119,18 @@ export default class Games {
                 pointerLockFix: true,
             },
         },
+        {
+            title: "Subway Surfers",
+            creator: "SYBO Games",
+            prefix: "app-sbwysrf/",
+            screenmode: "window",
+            injectTime: 'load',
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync:false,
+                pointerLockFix: false,
+            },
+        },
     ];
 }
