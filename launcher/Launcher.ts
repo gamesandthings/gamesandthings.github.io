@@ -40,7 +40,7 @@ export default class Launcher {
         Launcher.iframeDiv.id = "iframeDiv";
         Launcher.initIframe();
         // ContextMenu
-        if ("chrome" in window) { // Chromium browsers
+        if ("chrome" in window && !navigator.userAgent.includes('Valve Steam Gamepad')) { // Chromium browsers
             Launcher.contextMenu = new NativeContextMenuHandler();
         }
         else { // anyothers
