@@ -46,6 +46,11 @@ HTMLCanvasElement.prototype.getContext = ((origFn) => {
                 antialias: false,
                 powerPreference: "high-performance",
             });
+            if (window.top.gameData.fixes.pointerLockFix) {
+                this.addEventListener("click", async () => {
+                    await this.requestPointerLock();
+                });
+            }
         }
 
         console.log(attributes);
