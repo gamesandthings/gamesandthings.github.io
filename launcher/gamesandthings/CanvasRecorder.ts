@@ -41,8 +41,9 @@ export default class CanvasRecorder {
 
         for (let i in types) {
             if (MediaRecorder.isTypeSupported(types[i])) {
+                console.log(types[i]);
                 this.supportedType = types[i];
-                break;
+                //break;
             }
         }
 
@@ -142,16 +143,7 @@ export default class CanvasRecorder {
         fixWebmDuration(blob, duration, { logger: false })
             .then(function (fixedBlob) {
                 const url = window.URL.createObjectURL(fixedBlob);
-                let previewWindow:Window | null = window.open(url);
-                if (previewWindow == null) return;
-                previewWindow.addEventListener("DOMContentLoaded", (ev)=>{
-                    if (previewWindow == null) return;
-                    if (file_name == undefined) { return; }
-                    previewWindow.document.title = file_name;
-                })
-                previewWindow.onclose = (ev) => {
-                    window.URL.revokeObjectURL(url);
-                };
+            
                 if (file_name == undefined) { return; }
                 const a: HTMLAnchorElement = document.createElement('a');
                 a.style.display = 'none';

@@ -3,9 +3,12 @@ import State from "./gamesandthings/State";
 import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
-import ContextMenuHandler from "./gamesandthings/ContextMenuHandler";
+import NativeContextMenuHandler from "./gamesandthings/contextmenu/NativeContextMenuHandler";
+import CustomContextMenuHandler from "./gamesandthings/contextmenu/CustomContextMenuHandler";
+
 import { Game, GameVersion } from "./gamesandthings/Games";
 import Vector2 from "./gamesandthings/types/Vector2";
+import IContextMenu from "./gamesandthings/contextmenu/IContextMenu";
 
 export default class Launcher {
     public static state: State;
@@ -17,7 +20,7 @@ export default class Launcher {
     public static iframe: HTMLIFrameElement;
     public static iframeDiv: HTMLDivElement;
     public static game: Game | null;
-    public static contextMenu: ContextMenuHandler;
+    public static contextMenu: IContextMenu;
     public static iframeMode: boolean = false;
     public static fullscreen: boolean = false;
     public static fullscreenByOS: boolean = false;
@@ -37,7 +40,12 @@ export default class Launcher {
         Launcher.iframeDiv.id = "iframeDiv";
         Launcher.initIframe();
         // ContextMenu
-        Launcher.contextMenu = new ContextMenuHandler();
+        if ("chrome" in window) { // Chromium browsers
+            Launcher.contextMenu = new NativeContextMenuHandler();
+        }
+        else { // anyothers
+            Launcher.contextMenu = new CustomContextMenuHandler();
+        }
         // Init Input and other Handlers
         document.body.style.margin = "0px";
         Launcher.mouse = new MouseHandler();
@@ -73,10 +81,10 @@ export default class Launcher {
     public static finalInject() {
         //  Launcher.injectedScript = false;
         console.clear();
-        window.eval("window.gameLogs = [];");
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
+
         Launcher.gameLogs = (window as any).gameLogs;
         Launcher.updateInjection();
     }
@@ -123,7 +131,7 @@ export default class Launcher {
         console.clear();
         window.eval("window.gameLogs = [];");
         window.eval("window.gameMediaStreams = [];");
-        if (Launcher.drawer.recorder?.recording){
+        if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
         Launcher.injectedScript = false;
@@ -155,7 +163,7 @@ export default class Launcher {
         Launcher.openURL(link);
     }
     public static openURL(url: string) {
-        if (Launcher.drawer.recorder?.recording){
+        if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
         Launcher.initIframe(false);
@@ -242,7 +250,6 @@ export default class Launcher {
         Launcher.cnv.setAttribute("width", Launcher.cnv.offsetWidth + "");
         Launcher.cnv.setAttribute("height", Launcher.cnv.offsetHeight + "");
         Launcher.delta = ((timestep - Launcher.lastTimestep) / 1000);
-        Launcher.contextMenu.update(Launcher.delta);
         if (!Launcher.iframeMode) {
             document.title = "Games And Things";
             Launcher.ctx.fillStyle = "black";

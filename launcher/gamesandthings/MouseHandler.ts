@@ -7,7 +7,7 @@ export default class MouseHandler {
     public deltaY: number = 0;
     private mouseMap: Map<MouseButtons, boolean> = new Map();
     private justPressedMap: Map<MouseButtons, boolean> = new Map();
-    public hasClickedAtLeastOnce:Boolean = false;
+    public hasClickedAtLeastOnce: Boolean = false;
 
     init(): void {
         window.addEventListener("mousedown", (ev) => { this.onMouseDown(ev) });
@@ -17,16 +17,32 @@ export default class MouseHandler {
         window.addEventListener("mouseout", (ev) => { this.onMouseOut(ev) });
         window.addEventListener("mouseover", (ev) => { this.onMouseOver(ev) });
         window.addEventListener("mouseup", (ev) => { this.onMouseUp(ev) });
+        window.addEventListener("touchstart", (ev) => { this.onMouseDown_touch(ev) });
+        window.addEventListener("touchmove", (ev) => { this.onMouseMove_touch(ev) });
+        window.addEventListener("touchend", (ev) => { this.onMouseUp_touch(ev) });
+
         window.addEventListener("contextmenu", (ev) => {
             this.onContextMenu(ev);
             return false;
         });
     }
     onMouseDown(ev: MouseEvent) {
-            this.hasClickedAtLeastOnce = true;
-            this.mouseMap.set(ev.button, true);
-            this.getPosFromEvent(ev);
-        
+        this.hasClickedAtLeastOnce = true;
+        this.mouseMap.set(ev.button, true);
+        this.getPosFromEvent(ev);
+    }
+    onMouseMove_touch(ev: TouchEvent) {
+        this.getPosFromTouchEvent(ev);
+    }
+    onMouseDown_touch(ev: TouchEvent) {
+        this.hasClickedAtLeastOnce = true;
+        this.mouseMap.set(MouseButtons.PRIMARY, true);
+        this.getPosFromTouchEvent(ev);
+    }
+    onMouseUp_touch(ev: TouchEvent) {
+        this.mouseMap.set(MouseButtons.PRIMARY, false);
+        this.justPressedMap.set(MouseButtons.PRIMARY, true);
+        this.getPosFromTouchEvent(ev);
     }
     onMouseEnter(ev: MouseEvent) {
         this.getPosFromEvent(ev);
@@ -73,6 +89,13 @@ export default class MouseHandler {
         this.y = ev.y;
         this.deltaX = ev.movementX;
         this.deltaY = ev.movementY;
+    }
+    getPosFromTouchEvent(ev: TouchEvent) {
+        if (ev.touches[0]==undefined) return;
+        this.deltaX = this.x - ev.touches[0].clientX;
+        this.deltaY = this.x - ev.touches[0].clientY;
+        this.x = ev.touches[0].clientX;
+        this.y = ev.touches[0].clientY;
     }
     resetDeltas() {
         this.deltaX = 0;

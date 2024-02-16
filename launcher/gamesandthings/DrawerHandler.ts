@@ -1,6 +1,6 @@
 import Launcher from "../Launcher";
-import ContextMenuHandler from "./ContextMenuHandler";
-import { ContextOption } from "./ContextMenuHandler";
+import NativeContextMenuHandler from "./contextmenu/NativeContextMenuHandler";
+import { ContextOption } from "./contextmenu/ContextOption";
 import UniFont from "./UniFont";
 import CanvasRecorder from "./CanvasRecorder";
 import { MouseButtons } from "./enums/MouseButtons"
@@ -45,6 +45,27 @@ export default class DrawerHandler implements IPositionable {
                     this.buttonsPressed.set(button.id, true);
                 }
             }
+        });
+        button.addEventListener("touchstart", (ev) => {
+            if (ev.touches[0] == undefined) return;
+            this.clickX = ev.touches[0].clientX;
+            this.clickY = ev.touches[0].clientY;
+        });
+        button.addEventListener("touchend", (ev) => {
+            if (ev.touches[0] == undefined) return;
+            this.clickX = ev.touches[0].clientX;
+            this.clickY = ev.touches[0].clientY;
+            if (this.isOut) {
+                this.buttonsPressed.set(button.id, true);
+            }
+            else {
+                if (button.id == "peekarrow") {
+                    this.buttonsPressed.set(button.id, true);
+                }
+            }
+        });
+        button.addEventListener("dblclick", (ev) => {
+            this.buttonsContextMenu.set(button.id, true);
         });
         button.addEventListener("mouseover", (ev) => {
             this.buttonsMouseOver.set(button.id, true);
@@ -296,7 +317,7 @@ export default class DrawerHandler implements IPositionable {
                                                 {
                                                     text: version.title,
                                                     onselect: () => {
-                                                        if (this.recorder?.recording){
+                                                        if (this.recorder?.recording) {
                                                             this.recorder.stopRecording();
                                                         }
                                                         Launcher.iframeDiv.removeChild(Launcher.iframe);
@@ -331,38 +352,40 @@ export default class DrawerHandler implements IPositionable {
                         });
                         if (this.recorder == null) this.recorder = new CanvasRecorder();
                         if (!this.recorder.recording) {
-                            options.push({
-                                text: "Start Recording (with audio)",
-                                desc: "Choose your screen under screen tab and share system audio for audio to work.",
-                                onselect: async () => {
-                                    if (Launcher.iframe.contentWindow == null) return;
-                                    let cnvs: HTMLCollectionOf<HTMLCanvasElement> = Launcher.iframe.contentWindow.document.getElementsByTagName("canvas");
-                                    const displayMediaOptions = {
-                                        video: true,
-                                        audio: {
-                                            autoGainControl: false,
-                                            googAutoGainControl: false,
-                                            echoCancellation: false,
-                                            noiseSuppression: false,
-                                            sampleRate: 44100,
-                                            suppressLocalAudioPlayback: false,
-                                        },
-                                        
-                                        monitorTypeSurfaces: "include",
-                                        surfaceSwitching: "include",
-                                        selfBrowserSurface: "include",
-                                        preferCurrentTab: false,
-                                        systemAudio: "include",
-                                    };
-                                    let userMedia: MediaStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-                                    userMedia.addEventListener("removetrack", (ev) => { this.recorder?.stopRecording() })
-                                    this.recorder = new CanvasRecorder(userMedia);
-                                    if (cnvs.length != 0) {
-                                        this.recorder.setCanvasStream(cnvs[0]);
+                            if ("chrome" in window) {
+                                options.push({
+                                    text: "Start Recording (with audio)",
+                                    desc: "Choose your screen under screen tab and share system audio for audio to work.",
+                                    onselect: async () => {
+                                        if (Launcher.iframe.contentWindow == null) return;
+                                        let cnvs: HTMLCollectionOf<HTMLCanvasElement> = Launcher.iframe.contentWindow.document.getElementsByTagName("canvas");
+                                        const displayMediaOptions = {
+                                            video: true,
+                                            audio: {
+                                                autoGainControl: false,
+                                                googAutoGainControl: false,
+                                                echoCancellation: false,
+                                                noiseSuppression: false,
+                                                sampleRate: 44100,
+                                                suppressLocalAudioPlayback: false,
+                                            },
+
+                                            monitorTypeSurfaces: "include",
+                                            surfaceSwitching: "include",
+                                            selfBrowserSurface: "include",
+                                            preferCurrentTab: false,
+                                            systemAudio: "include",
+                                        };
+                                        let userMedia: MediaStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+                                        userMedia.addEventListener("removetrack", (ev) => { this.recorder?.stopRecording() })
+                                        this.recorder = new CanvasRecorder(userMedia);
+                                        if (cnvs.length != 0) {
+                                            this.recorder.setCanvasStream(cnvs[0]);
+                                        }
+                                        this.recorder.startRecording();
                                     }
-                                    this.recorder.startRecording();
-                                }
-                            });
+                                });
+                            }
                             options.push({
                                 text: "Start Recording (without audio)",
                                 onselect: async () => {
@@ -473,7 +496,7 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
-                                if (this.recorder?.recording){
+                                if (this.recorder?.recording) {
                                     this.recorder.stopRecording();
                                 }
                                 Launcher.iframeDiv.removeChild(Launcher.iframe);
@@ -491,7 +514,7 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
-                                if (this.recorder?.recording){
+                                if (this.recorder?.recording) {
                                     this.recorder.stopRecording();
                                 }
                                 Launcher.iframeDiv.removeChild(Launcher.iframe);
@@ -504,7 +527,7 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
-                                if (this.recorder?.recording){
+                                if (this.recorder?.recording) {
                                     this.recorder.stopRecording();
                                 }
                                 Launcher.iframeDiv.removeChild(Launcher.iframe);

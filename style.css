@@ -25,6 +25,7 @@ canvas {
     position: fixed;
     z-index: 2;
 }
+
 iframe {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
@@ -59,7 +60,7 @@ input {
 
 #slidymenu {
     z-index: 6;
-    width: 175px;
+    width: auto;
     height: 25px;
     top: 15px;
     border-radius: 25px;
@@ -92,4 +93,63 @@ input {
     justify-content: center;
     width: 25px;
     background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Non-native ctx menu */
+#ctxtriangle {
+    left: 10px;
+    position: relative;
+    width: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #000;
+}
+
+#ctxbox {
+    display: grid;
+    position: absolute;
+    font-size: 15px;
+    width: auto;
+    min-width: 150px;
+    height: auto;
+    background-color: #000;
+    border-radius: 10px;
+    z-index: 9;
+}
+
+.ctxitem {
+    height: 35px;
+    line-height: 35px;
+    width: auto;
+    min-width: 150px;
+    gap: 0;
+    font-family: sans-serif;
+    text-indent: 5px;
+    padding-right: 5px;
+    border: 0;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    
+    padding-right: 5px;
+    position: relative;
+    color: white;
+    background-color: black;
+    white-space: nowrap;
+    z-index: 9;
+}
+
+.ctxitem:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    z-index: 9;
+}
+
+#ctxmenu {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 9;
+    top: 50px;
+    left: 50px;
 }

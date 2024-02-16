@@ -1,18 +1,11 @@
-import Launcher from "../Launcher";
-import UniFont from "./UniFont";
-import { Font } from "./UniFont";
-import IPositionable from "./interfaces/IPositionable";
-export type ContextOption = {
-    text: string,
-    desc?: string,
-    onselect?: () => void,
-    title?: boolean,
-    hasSecondary?: boolean,
-    font?: Font,
-    descFont?: Font,
+import Launcher from "../../Launcher";
+import UniFont from "../UniFont";
+import { Font } from "../UniFont";
+import IPositionable from "../interfaces/IPositionable";
+import { ContextOption } from "./ContextOption";
+import IContextMenu from "./IContextMenu";
 
-}
-export default class ContextMenuHandler implements IPositionable {
+export default class NativeContextMenuHandler implements IPositionable, IContextMenu {
     x: number = 0;
     y: number = 0;
     contextMenuInput!: HTMLInputElement;
@@ -128,7 +121,7 @@ export default class ContextMenuHandler implements IPositionable {
                 alert("Please join discord (chat icon) for updates.");
             }
         }
-        catch {}
+        catch { }
         // go away so it doesnt interfere with user input
         this.contextMenuInput.style.top = "-999px";
         this.contextMenuInput.style.left = "-999px";

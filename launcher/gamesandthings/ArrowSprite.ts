@@ -1,5 +1,5 @@
 import Launcher from "../Launcher";
-import { ContextOption } from "./ContextMenuHandler";
+import { ContextOption } from "./contextmenu/ContextOption";
 import Games from "./Games";
 import Sprite from "./Sprite";
 import UniFont from "./UniFont";
