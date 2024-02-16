@@ -4,3 +4,6 @@
 [submodule "app-sm64"]
 	path = app-sm64
 	url = https://github.com/gamesandthings/app-sm64
+[submodule "app-mari0"]
+	path = app-mari0
+	url = https://github.com/gamesandthings/app-mari0
