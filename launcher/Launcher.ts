@@ -151,7 +151,7 @@ export default class Launcher {
         else {
             Launcher.drawer.screenmode = "window";
         }
-        
+
         if (this.state instanceof LauncherState) {
             if (game.assets != null) {
                 this.state.loadGameAssets(game.assets);
@@ -160,7 +160,7 @@ export default class Launcher {
                 this.state.loadOriginalAssets();
         }
         Launcher.drawer.updateScreenMode();
-        let link: string = game.prefix;
+        let link: string = window.location.protocol+'//'+window.location.host + "/" + game.prefix;
         if (version == null && game.versions == null) {
             link += "/";
         }
