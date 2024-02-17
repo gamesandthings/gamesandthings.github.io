@@ -1,5 +1,6 @@
 import LauncherState from "./gamesandthings/LauncherState";
 import State from "./gamesandthings/State";
+import SettingsHandler from "./gamesandthings/SettingsHandler";
 import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
@@ -30,6 +31,8 @@ export default class Launcher {
 
     static init(state: State) {
         // canvas and iframe
+        SettingsHandler.load();
+        Launcher.performanceMode = SettingsHandler.data.performanceModeEnabled;
         window.addEventListener("error", (ev: ErrorEvent) => {
             alert("Error!\n" + ev.message
                 + "\nPlease report this bug in the games and things discord!\nAttempting to continue...");
@@ -66,6 +69,9 @@ export default class Launcher {
         Launcher.state = state;
         Launcher.state.create();
         this.initInject();
+        
+        (window as any).gameConfig = SettingsHandler.data;
+        
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
@@ -84,12 +90,7 @@ export default class Launcher {
     }
     public static finalInject() {
         //  Launcher.injectedScript = false;
-        console.clear();
-        (window as any).gameMediaStreams = [];
-        Launcher.gameMediaStreams = (window as any).gameMediaStreams;
-        (window as any).gameLogs = [];
-
-        Launcher.gameLogs = (window as any).gameLogs;
+        Launcher.beginOpen();
         Launcher.updateInjection();
     }
     public static initIframe(recreate: boolean = true): void {
@@ -124,17 +125,20 @@ export default class Launcher {
     static lastShiftTabTimeStep: number = 0;
     static delta: number = 0;
     public static lastURL: string = "";
-    public static refreshGame() {
+    public static beginOpen() {
         console.clear();
-        window.eval("window.gameLogs = [];");
-        window.eval("window.gameMediaStreams = [];");
+        (window as any).gameMediaStreams = [];
+        Launcher.gameMediaStreams = (window as any).gameMediaStreams;
+        (window as any).gameLogs = [];
+        Launcher.gameLogs = (window as any).gameLogs;
+    }
+    public static refreshGame() {
+        Launcher.beginOpen();
         Launcher.iframe.src = Launcher.lastURL + '';
         Launcher.initIframe(false);
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
-        console.clear();
-        window.eval("window.gameLogs = [];");
-        window.eval("window.gameMediaStreams = [];");
+        Launcher.beginOpen();
         if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
@@ -160,7 +164,7 @@ export default class Launcher {
                 this.state.loadOriginalAssets();
         }
         Launcher.drawer.updateScreenMode();
-        let link: string = window.location.protocol+'//'+window.location.host + "/" + game.prefix;
+        let link: string = window.location.protocol + '//' + window.location.host + "/" + game.prefix;
         if (version == null && game.versions == null) {
             link += "/";
         }
@@ -183,7 +187,7 @@ export default class Launcher {
         Launcher.lastURL = url;
         if (this.lastURL != "") {
             Launcher.openIframeWindow();
-            Launcher.iframe.setAttribute('src',url);
+            Launcher.iframe.setAttribute('src', url);
         }
     }
     public static openIframeWindow() {
@@ -218,6 +222,7 @@ export default class Launcher {
     }
     static injectedScript: Boolean = false;
     static update(timestep: number) {
+        (window as any).gameConfig = SettingsHandler.data;
         Launcher.drawer.update(Launcher.delta);
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {

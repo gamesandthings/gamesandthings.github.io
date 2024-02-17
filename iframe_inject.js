@@ -27,14 +27,15 @@ console.log("Succesfully injected script!");
 /* Use raw input for better feeling mouse */
 HTMLCanvasElement.prototype.requestPointerLock = ((origFn) => {
     return function (options) {
-        if (options == null || options == undefined) {
-            options = {};
-        }
-        options = Object.assign({}, options, {
-            unadjustedMovement: true,
-        });
-        if ("keyboard" in window.navigator) {
-            window.top.navigator.keyboard.lock();
+        if ("gameConfig" in window.top) {
+            if (window.top.gameConfig.rawMouseInputEnabled) {
+                if (options == null || options == undefined) {
+                    options = {};
+                }
+                options = Object.assign({}, options, {
+                    unadjustedMovement: true,
+                });
+            }
         }
         //console.log(options);
         return origFn.call(this, options);

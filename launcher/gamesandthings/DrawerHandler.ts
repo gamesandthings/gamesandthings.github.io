@@ -6,6 +6,7 @@ import CanvasRecorder from "./CanvasRecorder";
 import { MouseButtons } from "./enums/MouseButtons"
 import IPositionable from "./interfaces/IPositionable";
 import Vector2 from "./types/Vector2";
+import SettingsHandler from "./SettingsHandler";
 
 export default class DrawerHandler implements IPositionable {
     buttonsPressed: Map<string, boolean> = new Map<string, boolean>();
@@ -334,18 +335,33 @@ export default class DrawerHandler implements IPositionable {
                                 }
                             });
                         }
-                        let performanceModeText: string = "Enable Performance Mode";
+                        let switcherText: string = "Enable Performance Mode";
                         if (Launcher.performanceMode) {
-                            performanceModeText = "Disable Performance Mode"
+                            switcherText = "Disable Performance Mode"
                         }
                         options.push({
-                            text: performanceModeText,
+                            text: switcherText,
                             desc: "Runs launcher menu at a low fps.",
-                            descFont: UniFont.ITALIC,
                             onselect: () => {
                                 Launcher.performanceMode = !Launcher.performanceMode;
+                                SettingsHandler.save({ performanceModeEnabled: Launcher.performanceMode });
                             }
                         })
+                        switcherText = "Enable Raw Mouse Input";
+                        if (SettingsHandler.data.rawMouseInputEnabled) {
+                            switcherText = "Disable Raw Mouse Input";
+                        }
+
+                        options.push({
+                            text: switcherText,
+                            desc: 'Makes your mouse more accurate by removing mouse accel when pointer-locked.',
+                            onselect: () => {
+                                SettingsHandler.data.rawMouseInputEnabled = !SettingsHandler.data.rawMouseInputEnabled;
+                                SettingsHandler.save();
+                            }
+                        });
+
+
                         options.push({
                             text: "Screenshot",
                             onselect: () => {
