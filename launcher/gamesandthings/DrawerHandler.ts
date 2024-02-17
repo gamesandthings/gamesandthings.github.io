@@ -435,7 +435,49 @@ export default class DrawerHandler implements IPositionable {
                     }
                 }
                 else if (button.id == "forum") {
-                    window.open("https://discord.com/invite/up7VmmCPhn");
+                    Launcher.contextMenu.show([
+                        {
+                            text: "Discord",
+                            desc: 'Join the Games and Things Discord!',
+                            onselect: () => {
+                                window.open("https://discord.com/invite/up7VmmCPhn");
+                            }
+                        },
+                        {
+                            text: "Alternate Link #1",
+                            desc: 'https://gamesandthings.vercel.app (faster loading times)',
+                            onselect: () => {
+                                let link: string = 'gamesandthings.vercel.app';
+                                if (window.location.host == link) {
+                                    window.alert('You are already using this link!');
+                                }
+                                else if (Launcher.runningInWebApp) {
+                                    window.open('https://' + link);
+                                }
+                                else {
+                                    window.location.href = 'https://' + link;
+                                }
+                            }
+                        },
+                        {
+                            text: "Alternate Link #2",
+                            desc: 'https://gamesandthings.github.io (slower loading times)',
+                            onselect: () => {
+                                let link: string = 'gamesandthings.github.io';
+                                if (window.location.host == link) {
+                                    window.alert('You are already using this link!');
+                                }
+                                else if (Launcher.runningInWebApp) {
+                                    window.open('https://' + link);
+                                }
+                                else {
+                                    window.location.href = 'https://' + link;
+                                }
+
+                            }
+                        },
+                    ]);
+
                 }
             }
         });

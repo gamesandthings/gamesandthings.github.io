@@ -28,8 +28,9 @@ export default class Launcher {
     public static performanceMode: boolean = false;
     static gameMediaStreams: MediaStream[] = [];
     static gameLogs: string[] = [];
-
-    static init(state: State) {
+public static runningInWebApp: boolean = false;
+    public static init(state: State) {
+        Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") ||  window.matchMedia("(display-mode: standalone)").matches;
         // canvas and iframe
         SettingsHandler.load();
         Launcher.performanceMode = SettingsHandler.data.performanceModeEnabled;
@@ -222,6 +223,7 @@ export default class Launcher {
     }
     static injectedScript: Boolean = false;
     static update(timestep: number) {
+        Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") ||  window.matchMedia("(display-mode: standalone)").matches;
         (window as any).gameConfig = SettingsHandler.data;
         Launcher.drawer.update(Launcher.delta);
         if ((document.body.offsetWidth >= window.screen.availWidth &&
