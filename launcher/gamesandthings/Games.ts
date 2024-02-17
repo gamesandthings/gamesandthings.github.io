@@ -136,7 +136,7 @@ export default class Games {
             title: "Fruit Ninja",
             creator: "Halfbrick",
             prefix: "app-fruitninja/",
-            screenmode: "window",
+            screenmode: "16/10",
             injectTime: 'load',
             fixes: {
                 preserveDrawingBuffer: true,

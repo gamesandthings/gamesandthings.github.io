@@ -24,6 +24,22 @@ console.info = ((origFn) => {
     };
 })(console.info);
 console.log("Succesfully injected script!");
+/* Use raw input for better feeling mouse */
+HTMLCanvasElement.prototype.requestPointerLock = ((origFn) => {
+    return function (options) {
+        if (options == null || options == undefined) {
+            options = {};
+        }
+        options = Object.assign({}, options, {
+            unadjustedMovement: true,
+        });
+        if ("keyboard" in window.navigator) {
+            window.top.navigator.keyboard.lock();
+        }
+        //console.log(options);
+        return origFn.call(this, options);
+    };
+})(HTMLCanvasElement.prototype.requestPointerLock);
 HTMLCanvasElement.prototype.getContext = ((origFn) => {
     return function (type, attributes) {
         if ("fixes" in window.top.gameData) {
@@ -58,31 +74,3 @@ HTMLCanvasElement.prototype.getContext = ((origFn) => {
         return origFn.call(this, type, attributes);
     };
 })(HTMLCanvasElement.prototype.getContext);
-
-/* Use raw input for better feeling mouse */
-HTMLCanvasElement.prototype.requestPointerLock = ((origFn) => {
-    return function (options) {
-        if (options == null || options == undefined) {
-            options = {};
-        }
-        options = Object.assign({}, options, {
-            unadjustedMovement: true,
-        });
-        //console.log(options);
-        return origFn.call(this, options);
-    };
-})(HTMLCanvasElement.prototype.requestPointerLock);
-
-Object.defineProperty(HTMLAudioElement.prototype, 'srcObject', {
-    configurable: true,
-    get: function () {
-        console.log(this.constructor.name);
-        return this.srcObject;
-
-    }.bind(window),
-    set: function (value) {
-        console.log(this.constructor.name);
-        this.srcObject = value;
-
-    }.bind(window)
-});

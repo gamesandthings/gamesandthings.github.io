@@ -128,8 +128,8 @@ export default class Launcher {
         console.clear();
         window.eval("window.gameLogs = [];");
         window.eval("window.gameMediaStreams = [];");
-
         Launcher.iframe.src = Launcher.lastURL + '';
+        Launcher.initIframe(false);
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
         console.clear();
