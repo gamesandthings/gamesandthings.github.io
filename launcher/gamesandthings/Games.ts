@@ -101,8 +101,8 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
-                removeVsync:false,
-                pointerLockFix:true,
+                removeVsync: false,
+                pointerLockFix: true,
             },
         },
         {

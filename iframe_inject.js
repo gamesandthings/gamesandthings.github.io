@@ -59,6 +59,20 @@ HTMLCanvasElement.prototype.getContext = ((origFn) => {
     };
 })(HTMLCanvasElement.prototype.getContext);
 
+/* Use raw input for better feeling mouse */
+HTMLCanvasElement.prototype.requestPointerLock = ((origFn) => {
+    return function (options) {
+        if (options == null || options == undefined) {
+            options = {};
+        }
+        options = Object.assign({}, options, {
+            unadjustedMovement: true,
+        });
+        //console.log(options);
+        return origFn.call(this, options);
+    };
+})(HTMLCanvasElement.prototype.requestPointerLock);
+
 Object.defineProperty(HTMLAudioElement.prototype, 'srcObject', {
     configurable: true,
     get: function () {
