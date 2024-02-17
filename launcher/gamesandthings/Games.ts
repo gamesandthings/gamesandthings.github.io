@@ -132,5 +132,18 @@ export default class Games {
                 pointerLockFix: false,
             },
         },
+        {
+            title: "Fruit Ninja",
+            creator: "Halfbrick",
+            prefix: "app-fruitninja/",
+            screenmode: "window",
+            injectTime: 'load',
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync:false,
+                pointerLockFix: false,
+            },
+        },
     ];
 }

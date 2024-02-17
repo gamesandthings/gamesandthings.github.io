@@ -1,7 +1,7 @@
 // Log Replace
 console.log = ((origFn) => {
     return function (v) {
-        if ("gameData" in window.top && (v + "") != "[object Object]") {
+        if ("gameData" in window.top && v.constructor.name.toLowerCase() == "string") {
             let prefix = "[" + window.top.gameData.title + "]";
             if ("gameLogs" in window.top) {
                 window.top.gameLogs.push(v);
@@ -13,7 +13,7 @@ console.log = ((origFn) => {
 })(console.log);
 console.info = ((origFn) => {
     return function (v) {
-        if ("gameData" in window.top && (v + "") != "[object Object]") {
+        if ("gameData" in window.top && v.constructor.name.toLowerCase() == "string") {
             let prefix = "[" + window.top.gameData.title + "]";
             if ("gameLogs" in window.top) {
                 window.top.gameLogs.push(v);
