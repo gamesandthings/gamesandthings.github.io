@@ -13,3 +13,6 @@
 [submodule "app-sbwysrf"]
 	path = app-sbwysrf
 	url = https://github.com/gamesandthings/app-sbwysrf.git
+[submodule "app-fruitninja"]
+	path = app-fruitninja
+	url = https://github.com/gamesandthings/app-fruitninja.git
