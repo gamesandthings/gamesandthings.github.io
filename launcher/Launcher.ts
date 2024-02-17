@@ -90,11 +90,12 @@ public static runningInWebApp: boolean = false;
             })
     }
     public static finalInject() {
-        //  Launcher.injectedScript = false;
+        Launcher.injectedScript = false;
         Launcher.beginOpen();
         Launcher.updateInjection();
     }
     public static initIframe(recreate: boolean = true): void {
+        Launcher.injectedScript = false;
         if (recreate) {
             Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
             Launcher.iframeDiv.appendChild(Launcher.iframe);
@@ -105,7 +106,6 @@ public static runningInWebApp: boolean = false;
         Launcher.iframe.style.width = "100%";
         Launcher.iframe.style.height = "100%";
         Launcher.iframe.addEventListener("load", (ev) => {
-
             if (Launcher.game != null && Launcher.game.injectTime == 'load') {
                 Launcher.finalInject();
             }
@@ -140,6 +140,7 @@ public static runningInWebApp: boolean = false;
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
         Launcher.beginOpen();
+        
         if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
