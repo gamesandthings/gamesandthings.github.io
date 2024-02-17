@@ -106,6 +106,20 @@ export default class Games {
             },
         },
         {
+            title: "Sonic CD",
+            creator: "Sega",
+            prefix: "app-soniccd/",
+            screenmode: "16/9",
+            forcescreenmode: true,
+            injectTime: 'load',
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync:false,
+                pointerLockFix: false,
+            },
+        },
+        {
             title: "Half-Life",
             creator: "Valve",
             prefix: "app-hl/xash.html#150",
