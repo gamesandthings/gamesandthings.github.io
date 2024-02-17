@@ -16,3 +16,6 @@
 [submodule "app-fruitninja"]
 	path = app-fruitninja
 	url = https://github.com/gamesandthings/app-fruitninja.git
+[submodule "app-soniccd"]
+	path = app-soniccd
+	url = https://github.com/gamesandthings/app-soniccd.git
