@@ -76,7 +76,7 @@ public static runningInWebApp: boolean = false;
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
-        (window as any).gameData = [];
+        (window as any).gameData = {};
         Launcher.gameLogs = (window as any).gameLogs;
     }
     public static initInject() {
