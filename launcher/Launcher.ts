@@ -134,8 +134,7 @@ export default class Launcher {
     public static lastURL: string = "";
     public static curVersion: string = "";
     public static beginOpen() {
-        
-        //console.clear();
+        console.clear();
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
