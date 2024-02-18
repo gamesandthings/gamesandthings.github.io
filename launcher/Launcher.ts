@@ -1,6 +1,8 @@
 import LauncherState from "./gamesandthings/LauncherState";
 import State from "./gamesandthings/State";
 import SettingsHandler from "./gamesandthings/SettingsHandler";
+import SaveManager from "./gamesandthings/SaveManager";
+
 import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
@@ -28,11 +30,12 @@ export default class Launcher {
     public static performanceMode: boolean = false;
     static gameMediaStreams: MediaStream[] = [];
     static gameLogs: string[] = [];
-public static runningInWebApp: boolean = false;
+    public static runningInWebApp: boolean = false;
     public static init(state: State) {
-        Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") ||  window.matchMedia("(display-mode: standalone)").matches;
+        Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") || window.matchMedia("(display-mode: standalone)").matches;
         // canvas and iframe
         SettingsHandler.load();
+        SaveManager.init();
         Launcher.performanceMode = SettingsHandler.data.performanceModeEnabled;
         window.addEventListener("error", (ev: ErrorEvent) => {
             alert("Error!\n" + ev.message
@@ -70,9 +73,12 @@ public static runningInWebApp: boolean = false;
         Launcher.state = state;
         Launcher.state.create();
         this.initInject();
-        
+
+        setInterval(()=>{
+            SaveManager.update();
+        },1000/5);
+
         (window as any).gameConfig = SettingsHandler.data;
-        
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
@@ -126,9 +132,10 @@ public static runningInWebApp: boolean = false;
     static lastShiftTabTimeStep: number = 0;
     static delta: number = 0;
     public static lastURL: string = "";
+    public static curVersion: string = "";
     public static beginOpen() {
         
-        console.clear();
+        //console.clear();
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
@@ -141,7 +148,6 @@ public static runningInWebApp: boolean = false;
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
         Launcher.beginOpen();
-        
         if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
@@ -166,19 +172,23 @@ public static runningInWebApp: boolean = false;
             else
                 this.state.loadOriginalAssets();
         }
-        Launcher.drawer.updateScreenMode();
         let link: string = window.location.protocol + '//' + window.location.host + "/" + game.prefix;
         if (version == null && game.versions == null) {
+            Launcher.curVersion = "";
             link += "/";
         }
         else if (version == null && game.versions != null) {
+            Launcher.curVersion = game.versions[0].title;
             document.title += " - " + game.versions[0].title;
             link += '/' + game.versions[0].url;
         }
         else if (version != null) {
+            Launcher.curVersion = version.title;
             document.title += " - " + version.title;
             link += '/' + version.url;
         }
+        SaveManager.load();
+        Launcher.drawer.updateScreenMode();
         link += "/";
         Launcher.openURL(link);
     }
@@ -225,7 +235,7 @@ public static runningInWebApp: boolean = false;
     }
     static injectedScript: Boolean = false;
     static update(timestep: number) {
-        Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") ||  window.matchMedia("(display-mode: standalone)").matches;
+        Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") || window.matchMedia("(display-mode: standalone)").matches;
         (window as any).gameConfig = SettingsHandler.data;
         Launcher.drawer.update(Launcher.delta);
         if ((document.body.offsetWidth >= window.screen.availWidth &&
@@ -242,6 +252,8 @@ public static runningInWebApp: boolean = false;
             Launcher.fullscreenByOS = false;
             Launcher.fullscreen = false;
         }
+
+
         if (Launcher.iframeMode) {
             Launcher.iframe.contentWindow?.focus();
             Launcher.cnv.style.display = "none";
@@ -260,11 +272,10 @@ public static runningInWebApp: boolean = false;
             Launcher.iframe.style.opacity = "0";
             Launcher.iframe.style.top = "0px";
         }
-
+        
         //Launcher.ctx.reset();
         //Launcher.iframe.style.width = "100%";
         //Launcher.iframe.style.height = "100%";
-
         Launcher.iframe.setAttribute("width", Launcher.cnv.offsetWidth + "");
         Launcher.iframe.setAttribute("height", Launcher.cnv.offsetHeight + "");
         Launcher.cnv.style.width = "100%";

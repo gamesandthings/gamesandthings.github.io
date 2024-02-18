@@ -7,6 +7,7 @@ import { MouseButtons } from "./enums/MouseButtons"
 import IPositionable from "./interfaces/IPositionable";
 import Vector2 from "./types/Vector2";
 import SettingsHandler from "./SettingsHandler";
+import SaveManager from "./SaveManager";
 
 export default class DrawerHandler implements IPositionable {
     buttonsPressed: Map<string, boolean> = new Map<string, boolean>();
@@ -245,6 +246,7 @@ export default class DrawerHandler implements IPositionable {
                 else if (id == "refresh") {
                     if (Launcher.iframe.src != '') {
                         Launcher.iframe.src += '';
+                        SaveManager.load();
                     }
                 }
                 else if (id == "pause") {
@@ -557,6 +559,7 @@ export default class DrawerHandler implements IPositionable {
                             descFont: UniFont.ITALIC,
                             onselect: () => {
                                 (window as any).gameData = {};
+                                Launcher.curVersion = "";
                                 if (this.recorder?.recording) {
                                     this.recorder.stopRecording();
                                 }

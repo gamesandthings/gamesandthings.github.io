@@ -64,8 +64,8 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
-                removeVsync:false,
-                pointerLockFix:false,
+                removeVsync: false,
+                pointerLockFix: false,
             },
             assets: {
                 bg: 'bg.png',
@@ -82,8 +82,8 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
-                removeVsync:false,
-                pointerLockFix:false,
+                removeVsync: false,
+                pointerLockFix: false,
             },
             assets: {
                 bg: 'blank',
@@ -115,7 +115,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
-                removeVsync:false,
+                removeVsync: false,
                 pointerLockFix: false,
             },
         },
@@ -129,7 +129,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
-                removeVsync:false,
+                removeVsync: false,
                 pointerLockFix: true,
             },
         },
@@ -142,7 +142,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
-                removeVsync:false,
+                removeVsync: false,
                 pointerLockFix: false,
             },
         },
@@ -155,7 +155,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
-                removeVsync:false,
+                removeVsync: false,
                 pointerLockFix: false,
             },
         },

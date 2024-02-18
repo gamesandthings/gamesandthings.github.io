@@ -4,6 +4,8 @@ if ("gatScriptInjected" in window) {
 }
 else {
     window.gatScriptInjected = true;
+    console.log("Succesfully injected script!");
+    window.top.localStorage_gat = {};
     console.log = ((origFn) => {
         return function (v) {
             if ("gameData" in window.top && v.constructor.name.toLowerCase() == "string") {
@@ -28,7 +30,6 @@ else {
             return origFn.call(this, v);
         };
     })(console.info);
-    console.log("Succesfully injected script!");
     /* Use raw input for better feeling mouse */
     HTMLCanvasElement.prototype.requestPointerLock = ((origFn) => {
         return function (options) {
@@ -108,6 +109,16 @@ else {
                 };
                 f.readAsDataURL(bb);
             }
-        });
+        }, 1000);
     }
+    function raf(timestep) {
+        Object.keys(window.localStorage).forEach((key) => {
+            if (window.localStorage.getItem(key) != null && key != 'gat_settings') {
+                window.top.localStorage_gat[key] = window.localStorage.getItem(key);
+            }
+        });
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
 }

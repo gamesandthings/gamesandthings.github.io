@@ -106,6 +106,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["launcher/*", "launcher/gamesandthings/State.ts", "launcher/gamesandthings/interfaces/IObject.ts"],
+  "include": ["launcher/*", "launcher/gamesandthings/State.ts", "launcher/gamesandthings/interfaces/IObject.ts", "launcher/gamesandthings/UniFont.ts"],
   "exclude": []
 }
