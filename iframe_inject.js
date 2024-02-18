@@ -100,12 +100,14 @@ else {
             FS.writeFile('/SData.bin', convertDataURIToBinary("data:application/octet-stream;base64," + sonic_cd_save_file));
         }
         window.setInterval(() => {
-            var bb = new Blob([FS.readFile('/SData.bin')]);
-            var f = new FileReader();
-            f.onload = function (e) {
-                window.localStorage.setItem('sonic_cd_save_file', e.target.result.replace("data:application/octet-stream;base64,", ""))
-            };
-            f.readAsDataURL(bb);
+            if (FS.readdir('/').includes('SData.bin')) {
+                var bb = new Blob([FS.readFile('/SData.bin')]);
+                var f = new FileReader();
+                f.onload = function (e) {
+                    window.localStorage.setItem('sonic_cd_save_file', e.target.result.replace("data:application/octet-stream;base64,", ""))
+                };
+                f.readAsDataURL(bb);
+            }
         });
     }
 }

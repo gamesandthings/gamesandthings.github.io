@@ -30,7 +30,7 @@ export default class Games {
             title: "Minecraft",
             creator: "Mojang Studios",
             injectTime: 'load',
-            prefix: "mc/",
+            prefix: "mc",
             screenmode: "16/9",
             versions: [
                 {
@@ -76,7 +76,7 @@ export default class Games {
         {
             title: "Super Mario 64",
             creator: "Nintendo",
-            prefix: "app-sm64/",
+            prefix: "app-sm64",
             screenmode: "4/3",
             injectTime: 'load',
             fixes: {
@@ -94,7 +94,7 @@ export default class Games {
         {
             title: "Mari0",
             creator: "Stabyourself.net",
-            prefix: "app-mari0/",
+            prefix: "app-mari0",
             screenmode: "16/9",
             forcescreenmode: true,
             injectTime: 'load',
@@ -108,7 +108,7 @@ export default class Games {
         {
             title: "Sonic CD",
             creator: "Sega",
-            prefix: "app-soniccd/",
+            prefix: "app-soniccd",
             screenmode: "16/9",
             forcescreenmode: true,
             injectTime: 'load',
@@ -136,7 +136,7 @@ export default class Games {
         {
             title: "Subway Surfers",
             creator: "SYBO Games",
-            prefix: "app-sbwysrf/",
+            prefix: "app-sbwysrf",
             screenmode: "window",
             injectTime: 'load',
             fixes: {
@@ -149,7 +149,7 @@ export default class Games {
         {
             title: "Fruit Ninja",
             creator: "Halfbrick",
-            prefix: "app-fruitninja/",
+            prefix: "app-fruitninja",
             screenmode: "16/10",
             injectTime: 'load',
             fixes: {

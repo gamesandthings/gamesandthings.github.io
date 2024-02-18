@@ -556,6 +556,7 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
+                                (window as any).gameData = {};
                                 if (this.recorder?.recording) {
                                     this.recorder.stopRecording();
                                 }

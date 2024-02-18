@@ -127,6 +127,7 @@ public static runningInWebApp: boolean = false;
     static delta: number = 0;
     public static lastURL: string = "";
     public static beginOpen() {
+        
         console.clear();
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
@@ -172,11 +173,11 @@ public static runningInWebApp: boolean = false;
         }
         else if (version == null && game.versions != null) {
             document.title += " - " + game.versions[0].title;
-            link += game.versions[0].url;
+            link += '/' + game.versions[0].url;
         }
         else if (version != null) {
             document.title += " - " + version.title;
-            link += version.url;
+            link += '/' + version.url;
         }
         link += "/";
         Launcher.openURL(link);
