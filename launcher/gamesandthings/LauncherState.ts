@@ -54,7 +54,7 @@ export default class LauncherState extends State {
         this.bg.screenCenter();
         this.notice.screenCenter();
         this.chooseGame.screenCenter();
-        this.chooseGame.y = this.notice.y + 85;
+        this.chooseGame.y = this.logo.y+this.logo.height + 10;
         if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
                 let gamesCtx: Array<ContextOption> = [];
