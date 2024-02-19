@@ -13,8 +13,8 @@ export default class LauncherState extends State {
     logo: Sprite = new Sprite();
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
-    notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!",15);
-    chooseGame: SText = new SText("CHOOSE FROM GAME LIST",32);
+    notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!", 15);
+    chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
 
     create(): void {
         this.logo.loadGraphic("/assets/images/logo.png");
@@ -60,7 +60,7 @@ export default class LauncherState extends State {
                 let gamesCtx: Array<ContextOption> = [];
                 Games.games.forEach((game) => {
                     gamesCtx.push({
-                        text: game.title, 
+                        text: game.title,
                         desc: game.creator,
                         descFont: UniFont.ITALIC,
                         onselect: () => {
