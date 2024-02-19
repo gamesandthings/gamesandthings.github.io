@@ -1,20 +1,20 @@
 import Launcher from "../Launcher";
 import Graphic from "./Graphic";
 import MouseHandler from "./MouseHandler";
-import ArrowSprite from "./ArrowSprite";
 import Sprite from "./Sprite";
 import SText from "./SText";
 import State from "./State";
 import { Axes } from "./enums/Axes";
 import { MouseButtons } from "./enums/MouseButtons";
-import { GameAssets } from "./Games";
+import Games, { GameAssets } from "./Games";
+import { ContextOption } from "./contextmenu/ContextOption";
+import UniFont from "./UniFont";
 export default class LauncherState extends State {
     logo: Sprite = new Sprite();
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
-    notice:SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!");
-    lArrow: ArrowSprite = new ArrowSprite();
-    rArrow: ArrowSprite = new ArrowSprite();
+    notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!",15);
+    chooseGame: SText = new SText("CHOOSE FROM GAME LIST",32);
 
     create(): void {
         this.logo.loadGraphic("/assets/images/logo.png");
@@ -22,11 +22,9 @@ export default class LauncherState extends State {
         this.bg.alpha = 0;
         this.add(this.bg);
         this.add(this.logo);
-        this.add(this.lArrow);
-        this.add(this.rArrow);
         this.notice.y = 35;
         this.add(this.notice);
-        this.rArrow.flipX = true;
+        this.add(this.chooseGame);
     }
     update(elapsed: number): void {
         super.update(elapsed); // CALL BEFORE EVERYTHING
@@ -54,7 +52,38 @@ export default class LauncherState extends State {
         this.bg.setGraphicSize(Math.ceil(w * Math.max(window.innerWidth / w, window.innerHeight / h)),
             Math.ceil(h * Math.max(window.innerWidth / w, window.innerHeight / h)));
         this.bg.screenCenter();
+        this.notice.screenCenter();
+        this.chooseGame.screenCenter();
+        this.chooseGame.y = this.notice.y + 85;
+        if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
+            if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
+                let gamesCtx: Array<ContextOption> = [];
+                Games.games.forEach((game) => {
+                    gamesCtx.push({
+                        text: game.title, 
+                        desc: game.creator,
+                        descFont: UniFont.ITALIC,
+                        onselect: () => {
+                            Launcher.openGame(game);
+                        }
+                    });
+                });
+                gamesCtx.push({
+                    text: "Custom",
+                    onselect: () => {
+                        let debugPrompt: string | null = prompt("Enter URL to open:\n");
+                        if (debugPrompt == null) return;
+                        if (!(debugPrompt.startsWith("http://")) && !(debugPrompt.startsWith("https://"))) {
+                            debugPrompt = "http://" + debugPrompt;
+                        }
+                        Launcher.game = null;
+                        Launcher.openURL(debugPrompt);
+                    }
+                });
+                Launcher.contextMenu.show(gamesCtx);
 
+            }
+        }
     }
     loadOriginalAssets() {
         this.logo.loadGraphic("/assets/images/logo.png");

@@ -2,6 +2,7 @@ import IDrawable from "./interfaces/IDrawable";
 import Launcher from "../Launcher";
 import IPositionable from "./interfaces/IPositionable";
 import Rectangle from "./types/Rectangle";
+import { Axes } from "./enums/Axes";
 
 export default class SText extends Rectangle implements IDrawable {
     public x: number = 0;
@@ -29,8 +30,10 @@ export default class SText extends Rectangle implements IDrawable {
         this.height = 0;
 
         lines.forEach((line, i) => {
+            if (lines.length == 1){
+                this.height = this.size;
+            }
             Launcher.ctx.save();
-            Launcher.ctx.translate(this.x, this.y);
             Launcher.ctx.fillStyle = this.color;
             Launcher.ctx.font = `${this.size}px ${this.font}`;
             Launcher.ctx.textBaseline = this.textBaseline;
@@ -43,6 +46,7 @@ export default class SText extends Rectangle implements IDrawable {
                 this.width = lineW;
             }
             this.height += (this.size * i);
+            Launcher.ctx.translate(this.x, this.y);
             Launcher.ctx.fillText(line, 0, (this.size * i));
             Launcher.ctx.restore();
         });
@@ -54,5 +58,16 @@ export default class SText extends Rectangle implements IDrawable {
     }
     destroy(): void {
     }
-
+    screenCenter(axis?:Axes){
+        if (axis == Axes.X) {
+            this.x = (Launcher.cnv.offsetWidth - this.width) / 2;
+        }
+        else if (axis == Axes.Y) {
+            this.y = (Launcher.cnv.offsetHeight - this.height) / 2;
+        }
+        else {
+            this.x = (Launcher.cnv.offsetWidth - this.width) / 2;
+            this.y = (Launcher.cnv.offsetHeight - this.height) / 2;
+        }
+    }
 }
