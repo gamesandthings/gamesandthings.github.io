@@ -347,7 +347,7 @@ export default class DrawerHandler implements IPositionable {
                         }
                         options.push({
                             text: switcherText,
-                            desc: "Runs launcher menu at a low fps.",
+                            desc: "Runs launcher menu at a low fps and other misc perf improvements.",
                             onselect: () => {
                                 Launcher.performanceMode = !Launcher.performanceMode;
                                 SettingsHandler.save({ performanceModeEnabled: Launcher.performanceMode });

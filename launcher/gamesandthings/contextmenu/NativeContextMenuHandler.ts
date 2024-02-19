@@ -35,7 +35,6 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
             if (this.contextMenuInput.value != null) {
                 let val: string = this.contextMenuInput.value;
                 this.contextMenuInput.value = "";
-                console.log(val);
                 this.ctxItemMap.get(val)?.call(null);
             }
         });

@@ -8,6 +8,10 @@ else {
     window.top.localStorage_gat = {};
     console.log = ((origFn) => {
         return function (v) {
+            if ("gameConfig" in window.top
+                && window.top.gameConfig.performanceModeEnabled) {
+                return;
+            }
             if ("gameData" in window.top && v.constructor.name.toLowerCase() == "string") {
                 let prefix = "[" + window.top.gameData.title + "]";
                 if ("gameLogs" in window.top) {
@@ -20,6 +24,10 @@ else {
     })(console.log);
     console.info = ((origFn) => {
         return function (v) {
+            if ("gameConfig" in window.top
+                && window.top.gameConfig.performanceModeEnabled) {
+                return;
+            }
             if ("gameData" in window.top && v.constructor.name.toLowerCase() == "string") {
                 let prefix = "[" + window.top.gameData.title + "]";
                 if ("gameLogs" in window.top) {
@@ -170,7 +178,7 @@ else {
             };
         })(Window.prototype.addEventListener);
     }
-    else if ("gameData" in window.top && window.top.gameData.title == "Subway Surfers"){
+    else if ("gameData" in window.top && window.top.gameData.title == "Subway Surfers") {
         Window.prototype.addEventListener = ((origFn) => {
             return function (type, callback, options) {
                 if (type == "keydown" || type == "keyup" || type == "keypress") {
