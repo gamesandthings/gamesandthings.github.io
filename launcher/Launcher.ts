@@ -72,9 +72,9 @@ export default class Launcher {
         Launcher.state.create();
         this.initInject();
 
-        setInterval(()=>{
+        setInterval(() => {
             SaveManager.update();
-        },1000/5);
+        }, 1000 / 5);
 
         (window as any).gameConfig = SettingsHandler.data;
         (window as any).gameMediaStreams = [];
@@ -234,7 +234,12 @@ export default class Launcher {
     static update(timestep: number) {
         Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") || window.matchMedia("(display-mode: standalone)").matches;
         (window as any).gameConfig = SettingsHandler.data;
-        Launcher.drawer.update(Launcher.delta);
+        if (Launcher.drawer.alpha != 0) {
+            Launcher.drawer.update(Launcher.delta);
+        }
+        else {
+            Launcher.drawer.mouseOverCheck();
+        }
         if ((document.body.offsetWidth >= window.screen.availWidth &&
             document.body.offsetHeight >= window.screen.availHeight)) {
             Launcher.fullscreen = true;
@@ -269,7 +274,7 @@ export default class Launcher {
             Launcher.iframe.style.opacity = "0";
             Launcher.iframe.style.top = "0px";
         }
-        
+
         //Launcher.ctx.reset();
         //Launcher.iframe.style.width = "100%";
         //Launcher.iframe.style.height = "100%";

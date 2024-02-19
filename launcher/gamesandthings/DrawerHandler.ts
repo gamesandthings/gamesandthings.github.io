@@ -102,8 +102,8 @@ export default class DrawerHandler implements IPositionable {
                 this.alpha = 1;
             }
             else if (Launcher.iframe.contentDocument?.pointerLockElement != null) {
-                
                 this.alpha = 0;
+                this.isOut = false;
             }
             else {
                 this.alpha = 0.5;
