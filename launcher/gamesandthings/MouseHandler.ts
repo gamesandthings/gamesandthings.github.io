@@ -8,7 +8,7 @@ export default class MouseHandler {
     private mouseMap: Map<MouseButtons, boolean> = new Map();
     private justPressedMap: Map<MouseButtons, boolean> = new Map();
     public hasClickedAtLeastOnce: Boolean = false;
-
+    public scrollY: number = 0;
     init(): void {
         window.addEventListener("mousedown", (ev) => { this.onMouseDown(ev) });
         window.addEventListener("mouseenter", (ev) => { this.onMouseEnter(ev) });
@@ -20,11 +20,11 @@ export default class MouseHandler {
         window.addEventListener("touchstart", (ev) => { this.onMouseDown_touch(ev) });
         window.addEventListener("touchmove", (ev) => { this.onMouseMove_touch(ev) });
         window.addEventListener("touchend", (ev) => { this.onMouseUp_touch(ev) });
-
         window.addEventListener("contextmenu", (ev) => {
             this.onContextMenu(ev);
             return false;
         });
+        window.addEventListener("wheel", (ev) => { this.onWheel(ev) });
     }
     onMouseDown(ev: MouseEvent) {
         this.hasClickedAtLeastOnce = true;
@@ -68,6 +68,9 @@ export default class MouseHandler {
         //ev.preventDefault();
         this.getPosFromEvent(ev);
     }
+    onWheel(ev: WheelEvent) {
+        this.scrollY = ev.deltaY;
+    }
     isMBDown(button: MouseButtons): boolean {
         if (!this.mouseMap.has(button)) {
             return false;
@@ -91,7 +94,7 @@ export default class MouseHandler {
         this.deltaY = ev.movementY;
     }
     getPosFromTouchEvent(ev: TouchEvent) {
-        if (ev.touches[0]==undefined) return;
+        if (ev.touches[0] == undefined) return;
         this.deltaX = this.x - ev.touches[0].clientX;
         this.deltaY = this.x - ev.touches[0].clientY;
         this.x = ev.touches[0].clientX;
@@ -100,6 +103,7 @@ export default class MouseHandler {
     resetDeltas() {
         this.deltaX = 0;
         this.deltaY = 0;
+        this.scrollY = 0;
         this.justPressedMap.clear();
     }
 }

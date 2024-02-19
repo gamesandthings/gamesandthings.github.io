@@ -3,6 +3,7 @@ import Graphic from "./Graphic";
 import MouseHandler from "./MouseHandler";
 import ArrowSprite from "./ArrowSprite";
 import Sprite from "./Sprite";
+import SText from "./SText";
 import State from "./State";
 import { Axes } from "./enums/Axes";
 import { MouseButtons } from "./enums/MouseButtons";
@@ -11,7 +12,7 @@ export default class LauncherState extends State {
     logo: Sprite = new Sprite();
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
-
+    notice:SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!");
     lArrow: ArrowSprite = new ArrowSprite();
     rArrow: ArrowSprite = new ArrowSprite();
 
@@ -23,10 +24,13 @@ export default class LauncherState extends State {
         this.add(this.logo);
         this.add(this.lArrow);
         this.add(this.rArrow);
+        this.notice.y = 35;
+        this.add(this.notice);
         this.rArrow.flipX = true;
     }
     update(elapsed: number): void {
         super.update(elapsed); // CALL BEFORE EVERYTHING
+        //this.notice.y += Launcher.mouse.scrollY;
         if (this.logo.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)
             && Launcher.mouse.isMBDown(MouseButtons.PRIMARY)) {
             this.logo.angle += 5 * (elapsed * 60);

@@ -2,13 +2,11 @@ import LauncherState from "./gamesandthings/LauncherState";
 import State from "./gamesandthings/State";
 import SettingsHandler from "./gamesandthings/SettingsHandler";
 import SaveManager from "./gamesandthings/SaveManager";
-
 import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
 import NativeContextMenuHandler from "./gamesandthings/contextmenu/NativeContextMenuHandler";
 import CustomContextMenuHandler from "./gamesandthings/contextmenu/CustomContextMenuHandler";
-
 import { Game, GameVersion } from "./gamesandthings/Games";
 import Vector2 from "./gamesandthings/types/Vector2";
 import IContextMenu from "./gamesandthings/contextmenu/IContextMenu";
@@ -287,13 +285,6 @@ export default class Launcher {
             Launcher.ctx.fillStyle = "black";
             Launcher.ctx.fillRect(0, 0, Launcher.cnv.width, Launcher.cnv.height);
             Launcher.state.draw();
-            Launcher.ctx.fillStyle = "white";
-            Launcher.ctx.font = "15px sans-serif";
-            Launcher.ctx.textBaseline = "hanging";
-            Launcher.ctx.fillText("This is the new games and stuff, ", 0, 35);
-            Launcher.ctx.fillText("currently in very early development.", 0, 55)
-            Launcher.ctx.fillText("Mobile devices are supported now!", 0, 75)
-
             Launcher.state.update(Launcher.delta);
             Launcher.lastTimestep = timestep;
             Launcher.mouse.resetDeltas();

@@ -173,8 +173,9 @@ else {
 
     function raf(timestep) {
         Object.keys(window.localStorage).forEach((key) => {
-            if (window.localStorage.getItem(key) != null && key != 'gat_settings') {
-                window.top.localStorage_gat[key] = window.localStorage.getItem(key);
+            let item = window.localStorage.getItem(key);
+            if (item != null && key != 'gat_settings') {
+                window.top.localStorage_gat[key] = item;
             }
         });
         requestAnimationFrame(raf);
