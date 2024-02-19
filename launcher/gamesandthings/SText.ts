@@ -3,7 +3,7 @@ import Launcher from "../Launcher";
 import IPositionable from "./interfaces/IPositionable";
 import Rectangle from "./types/Rectangle";
 import { Axes } from "./enums/Axes";
-
+type FontStyle = "normal" | "italic" | "bold";
 export default class SText extends Rectangle implements IDrawable {
     public x: number = 0;
     public y: number = 0;
@@ -15,12 +15,14 @@ export default class SText extends Rectangle implements IDrawable {
     public fontKerning: CanvasFontKerning = "none";
     public textBaseline: CanvasTextBaseline = "hanging";
     public color: string | CanvasGradient | CanvasPattern = "white";
+    public fontStyle: FontStyle = "normal";
 
-    constructor(text: string = "", size: number = 15, color: string = "white", x: number = 0, y: number = 0) {
+    constructor(text: string = "", size: number = 15, fontStyle: FontStyle = "normal", color: string = "white", x: number = 0, y: number = 0) {
         super();
         this.text = text;
         this.size = size;
         this.color = color;
+        this.fontStyle = fontStyle;
         this.x = x;
         this.y = y;
     }
@@ -30,12 +32,12 @@ export default class SText extends Rectangle implements IDrawable {
         this.height = 0;
 
         lines.forEach((line, i) => {
-            if (lines.length == 1){
+            if (lines.length == 1) {
                 this.height = this.size;
             }
             Launcher.ctx.save();
             Launcher.ctx.fillStyle = this.color;
-            Launcher.ctx.font = `${this.size}px ${this.font}`;
+            Launcher.ctx.font = `${this.fontStyle} ${this.size}px ${this.font}`;
             Launcher.ctx.textBaseline = this.textBaseline;
             Launcher.ctx.fontKerning = this.fontKerning;
             Launcher.ctx.translate(0, (this.size * (1 / 3)) * i);
@@ -58,7 +60,7 @@ export default class SText extends Rectangle implements IDrawable {
     }
     destroy(): void {
     }
-    screenCenter(axis?:Axes){
+    screenCenter(axis?: Axes) {
         if (axis == Axes.X) {
             this.x = (Launcher.cnv.offsetWidth - this.width) / 2;
         }

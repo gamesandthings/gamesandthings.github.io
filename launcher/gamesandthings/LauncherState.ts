@@ -20,6 +20,7 @@ export default class LauncherState extends State {
         this.logo.loadGraphic("/assets/images/logo.png");
         this.bg.loadGraphic('/assets/images/logo.png');
         this.bg.alpha = 0;
+        this.chooseGame.fontStyle = "bold";
         this.add(this.bg);
         this.add(this.logo);
         this.notice.y = 35;
@@ -56,6 +57,7 @@ export default class LauncherState extends State {
         this.chooseGame.screenCenter();
         this.chooseGame.y = this.logo.y+this.logo.height + 10;
         if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
+            this.chooseGame.color = "#A9A9A9";
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
                 let gamesCtx: Array<ContextOption> = [];
                 Games.games.forEach((game) => {
@@ -83,6 +85,9 @@ export default class LauncherState extends State {
                 Launcher.contextMenu.show(gamesCtx);
 
             }
+        }
+        else {
+            this.chooseGame.color = "white";
         }
     }
     loadOriginalAssets() {
