@@ -77,6 +77,7 @@ export default class Launcher {
         }, 1000 / 5);
 
         (window as any).gameConfig = SettingsHandler.data;
+        (window as any).gameKeys = [];
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
@@ -183,6 +184,12 @@ export default class Launcher {
             Launcher.curVersion = version.title;
             document.title += " - " + version.title;
             link += '/' + version.url;
+        }
+        if (game.gameKeys != undefined || game.gameKeys != null){
+            (window as any).gameKeys = game.gameKeys;
+        }
+        else {
+            (window as any).gameKeys = [];
         }
         SaveManager.load();
         Launcher.drawer.updateScreenMode();

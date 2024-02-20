@@ -14,7 +14,8 @@ export default class KeyboardHandler {
     }
     onKeyDown(ev: KeyboardEvent, preventDefault: boolean = true) {
         if (ev.key != null) {
-            if (ev.key == "F11"){
+            console.log(`public static ${ev.code.toUpperCase().replace('KEY','')}:Key = {key: '${ev.key}', code: '${ev.code}', keyCode: ${ev.keyCode},}; `);
+            if (ev.key == "F11") {
                 Launcher.toggleFullscreen();
             }
             this.pressedMap.set(ev.key.toLowerCase(), true);

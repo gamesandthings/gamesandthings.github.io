@@ -341,6 +341,46 @@ export default class DrawerHandler implements IPositionable {
                                 }
                             });
                         }
+                        if (Launcher.game?.gameKeys != undefined) {
+                            options.push({
+                                text: "Controls",
+                                desc: "(rebinding coming soon!)",
+                                onselect: () => {
+                                    let controls: Array<ContextOption> = [];
+                                    Launcher.game?.gameKeys?.forEach((gameKey) => {
+                                        let top = gameKey.name;
+                                        let bottom = "";
+                                        if (!gameKey.disableOriginal) {
+                                            let key = gameKey.key.key.replace('Arrow', '').replace(' ', 'Space').replace('Left','Left ').replace('Right','Right ');
+                                            if (key.length == 1) {
+                                                key = key.toUpperCase();
+                                            }
+                                            bottom = key;
+                                        }
+                                        gameKey.extraKeys.forEach((exkey, i) => {
+                                            if (bottom != "") {
+                                                let key = exkey.key.replace('Arrow', '').replace(' ', 'Space').replace('Left','Left ').replace('Right','Right ');
+                                                if (key.length == 1) {
+                                                    key = key.toUpperCase();
+                                                }
+                                                
+                                                bottom += ", " + key;
+                                            }
+                                            else {
+                                                bottom = exkey.key;
+                                            }
+                                        });
+                                        controls.push({
+                                            text: top,
+                                            desc: bottom,
+                                        });
+
+                                        Launcher.contextMenu.show(controls);
+                                    })
+                                }
+                            });
+                        }
+
                         let switcherText: string = "Enable Performance Mode";
                         if (Launcher.performanceMode) {
                             switcherText = "Disable Performance Mode"

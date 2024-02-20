@@ -1,3 +1,7 @@
+import { GameKey } from "./types/GameKey";
+import { Key } from "./types/Key";
+import Keys from "./Keys";
+
 export type Game = {
     title: string,
     creator: string,
@@ -8,6 +12,7 @@ export type Game = {
     versions?: Array<GameVersion> | null,
     fixes?: Fixes | null,
     assets?: GameAssets,
+    gameKeys?: Array<GameKey>,
 }
 export type GameAssets = {
     bg: string,
@@ -89,7 +94,74 @@ export default class Games {
                 bg: 'blank',
                 logo: 'logo.png',
                 logoPos: 'center'
-            }
+            },
+            gameKeys: [
+                {
+                    name: 'Forward',
+                    key: Keys.W,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Back',
+                    key: Keys.S,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Left',
+                    key: Keys.A,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Right',
+                    key: Keys.D,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Crouch (Z Trigger)',
+                    key: Keys.K,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Jump (A Button)',
+                    key: Keys.L,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Punch (B Button)',
+                    key: Keys.COMMA,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Pause (Start Button)',
+                    key: Keys.SPACE,
+                    extraKeys: [
+                        Keys.ENTER,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Camera (R Button)',
+                    key: Keys.RSHIFT,
+                    extraKeys: [
+                        Keys.LSHIFT,
+                    ],
+                    disableOriginal: false,
+                },
+            ]
         },
         {
             title: "Mari0",
@@ -118,6 +190,65 @@ export default class Games {
                 removeVsync: false,
                 pointerLockFix: false,
             },
+            gameKeys: [
+                {
+                    name: 'Up',
+                    key: Keys.UP,
+                    extraKeys: [
+                        Keys.W,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Down',
+                    key: Keys.DOWN,
+                    extraKeys: [
+                        Keys.S,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Left',
+                    key: Keys.LEFT,
+                    extraKeys: [
+                        Keys.A,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Right',
+                    key: Keys.RIGHT,
+                    extraKeys: [
+                        Keys.D,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Select/Jump',
+                    key: Keys.Z,
+                    extraKeys: [
+                        Keys.SPACE,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Back/Jump',
+                    key: Keys.X,
+                    extraKeys: [
+                        Keys.BACKSPACE,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Select/Pause',
+                    key: Keys.ENTER,
+                    extraKeys: [
+                        Keys.P,
+                        Keys.ESCAPE
+                    ],
+                    disableOriginal: false,
+                },
+            ],
         },
         {
             title: "Half-Life",
@@ -145,6 +276,47 @@ export default class Games {
                 removeVsync: false,
                 pointerLockFix: false,
             },
+            gameKeys: [
+                    {
+                        name: 'Jump',
+                        key: Keys.UP,
+                        extraKeys: [
+                            Keys.W,
+                        ],
+                        disableOriginal: false,
+                    },
+                    {
+                        name: 'Duck',
+                        key: Keys.DOWN,
+                        extraKeys: [
+                            Keys.S,
+                        ],
+                        disableOriginal: false,
+                    },
+                    {
+                        name: 'Left',
+                        key: Keys.LEFT,
+                        extraKeys: [
+                            Keys.A,
+                        ],
+                        disableOriginal: false,
+                    },
+                    {
+                        name: 'Right',
+                        key: Keys.RIGHT,
+                        extraKeys: [
+                            Keys.D,
+                        ],
+                        disableOriginal: false,
+                    },
+                    {
+                        name: 'Hoverboard',
+                        key: Keys.SPACE,
+                        extraKeys: [
+                        ],
+                        disableOriginal: false,
+                    },
+            ]
         },
         {
             title: "Fruit Ninja",
