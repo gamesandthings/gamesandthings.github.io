@@ -41,7 +41,12 @@ export default class Games {
                 {
                     url: "1.8.8",
                     title: "1.8.8"
-                }, {
+                },
+                {
+                    url: "1.8.8-resent",
+                    title: "1.8.8 Resent Client"
+                },
+                {
                     url: "1.5.2",
                     title: "1.5.2"
                 },
