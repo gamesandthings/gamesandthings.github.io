@@ -26,6 +26,10 @@ export default class SaveManager {
             Object.keys(game.localStorage).forEach((key) => {
                 window.localStorage.setItem(key, game.localStorage[key])
             });
+            
+            if (Launcher.game?.title == "Subway Surfers"){
+                window.localStorage.setItem("playerAge",'6'); 
+            }
         });
 
     }

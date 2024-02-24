@@ -3,7 +3,9 @@
     "dexie": "^3.2.5",
     "fix-webm-duration": "^1.0.5",
     "ts-loader": "^9.5.1",
-    "webpack": "^5.90.1",
+    "webpack": "^5.90.1"
+  },
+  "devDependencies": {
     "webpack-cli": "^5.1.4"
   }
 }

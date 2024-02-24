@@ -281,6 +281,41 @@ export default class Games {
                 removeVsync: false,
                 pointerLockFix: false,
             },
+            versions: [
+                {
+                    url: "zurich",
+                    title: "Zurich (Easter)",
+                },
+                {
+                    url: "new-orleans",
+                    title: "New Orleans (Halloween)"
+                },
+                {
+                    url: "london",
+                    title: "London (Christmas)"
+                },
+                {
+                    url: "berlin",
+                    title: "Berlin"
+                },
+                {
+                    url: "havana",
+                    title: "Havana"
+                },
+                {
+                    url: "houston",
+                    title: "Houston"
+                },
+                {
+                    url: "monaco",
+                    title: "Monaco"
+                },
+                {
+                    url: "st-petersburg",
+                    title: "Saint Petersburg"
+                },
+
+            ],
             gameKeys: [
                     {
                         name: 'Jump',
@@ -322,6 +357,7 @@ export default class Games {
                         disableOriginal: false,
                     },
             ]
+            
         },
         {
             title: "Fruit Ninja",

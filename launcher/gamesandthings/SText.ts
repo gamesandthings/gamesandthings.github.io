@@ -47,7 +47,7 @@ export default class SText extends Rectangle implements IDrawable {
             if (lineW > this.width) {
                 this.width = lineW;
             }
-            this.height += (this.size * i);
+            this.height += (this.size);
             Launcher.ctx.translate(this.x, this.y);
             Launcher.ctx.fillText(line, 0, (this.size * i));
             Launcher.ctx.restore();

@@ -13,14 +13,16 @@ export default class LauncherState extends State {
     logo: Sprite = new Sprite();
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
-    notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!", 15);
+    notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!\n\n" +
+        "Latest News (24 Feb 2024):\n\n - Subway Surfers now has more versions\n(Go to Settings > Set Version version to see all available versions)", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
-
+    updateTicks: number = 0;
     create(): void {
         this.logo.loadGraphic("/assets/images/logo.png");
         this.bg.loadGraphic('/assets/images/logo.png');
         this.bg.alpha = 0;
         this.chooseGame.fontStyle = "bold";
+        this.notice.font = "monospace";
         this.add(this.bg);
         this.add(this.logo);
         this.notice.y = 35;
@@ -28,11 +30,15 @@ export default class LauncherState extends State {
         this.add(this.chooseGame);
     }
     update(elapsed: number): void {
+        let dt = elapsed * 60;
+        this.updateTicks += 1 * dt;
+        this.updateTicks = this.updateTicks % 65535;
         super.update(elapsed); // CALL BEFORE EVERYTHING
+
         //this.notice.y += Launcher.mouse.scrollY;
         if (this.logo.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)
             && Launcher.mouse.isMBDown(MouseButtons.PRIMARY)) {
-            this.logo.angle += 5 * (elapsed * 60);
+            this.logo.angle += 5 * dt;
         }
         else {
             this.logo.angle = 0;
@@ -54,10 +60,11 @@ export default class LauncherState extends State {
             Math.ceil(h * Math.max(window.innerWidth / w, window.innerHeight / h)));
         this.bg.screenCenter();
         this.notice.screenCenter();
+        this.chooseGame.size = (32 * Math.abs(Math.sin(this.updateTicks / 100) / 2) + 32);
         this.chooseGame.screenCenter();
-        this.chooseGame.y = this.logo.y+this.logo.height + 10;
-        if (this.chooseGame.y >= window.innerHeight || this.notice.overlaps(this.chooseGame)){
-            this.chooseGame.y = this.notice.y+this.notice.height + 10;
+        this.chooseGame.y = this.notice.y + this.notice.height + 10;
+        if (this.chooseGame.y >= window.innerHeight || this.notice.overlaps(this.chooseGame)) {
+            this.chooseGame.y = this.notice.y + this.notice.height + 10;
         }
         if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             this.chooseGame.color = "#A9A9A9";
