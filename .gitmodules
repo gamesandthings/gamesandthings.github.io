@@ -19,3 +19,6 @@
 [submodule "app-soniccd"]
 	path = app-soniccd
 	url = https://github.com/gamesandthings/app-soniccd.git
+[submodule "app-fnf"]
+	path = app-fnf
+	url = https://github.com/gamesandthings/app-fnf.git
