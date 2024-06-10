@@ -60,7 +60,7 @@ export default class LauncherState extends State {
             Math.ceil(h * Math.max(window.innerWidth / w, window.innerHeight / h)));
         this.bg.screenCenter();
         this.notice.screenCenter();
-        this.chooseGame.size = (32 * Math.abs(Math.sin(this.updateTicks / 100) / 2) + 32);
+        this.chooseGame.size = 32;
         this.chooseGame.screenCenter();
         this.chooseGame.y = this.notice.y + this.notice.height + 10;
         if (this.chooseGame.y >= window.innerHeight || this.notice.overlaps(this.chooseGame)) {
