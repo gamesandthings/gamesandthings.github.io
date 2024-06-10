@@ -372,5 +372,19 @@ export default class Games {
                 pointerLockFix: false,
             },
         },
+        {
+            title: "Friday Night Funkin'",
+            creator: "Funkin' Crew",
+            prefix: "app-fnf",
+            screenmode: "window",
+            forcescreenmode: true,
+            injectTime: 'load',
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+        },
     ];
 }

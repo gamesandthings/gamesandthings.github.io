@@ -14,7 +14,7 @@ export default class LauncherState extends State {
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
     notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!\n\n" +
-        "Latest News (24 Feb 2024):\n\n - Subway Surfers now has more versions\n(Go to Settings > Set Version version to see all available versions)", 15);
+        "Latest News (10 June 2024):\n\n - NEW GAME: Friday Night Funkin'\nAdded Friday Night Funkin' v0.4.0", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
     updateTicks: number = 0;
     create(): void {
