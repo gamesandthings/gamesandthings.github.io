@@ -14,7 +14,7 @@ export default class LauncherState extends State {
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
     notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!\n\n" +
-        "Latest News (10 June 2024):\n\n - NEW GAME: Friday Night Funkin'\nAdded Friday Night Funkin' v0.4.0", 15);
+        "Latest News (12 June 2024):\n\n - NEW GAMES: DOOM and DOOM II\n", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
     updateTicks: number = 0;
     currentPage: number = 0;
