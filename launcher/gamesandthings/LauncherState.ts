@@ -6,7 +6,7 @@ import SText from "./SText";
 import State from "./State";
 import { Axes } from "./enums/Axes";
 import { MouseButtons } from "./enums/MouseButtons";
-import Games, { GameAssets } from "./Games";
+import Games, { Game, GameAssets } from "./Games";
 import { ContextOption } from "./contextmenu/ContextOption";
 import UniFont from "./UniFont";
 export default class LauncherState extends State {
@@ -17,6 +17,8 @@ export default class LauncherState extends State {
         "Latest News (10 June 2024):\n\n - NEW GAME: Friday Night Funkin'\nAdded Friday Night Funkin' v0.4.0", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
     updateTicks: number = 0;
+    currentPage: number = 0;
+    amountPerPage: number = 5;
     create(): void {
         this.logo.loadGraphic("/assets/images/logo.png");
         this.bg.loadGraphic('/assets/images/logo.png');
@@ -59,41 +61,18 @@ export default class LauncherState extends State {
         this.bg.setGraphicSize(Math.ceil(w * Math.max(window.innerWidth / w, window.innerHeight / h)),
             Math.ceil(h * Math.max(window.innerWidth / w, window.innerHeight / h)));
         this.bg.screenCenter();
-        this.notice.screenCenter();
         this.chooseGame.size = 32;
         this.chooseGame.screenCenter();
-        this.chooseGame.y = this.notice.y + this.notice.height + 10;
+        this.chooseGame.y -= 100;
+        this.notice.screenCenter();
+        this.notice.y = this.chooseGame.y + this.chooseGame.height;
         if (this.chooseGame.y >= window.innerHeight || this.notice.overlaps(this.chooseGame)) {
             this.chooseGame.y = this.notice.y + this.notice.height + 10;
         }
         if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             this.chooseGame.color = "#A9A9A9";
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
-                let gamesCtx: Array<ContextOption> = [];
-                Games.games.forEach((game) => {
-                    gamesCtx.push({
-                        text: game.title,
-                        desc: game.creator,
-                        descFont: UniFont.ITALIC,
-                        onselect: () => {
-                            Launcher.openGame(game);
-                        }
-                    });
-                });
-                gamesCtx.push({
-                    text: "Custom",
-                    onselect: () => {
-                        let debugPrompt: string | null = prompt("Enter URL to open:\n");
-                        if (debugPrompt == null) return;
-                        if (!(debugPrompt.startsWith("http://")) && !(debugPrompt.startsWith("https://"))) {
-                            debugPrompt = "http://" + debugPrompt;
-                        }
-                        Launcher.game = null;
-                        Launcher.openURL(debugPrompt);
-                    }
-                });
-                Launcher.contextMenu.show(gamesCtx);
-
+               this.showGameSelect();
             }
         }
         else {
@@ -117,5 +96,44 @@ export default class LauncherState extends State {
             this.bg.alpha = 0;
         }
         this.logoPos = assets.logoPos;
+    }
+    showGameSelect() {
+        let gamesCtx: Array<ContextOption> = [];
+
+        for (let i = this.currentPage * this.amountPerPage; i < (this.currentPage * this.amountPerPage) + this.amountPerPage; i++) {
+            let game: Game = Games.games[i];
+            if (game == undefined)
+                break;
+            gamesCtx.push({
+                text: game.title,
+                desc: game.creator,
+                descFont: UniFont.ITALIC,
+                onselect: () => {
+                    Launcher.openGame(game);
+                }
+            });
+        }
+
+        if (gamesCtx.length == this.amountPerPage){
+            gamesCtx.push({
+                text: "Next Page",
+                font: UniFont.BOLD,
+                onselect: () => {
+                    this.currentPage++;
+                    this.showGameSelect();
+                }
+            });
+        }
+        if (this.currentPage != 0){
+            gamesCtx.splice(0,0,{
+                text: "Previous Page",
+                font: UniFont.BOLD,
+                onselect: () => {
+                    this.currentPage--;
+                    this.showGameSelect();
+                }
+            });
+        }
+        Launcher.contextMenu.show(gamesCtx);
     }
 }

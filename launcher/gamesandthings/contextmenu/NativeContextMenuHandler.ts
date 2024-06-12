@@ -89,43 +89,45 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
     }
     contextOptions: Array<ContextOption> = [];
     show(options: Array<ContextOption>, x?: number, y?: number) {
-        if (!Launcher.mouse.hasClickedAtLeastOnce) return;
-        this.contextOptions = options;
-
-        this.clear();
-        options.forEach((opt) => {
-            this.add(opt);
-        });
-        this.add({
-            text: "Close", font: UniFont.BOLD, onselect: () => {
-                this.clear();
+        requestAnimationFrame(()=>{
+            if (!Launcher.mouse.hasClickedAtLeastOnce) return;
+            this.contextOptions = options;
+    
+            this.clear();
+            options.forEach((opt) => {
+                this.add(opt);
+            });
+            this.add({
+                text: "Close", font: UniFont.BOLD, onselect: () => {
+                    this.clear();
+                }
+            });
+            if (x == null) {
+                x = Launcher.mouse.x;
             }
-        });
-        if (x == null) {
-            x = Launcher.mouse.x;
-        }
-        if (y == null) {
-            y = Launcher.mouse.y;
-        }
-        this.contextMenuInput.style.width = "50px";
-        this.contextMenuInput.style.height = "50px";
-        this.contextMenuInput.style.left = x - 20 + "px";
-        this.contextMenuInput.style.top = y - 50 + "px";
-        try {
-            if ("showPicker" in this.contextMenuInput) {
-                this.contextMenuInput.showPicker();
+            if (y == null) {
+                y = Launcher.mouse.y;
             }
-            else {
-                alert("Your browser does not support context menus at the moment,\n");
-                alert("Please join discord (chat icon) for updates.");
+            this.contextMenuInput.style.width = "50px";
+            this.contextMenuInput.style.height = "50px";
+            this.contextMenuInput.style.left = x - 20 + "px";
+            this.contextMenuInput.style.top = y - 50 + "px";
+            try {
+                if ("showPicker" in this.contextMenuInput) {
+                    this.contextMenuInput.showPicker();
+                }
+                else {
+                    alert("Your browser does not support context menus at the moment,\n");
+                    alert("Please join discord (chat icon) for updates.");
+                }
             }
-        }
-        catch { }
-        // go away so it doesnt interfere with user input
-        this.contextMenuInput.style.top = "-999px";
-        this.contextMenuInput.style.left = "-999px";
-        this.contextMenuInput.style.width = "0px";
-        this.contextMenuInput.style.height = "0px";
+            catch { }
+            // go away so it doesnt interfere with user input
+            this.contextMenuInput.style.top = "-999px";
+            this.contextMenuInput.style.left = "-999px";
+            this.contextMenuInput.style.width = "0px";
+            this.contextMenuInput.style.height = "0px";
+        });   
     }
     destroy(): void {
 

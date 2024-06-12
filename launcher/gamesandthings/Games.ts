@@ -317,47 +317,47 @@ export default class Games {
 
             ],
             gameKeys: [
-                    {
-                        name: 'Jump',
-                        key: Keys.UP,
-                        extraKeys: [
-                            Keys.W,
-                        ],
-                        disableOriginal: false,
-                    },
-                    {
-                        name: 'Duck',
-                        key: Keys.DOWN,
-                        extraKeys: [
-                            Keys.S,
-                        ],
-                        disableOriginal: false,
-                    },
-                    {
-                        name: 'Left',
-                        key: Keys.LEFT,
-                        extraKeys: [
-                            Keys.A,
-                        ],
-                        disableOriginal: false,
-                    },
-                    {
-                        name: 'Right',
-                        key: Keys.RIGHT,
-                        extraKeys: [
-                            Keys.D,
-                        ],
-                        disableOriginal: false,
-                    },
-                    {
-                        name: 'Hoverboard',
-                        key: Keys.SPACE,
-                        extraKeys: [
-                        ],
-                        disableOriginal: false,
-                    },
+                {
+                    name: 'Jump',
+                    key: Keys.UP,
+                    extraKeys: [
+                        Keys.W,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Duck',
+                    key: Keys.DOWN,
+                    extraKeys: [
+                        Keys.S,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Left',
+                    key: Keys.LEFT,
+                    extraKeys: [
+                        Keys.A,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Right',
+                    key: Keys.RIGHT,
+                    extraKeys: [
+                        Keys.D,
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Hoverboard',
+                    key: Keys.SPACE,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
             ]
-            
+
         },
         {
             title: "Fruit Ninja",
@@ -379,6 +379,72 @@ export default class Games {
             screenmode: "window",
             forcescreenmode: true,
             injectTime: 'load',
+            versions: [
+                {
+                    url: "",
+                    title: "Base v0.4.0"
+                }
+            ],
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+        },
+        {
+            title: "Doom",
+            creator: "id Software",
+            prefix: "app-doom",
+            screenmode: "window",
+            forcescreenmode: true,
+            injectTime: 'DOMContentLoaded',
+            gameKeys: [
+                {
+                    name: 'Forwards',
+                    key: Keys.W,
+
+                    extraKeys: [],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Backwards',
+                    key: Keys.S,
+                    extraKeys: [],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Left',
+                    key: Keys.A,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Right',
+                    key: Keys.D,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+                {
+                    name: 'Interact',
+                    key: Keys.SPACE,
+                    extraKeys: [
+                    ],
+                    disableOriginal: false,
+                },
+            ],
+            versions: [
+                {
+                    url: "?bundleUrl=/app-doom/d?anonymous=1",
+                    title: "Doom"
+                },
+                {
+                    url: "?bundleUrl=/app-doom/d2?anonymous=1",
+                    title: "Doom II"
+                }
+            ],
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,

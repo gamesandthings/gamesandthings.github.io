@@ -177,7 +177,8 @@ export default class Launcher {
         }
         else if (version == null && game.versions != null) {
             Launcher.curVersion = game.versions[0].title;
-            document.title += " - " + game.versions[0].title;
+            if (Launcher.curVersion != game.title)
+                document.title += " - " + game.versions[0].title;
             link += '/' + game.versions[0].url;
         }
         else if (version != null) {
@@ -185,7 +186,7 @@ export default class Launcher {
             document.title += " - " + version.title;
             link += '/' + version.url;
         }
-        if (game.gameKeys != undefined || game.gameKeys != null){
+        if (game.gameKeys != undefined || game.gameKeys != null) {
             (window as any).gameKeys = game.gameKeys;
         }
         else {
@@ -193,7 +194,8 @@ export default class Launcher {
         }
         SaveManager.load();
         Launcher.drawer.updateScreenMode();
-        link += "/";
+        if (game.title != "Doom")
+            link += "/";
         Launcher.openURL(link);
     }
     public static openURL(url: string) {
