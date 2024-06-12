@@ -22,3 +22,6 @@
 [submodule "app-fnf"]
 	path = app-fnf
 	url = https://github.com/gamesandthings/app-fnf.git
+[submodule "app-doom"]
+	path = app-doom
+	url = https://github.com/gamesandthings/app-doom.git
