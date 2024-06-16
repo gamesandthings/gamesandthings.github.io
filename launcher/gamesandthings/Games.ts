@@ -383,6 +383,10 @@ export default class Games {
                 {
                     url: "",
                     title: "Base v0.4.0"
+                },
+                {
+                    url: "bhb",
+                    title: "Blue House Bundle: DEMO v1.0"
                 }
             ],
             fixes: {
