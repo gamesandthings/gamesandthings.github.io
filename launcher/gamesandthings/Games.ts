@@ -456,25 +456,5 @@ export default class Games {
                 pointerLockFix: false,
             },
         },
-        {
-            title: "Pizza Tower",
-            creator: "Tour de Pizza",
-            prefix: "app-pt",
-            screenmode: "16/9",
-            forcescreenmode: true,
-            injectTime: 'load',
-            versions: [
-                {
-                    url: "",
-                    title: "The Noise Update (v1.1.0)"
-                }
-            ],
-            fixes: {
-                preserveDrawingBuffer: true,
-                runsAtSetFrameRate: false,
-                removeVsync: false,
-                pointerLockFix: false,
-            },
-        },
     ];
 }

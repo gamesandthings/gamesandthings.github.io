@@ -25,6 +25,3 @@
 [submodule "app-doom"]
 	path = app-doom
 	url = https://github.com/gamesandthings/app-doom.git
-[submodule "app-pt"]
-	path = app-pt
-	url = https://github.com/gamesandthings/app-pt.git
