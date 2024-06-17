@@ -13,8 +13,8 @@ export default class LauncherState extends State {
     logo: Sprite = new Sprite();
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
-    notice: SText = new SText("This is the new games and stuff,\ncurrently in very early development.\nMobile devices are supported now!\n\n" +
-        "Latest News (12 June 2024):\n\n - NEW GAMES: DOOM and DOOM II\n", 15);
+    notice: SText = new SText("This is the new games and stuff, currently in very early development.\n" +
+        "Latest News (17 June 2024):\n\n - Updated Minecraft 1.8.8 to the latest Eaglercraft version.\nYou can now use capes, and performance should be improved.", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
     updateTicks: number = 0;
     currentPage: number = 0;
