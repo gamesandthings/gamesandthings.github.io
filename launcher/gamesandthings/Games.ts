@@ -459,5 +459,37 @@ export default class Games {
                 pointerLockFix: false,
             },
         },
+        {
+            title: "Run",
+            creator: "player03",
+            prefix: "app-flash",
+            screenmode: "window",
+            forcescreenmode: true,
+            injectTime: 'load',
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+            versions: [
+                {
+                    url: "run1",
+                    title: "Run (Classic)"
+                },
+                {
+                    url: "run1remaster",
+                    title: "Run (Remaster)"
+                },
+                {
+                    url: "run2",
+                    title: "Run 2"
+                },
+                {
+                    url: "run3",
+                    title: "Run 3"
+                },
+            ],
+        },
     ];
 }

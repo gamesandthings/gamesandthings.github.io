@@ -181,12 +181,12 @@ export default class Launcher {
             else if (version == null && game.versions != null) {
                 Launcher.curVersion = game.versions[0].title;
                 if (Launcher.curVersion != game.title)
-                    document.title += " - " + game.versions[0].title;
+                    document.title += " - " + game.versions[0].title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
                 link += '/' + game.versions[0].url;
             }
             else if (version != null) {
                 Launcher.curVersion = version.title;
-                document.title += " - " + version.title;
+                document.title += " - " + version.title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
                 link += '/' + version.url;
             }
             if (game.gameKeys != undefined || game.gameKeys != null) {
