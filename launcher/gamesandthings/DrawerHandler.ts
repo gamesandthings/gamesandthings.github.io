@@ -248,10 +248,12 @@ export default class DrawerHandler implements IPositionable {
                     }
                 }
                 else if (id == "refresh") {
-                    if (Launcher.iframe.src != '') {
-                        Launcher.iframe.src += '';
-                        SaveManager.load();
+                    if (this.recorder?.recording) {
+                        this.recorder.stopRecording();
                     }
+                    Launcher.iframeDiv.removeChild(Launcher.iframe);
+                    Launcher.initIframe();
+                    Launcher.openURL(Launcher.lastURL);
                 }
                 else if (id == "pause") {
                     if (Launcher.iframe.src != "") {
@@ -617,19 +619,6 @@ export default class DrawerHandler implements IPositionable {
                 if (!this.isOut) return;
                 if (id == "refresh") {
                     Launcher.contextMenu.show([
-                        {
-                            text: "Force Refresh Game",
-                            desc: "⚠ Unsaved data will be lost.",
-                            descFont: UniFont.ITALIC,
-                            onselect: () => {
-                                if (this.recorder?.recording) {
-                                    this.recorder.stopRecording();
-                                }
-                                Launcher.iframeDiv.removeChild(Launcher.iframe);
-                                Launcher.initIframe();
-                                Launcher.openURL(Launcher.lastURL);
-                            }
-                        },
                         {
                             text: "Force Refresh All",
                             desc: "⚠ Unsaved data will be lost.",

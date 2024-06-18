@@ -13,6 +13,7 @@ export type Game = {
     fixes?: Fixes | null,
     assets?: GameAssets,
     gameKeys?: Array<GameKey>,
+    fixScripts?: Array<string>
 }
 export type GameAssets = {
     bg: string,
@@ -189,6 +190,7 @@ export default class Games {
             screenmode: "16/9",
             forcescreenmode: true,
             injectTime: 'load',
+            fixScripts: ["/fixes/sonic-cd-save-file-fix.js"],
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,

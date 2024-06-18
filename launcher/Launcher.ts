@@ -5,6 +5,7 @@ import SaveManager from "./gamesandthings/SaveManager";
 import MouseHandler from "./gamesandthings/MouseHandler";
 import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
+import ScriptInjector from "./gamesandthings/ScriptInjector";
 import NativeContextMenuHandler from "./gamesandthings/contextmenu/NativeContextMenuHandler";
 import CustomContextMenuHandler from "./gamesandthings/contextmenu/CustomContextMenuHandler";
 import { Game, GameVersion } from "./gamesandthings/Games";
@@ -70,7 +71,7 @@ export default class Launcher {
         Launcher.ctx.imageSmoothingEnabled = false;
         Launcher.state = state;
         Launcher.state.create();
-        this.initInject();
+        Launcher.initInject();
 
         setInterval(() => {
             SaveManager.update();
@@ -85,26 +86,23 @@ export default class Launcher {
         Launcher.gameLogs = (window as any).gameLogs;
     }
     public static initInject() {
-        const url = "/iframe_inject.js"
-        fetch(url)
-            .then(r => r.text())
-            .then((t) => {
-                Launcher.injectScript = t;
-                setInterval(Launcher.updateInjection, 1000 * 10);
-                Launcher.update(0);
-            })
+        ScriptInjector.load("/iframe_inject.js");
     }
     public static finalInject() {
-        Launcher.injectedScript = false;
         Launcher.beginOpen();
         Launcher.updateInjection();
+        setTimeout(()=>{
+            setInterval(Launcher.updateInjection, 1000 * 10);
+        },1000);
     }
     public static initIframe(recreate: boolean = true): void {
-        Launcher.injectedScript = false;
+        ScriptInjector.reload();
+        //Launcher.initInject();
         if (recreate) {
             Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
             Launcher.iframeDiv.appendChild(Launcher.iframe);
         }
+
         Launcher.iframe.id = "gamewin";
         Launcher.iframe.setAttribute('frameborder', "0");
         Launcher.iframe.setAttribute('allowfullscreen', "true");
@@ -114,9 +112,6 @@ export default class Launcher {
             if (Launcher.game != null && Launcher.game.injectTime == 'load') {
                 Launcher.finalInject();
             }
-            else if (Launcher.game == null) {
-                Launcher.finalInject();
-            }
         });
         Launcher.iframe.addEventListener("DOMContentLoaded", (ev) => {
             if (Launcher.game != null && Launcher.game.injectTime == 'DOMContentLoaded') {
@@ -124,7 +119,7 @@ export default class Launcher {
             }
         });
         Launcher.iframe.addEventListener("beforeunload", (ev: BeforeUnloadEvent) => {
-            Launcher.injectedScript = false;
+            ScriptInjector.reload();
         });
     }
     static lastTimestep: number = 0;
@@ -133,7 +128,6 @@ export default class Launcher {
     public static lastURL: string = "";
     public static curVersion: string = "";
     public static beginOpen() {
-        console.clear();
         (window as any).gameMediaStreams = [];
         Launcher.gameMediaStreams = (window as any).gameMediaStreams;
         (window as any).gameLogs = [];
@@ -141,64 +135,74 @@ export default class Launcher {
     }
     public static refreshGame() {
         Launcher.beginOpen();
-        Launcher.iframe.src = Launcher.lastURL + '';
-        Launcher.initIframe(false);
+        Launcher.iframeDiv.removeChild(Launcher.iframe);
+        Launcher.initIframe();
+        Launcher.openGame(Launcher.game);
     }
     public static openGame(game: Game | null, version: GameVersion | null | undefined = null) {
         Launcher.beginOpen();
         if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
-        Launcher.injectedScript = false;
-        if (game == null) return; // it will never be called if its null but typescript i guess
-        if (game.fixes != null) {
-            window.eval("window.gameData =" + JSON.stringify(game) + ";");
+        ScriptInjector.reload();
+        let scripts:Array<string> = ["/iframe_inject.js"];
+        if (game != null && game.fixScripts != null){
+            game.fixScripts.forEach((script)=>{
+                scripts.push(script);
+            });
         }
-        Launcher.game = game;
-        document.title = game.title;
-        if (game.screenmode != null) {
-            Launcher.drawer.screenmode = game.screenmode;
-        }
-        else {
-            Launcher.drawer.screenmode = "window";
-        }
-
-        if (this.state instanceof LauncherState) {
-            if (game.assets != null) {
-                this.state.loadGameAssets(game.assets);
+        ScriptInjector.loadMultiple(scripts,()=>{
+            Launcher.update(0);
+            if (game == null) return; // it will never be called if its null but typescript i guess
+            if (game.fixes != null) {
+                window.eval("window.gameData =" + JSON.stringify(game) + ";");
             }
-            else
-                this.state.loadOriginalAssets();
-        }
-        let link: string = window.location.protocol + '//' + window.location.host + "/" + game.prefix;
-        if (version == null && game.versions == null) {
-            Launcher.curVersion = "";
-            link += "/";
-        }
-        else if (version == null && game.versions != null) {
-            Launcher.curVersion = game.versions[0].title;
-            if (Launcher.curVersion != game.title)
-                document.title += " - " + game.versions[0].title;
-            link += '/' + game.versions[0].url;
-        }
-        else if (version != null) {
-            Launcher.curVersion = version.title;
-            document.title += " - " + version.title;
-            link += '/' + version.url;
-        }
-        if (game.gameKeys != undefined || game.gameKeys != null) {
-            (window as any).gameKeys = game.gameKeys;
-        }
-        else {
-            (window as any).gameKeys = [];
-        }
-        SaveManager.load();
-        Launcher.drawer.updateScreenMode();
-        if (game.title != "Doom")
-            link += "/";
-        Launcher.openURL(link);
+            Launcher.game = game;
+            document.title = game.title;
+            if (game.screenmode != null) {
+                Launcher.drawer.screenmode = game.screenmode;
+            }
+            else {
+                Launcher.drawer.screenmode = "window";
+            }
+    
+            if (this.state instanceof LauncherState) {
+                if (game.assets != null) {
+                    this.state.loadGameAssets(game.assets);
+                }
+                else
+                    this.state.loadOriginalAssets();
+            }
+            let link: string = window.location.protocol + '//' + window.location.host + "/" + game.prefix;
+            if (version == null && game.versions == null) {
+                Launcher.curVersion = "";
+                link += "/";
+            }
+            else if (version == null && game.versions != null) {
+                Launcher.curVersion = game.versions[0].title;
+                if (Launcher.curVersion != game.title)
+                    document.title += " - " + game.versions[0].title;
+                link += '/' + game.versions[0].url;
+            }
+            else if (version != null) {
+                Launcher.curVersion = version.title;
+                document.title += " - " + version.title;
+                link += '/' + version.url;
+            }
+            if (game.gameKeys != undefined || game.gameKeys != null) {
+                (window as any).gameKeys = game.gameKeys;
+            }
+            else {
+                (window as any).gameKeys = [];
+            }
+            Launcher.drawer.updateScreenMode();
+            if (game.title != "Doom")
+                link += "/";
+            Launcher.openURL(link);
+        });
     }
     public static openURL(url: string) {
+        SaveManager.load();
         if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
@@ -239,7 +243,6 @@ export default class Launcher {
         }
         Launcher.drawer.updateScreenMode();
     }
-    static injectedScript: Boolean = false;
     static update(timestep: number) {
         Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") || window.matchMedia("(display-mode: standalone)").matches;
         (window as any).gameConfig = SettingsHandler.data;
@@ -319,30 +322,11 @@ export default class Launcher {
             requestAnimationFrame(Launcher.update);
         }
     }
-    static injectScript: string = "";
     static elemsToOptimize: string[] = ["canvas", "p", "h1", "h2", "h3"];
     static elemsToRemove: string[] = ["title", "meta"];
 
     public static updateInjection() {
-        if (Launcher.iframe.contentWindow != null) {
-            //console.log("updating iframe");
-            if (!Launcher.injectedScript) {
-                Launcher.injectedScript = true;
-                if (Launcher.injectScript == "") {
-                    const url = "/iframe_inject.js"
-                    fetch(url)
-                        .then(r => r.text())
-                        .then((t) => {
-                            Launcher.injectScript = t;
-                            if (Launcher.iframe.contentWindow == null) return;
-                            Launcher.iframe.contentWindow.window.eval(t);
-                        });
-                }
-                else {
-                    Launcher.iframe.contentWindow.window.eval(Launcher.injectScript);
-                }
-            }
-        }
+        ScriptInjector.update();          
         if (Launcher.iframe.contentDocument != null) {
             Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
                 elem.getAttribute("style")?.trim();
