@@ -91,9 +91,9 @@ export default class Launcher {
     public static finalInject() {
         Launcher.beginOpen();
         Launcher.updateInjection();
-        setTimeout(()=>{
+        setTimeout(() => {
             setInterval(Launcher.updateInjection, 1000 * 10);
-        },1000);
+        }, 1000);
     }
     public static initIframe(recreate: boolean = true): void {
         ScriptInjector.reload();
@@ -145,13 +145,13 @@ export default class Launcher {
             Launcher.drawer.recorder.stopRecording();
         }
         ScriptInjector.reload();
-        let scripts:Array<string> = ["/iframe_inject.js"];
-        if (game != null && game.fixScripts != null){
-            game.fixScripts.forEach((script)=>{
+        let scripts: Array<string> = ["/iframe_inject.js"];
+        if (game != null && game.fixScripts != null) {
+            game.fixScripts.forEach((script) => {
                 scripts.push(script);
             });
         }
-        ScriptInjector.loadMultiple(scripts,()=>{
+        ScriptInjector.loadMultiple(scripts, () => {
             Launcher.update(0);
             if (game == null) return; // it will never be called if its null but typescript i guess
             if (game.fixes != null) {
@@ -165,7 +165,7 @@ export default class Launcher {
             else {
                 Launcher.drawer.screenmode = "window";
             }
-    
+
             if (this.state instanceof LauncherState) {
                 if (game.assets != null) {
                     this.state.loadGameAssets(game.assets);
@@ -326,7 +326,7 @@ export default class Launcher {
     static elemsToRemove: string[] = ["title", "meta"];
 
     public static updateInjection() {
-        ScriptInjector.update();          
+        ScriptInjector.update();
         if (Launcher.iframe.contentDocument != null) {
             Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
                 elem.getAttribute("style")?.trim();
@@ -374,3 +374,12 @@ export default class Launcher {
 
 }
 Launcher.init(new LauncherState());
+const touchHandler = (ev: Event) => {
+    if (ev.target instanceof HTMLIFrameElement || ev.target instanceof HTMLCanvasElement || ev.target instanceof HTMLBodyElement) {
+        ev.preventDefault(); // Prevent text selection
+    }
+}
+document.addEventListener('touchstart', touchHandler, { passive: false });
+document.addEventListener('touchmove', touchHandler, { passive: false });
+document.addEventListener('touchend', touchHandler, { passive: false });
+document.addEventListener('touchcancel', touchHandler, { passive: false });

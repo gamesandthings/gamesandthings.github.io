@@ -66,6 +66,17 @@ if (!("gatScriptInjected" in window)) {
             };
         })(HTMLCanvasElement.prototype.requestPointerLock);
     }
+    else {
+        const touchHandler = (ev) => {
+            if (ev.target instanceof HTMLIFrameElement) {
+                ev.preventDefault(); // Prevent text selection
+            }
+        }
+        document.addEventListener('touchstart', touchHandler, { passive: false });
+        document.addEventListener('touchmove', touchHandler, { passive: false });
+        document.addEventListener('touchend', touchHandler, { passive: false });
+        document.addEventListener('touchcancel', touchHandler, { passive: false });
+    }
     HTMLCanvasElement.prototype.getContext = ((origFn) => {
         return function (type, attributes) {
             if ("fixes" in window.top.gameData) {
@@ -151,4 +162,45 @@ if (!("gatScriptInjected" in window)) {
     }
     requestAnimationFrame(raf);
 
+    var style = document.createElement('style');
+    document.head.appendChild(style);
+    style.innerHTML =
+        "canvas{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;outline:0;-webkit-tap-highlight-color:rgba(255,255,255,0)}" +
+        "body{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;outline:0}";
+
+    function createHandler(func, timeout) {
+
+        let timer = null;
+        let pressed = false;
+
+        return function () {
+
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            if (pressed) {
+                if (func) {
+                    func.apply(this, arguments);
+                }
+                clear();
+            } else {
+                pressed = true;
+                setTimeout(clear, timeout || 500);
+            }
+
+        };
+
+        function clear() {
+            timeout = null;
+            pressed = false;
+        }
+
+    }
+
+    // ....
+    // And you would use it like this:
+
+    const ignore = createHandler((e) => e.preventDefault(), 500);
+    document.body.addEventListener('touchstart', ignore, { passive: false })
 }

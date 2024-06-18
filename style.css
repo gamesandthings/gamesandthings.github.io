@@ -1,5 +1,11 @@
 * {
     user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    outline: none;
     overflow: hidden;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
@@ -10,6 +16,7 @@
     titlebar-area-height: 0px;
     accent-color: black;
     color-scheme: dark;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
 #iframediv {
@@ -24,6 +31,13 @@ canvas {
     height: 100%;
     position: fixed;
     z-index: 2;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    outline: none;
 }
 
 iframe {
@@ -31,6 +45,13 @@ iframe {
     image-rendering: crisp-edges;
     position: fixed;
     z-index: 1;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    outline: none;
 }
 
 body {

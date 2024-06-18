@@ -36,13 +36,17 @@ export default class MouseHandler {
     }
     onMouseDown_touch(ev: TouchEvent) {
         this.hasClickedAtLeastOnce = true;
-        this.mouseMap.set(MouseButtons.PRIMARY, true);
-        this.getPosFromTouchEvent(ev);
+        if (!Launcher.contextMenu.isOpen) {
+            this.mouseMap.set(MouseButtons.PRIMARY, true);
+            this.getPosFromTouchEvent(ev);
+        }
     }
     onMouseUp_touch(ev: TouchEvent) {
-        this.mouseMap.set(MouseButtons.PRIMARY, false);
-        this.justPressedMap.set(MouseButtons.PRIMARY, true);
-        this.getPosFromTouchEvent(ev);
+        if (!Launcher.contextMenu.isOpen) {
+            this.mouseMap.set(MouseButtons.PRIMARY, false);
+            this.justPressedMap.set(MouseButtons.PRIMARY, true);
+            this.getPosFromTouchEvent(ev);
+        }
     }
     onMouseEnter(ev: MouseEvent) {
         this.getPosFromEvent(ev);

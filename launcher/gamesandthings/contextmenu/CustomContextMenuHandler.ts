@@ -16,6 +16,7 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
 
         this.ctxMenuItems = (document.getElementById("ctxbox") as HTMLDivElement);
     }
+    isOpen: boolean = false;
     create(): void {
     }
     update(elapsed: number): void {
@@ -30,10 +31,12 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
         this.ctxMenu.appendChild(this.ctxMenuItems);
     }
     close() {
+        this.isOpen = false;
         this.clear();
         this.ctxMenu.style.display = 'none';
     }
     show(options: Array<ContextOption>, x?: number, y?: number) {
+        this.isOpen = true;
         this.ctxMenu.style.display = '';
         if (x == null) {
             x = Launcher.mouse.x;
@@ -72,7 +75,14 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
         }
         this.ctxItemMap.set(text, opt.onselect);
         let optElem: HTMLDivElement = (document.createElement("div") as HTMLDivElement);
-        optElem.addEventListener("click", (ev) => {
+        optElem.addEventListener("mouseup", (ev) => {
+            if (opt.onselect == undefined) return;
+            opt.onselect();
+            if (opt.hasSecondary == undefined || opt.hasSecondary != true) {
+                this.close();
+            }
+        });
+        optElem.addEventListener("touchend", (ev) => {
             if (opt.onselect == undefined) return;
             opt.onselect();
             if (opt.hasSecondary == undefined || opt.hasSecondary != true) {

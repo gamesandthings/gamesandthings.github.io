@@ -11,6 +11,7 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
     contextMenuInput!: HTMLInputElement;
     ctxMenuItems!: HTMLDataListElement;
     ctxItemMap: Map<string, () => void> = new Map<string, () => void>();
+    isOpen: boolean = false;
     constructor() {
         // Context Menu
         this.contextMenuInput = (document.createElement("input") as HTMLInputElement);
@@ -88,6 +89,10 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
         this.ctxItemMap.clear();
     }
     contextOptions: Array<ContextOption> = [];
+    close() {
+        this.isOpen = false;
+        this.clear();
+    }
     show(options: Array<ContextOption>, x?: number, y?: number) {
         requestAnimationFrame(()=>{
             if (!Launcher.mouse.hasClickedAtLeastOnce) return;
@@ -99,7 +104,7 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
             });
             this.add({
                 text: "Close", font: UniFont.BOLD, onselect: () => {
-                    this.clear();
+                    this.close();
                 }
             });
             if (x == null) {
