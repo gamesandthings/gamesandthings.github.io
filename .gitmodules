@@ -25,3 +25,6 @@
 [submodule "app-doom"]
 	path = app-doom
 	url = https://github.com/gamesandthings/app-doom.git
+[submodule "app-flash"]
+	path = app-flash
+	url = https://github.com/gamesandthings/app-flash.git
