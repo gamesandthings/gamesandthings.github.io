@@ -14,7 +14,7 @@ export default class LauncherState extends State {
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
     notice: SText = new SText("This is the new games and stuff, currently in very early development.\n" +
-        "Latest News (17 June 2024):\n\n - Updated Minecraft 1.8.8 to the latest Eaglercraft version.\nYou can now use capes, and performance should be improved.", 15);
+        "\nNews:\n\n(18 June 2024)\n - Added mobile support to Minecraft \n(17 June 2024)\n- Updated Minecraft 1.8.8 to the latest Eaglercraft version.\nYou can now use capes, and performance should be improved.", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
     updateTicks: number = 0;
     currentPage: number = 0;

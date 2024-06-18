@@ -37,7 +37,8 @@ export default class Games {
             creator: "Mojang Studios",
             injectTime: 'load',
             prefix: "mc",
-            screenmode: "16/9",
+            screenmode: "window",
+            fixScripts: ["/fixes/mc-mobile-fix.js"],
             versions: [
                 {
                     url: "1.8.8",

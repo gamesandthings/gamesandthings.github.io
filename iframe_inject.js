@@ -1,3 +1,11 @@
+function isMobile() {
+    try {
+        document.createEvent("TouchEvent");
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
 // Log Replace
 if (!("gatScriptInjected" in window)) {
     if ("gameData" in window.top) {
@@ -40,22 +48,24 @@ if (!("gatScriptInjected" in window)) {
         };
     })(console.info);
     /* Use raw input for better feeling mouse */
-    HTMLCanvasElement.prototype.requestPointerLock = ((origFn) => {
-        return function (options) {
-            if ("gameConfig" in window.top) {
-                if (window.top.gameConfig.rawMouseInputEnabled) {
-                    if (options == null || options == undefined) {
-                        options = {};
+    if (!isMobile()) {
+        HTMLCanvasElement.prototype.requestPointerLock = ((origFn) => {
+            return function (options) {
+                if ("gameConfig" in window.top) {
+                    if (window.top.gameConfig.rawMouseInputEnabled) {
+                        if (options == null || options == undefined) {
+                            options = {};
+                        }
+                        options = Object.assign({}, options, {
+                            unadjustedMovement: true,
+                        });
                     }
-                    options = Object.assign({}, options, {
-                        unadjustedMovement: true,
-                    });
                 }
-            }
-            //console.log(options);
-            return origFn.call(this, options);
-        };
-    })(HTMLCanvasElement.prototype.requestPointerLock);
+                //console.log(options);
+                return origFn.call(this, options);
+            };
+        })(HTMLCanvasElement.prototype.requestPointerLock);
+    }
     HTMLCanvasElement.prototype.getContext = ((origFn) => {
         return function (type, attributes) {
             if ("fixes" in window.top.gameData) {
