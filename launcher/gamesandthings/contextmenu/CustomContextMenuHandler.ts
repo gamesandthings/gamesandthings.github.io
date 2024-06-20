@@ -31,29 +31,36 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
         this.ctxMenu.appendChild(this.ctxMenuItems);
     }
     close() {
-        this.isOpen = false;
-        this.clear();
-        this.ctxMenu.style.display = 'none';
+        requestAnimationFrame(() => {
+            this.isOpen = false;
+            this.clear();
+            this.ctxMenu.style.display = 'none';
+            this.ctxMenuItems.style.display = 'none';
+        });
     }
     show(options: Array<ContextOption>, x?: number, y?: number) {
-        this.isOpen = true;
-        this.ctxMenu.style.display = '';
-        if (x == null) {
-            x = Launcher.mouse.x;
-        }
-        if (y == null) {
-            y = Launcher.mouse.y;
-        }
-        this.ctxMenu.style.left = x - 15 + 'px';
-        this.ctxMenu.style.top = y + 'px';
-        this.clear();
-        options.forEach((opt) => {
-            this.add(opt);
-        })
-        this.add({
-            text: "Close", font: UniFont.BOLD, onselect: () => {
-                this.close();
-            }
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                this.isOpen = true;
+                this.ctxMenu.style.display = '';
+                if (x == null) {
+                    x = Launcher.mouse.x;
+                }
+                if (y == null) {
+                    y = Launcher.mouse.y;
+                }
+                this.ctxMenu.style.left = x - 15 + 'px';
+                this.ctxMenu.style.top = y + 'px';
+                this.clear();
+                options.forEach((opt) => {
+                    this.add(opt);
+                })
+                this.add({
+                    text: "Close", font: UniFont.BOLD, onselect: () => {
+                        this.close();
+                    }
+                });
+            });
         });
         //setTimeout(() => { /this.ctxMenu.style.display = ''; }, 0);
     }

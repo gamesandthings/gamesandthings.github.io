@@ -1,4 +1,6 @@
 import Launcher from "../Launcher";
+import CustomContextMenuHandler from "./contextmenu/CustomContextMenuHandler";
+import NativeContextMenuHandler from "./contextmenu/NativeContextMenuHandler";
 import { MouseButtons } from "./enums/MouseButtons";
 export default class MouseHandler {
     public x: number = 0;
@@ -30,6 +32,10 @@ export default class MouseHandler {
         this.hasClickedAtLeastOnce = true;
         this.mouseMap.set(ev.button, true);
         this.getPosFromEvent(ev);
+        
+        if (Launcher.contextMenu instanceof NativeContextMenuHandler){
+            (Launcher.contextMenu as NativeContextMenuHandler).timesChanged = 0;
+        }
     }
     onMouseMove_touch(ev: TouchEvent) {
         this.getPosFromTouchEvent(ev);
@@ -92,17 +98,22 @@ export default class MouseHandler {
         }
     }
     getPosFromEvent(ev: MouseEvent) {
-        this.x = ev.x;
-        this.y = ev.y;
-        this.deltaX = ev.movementX;
-        this.deltaY = ev.movementY;
+        if (!Launcher.contextMenu.isOpen) {
+            this.x = ev.x;
+            this.y = ev.y;
+            this.deltaX = ev.movementX;
+            this.deltaY = ev.movementY;
+        }
+        console.log(ev.type);
     }
     getPosFromTouchEvent(ev: TouchEvent) {
-        if (ev.touches[0] == undefined) return;
-        this.deltaX = this.x - ev.touches[0].clientX;
-        this.deltaY = this.x - ev.touches[0].clientY;
-        this.x = ev.touches[0].clientX;
-        this.y = ev.touches[0].clientY;
+        if (!Launcher.contextMenu.isOpen) {
+            if (ev.touches[0] == undefined) return;
+            this.deltaX = this.x - ev.touches[0].clientX;
+            this.deltaY = this.x - ev.touches[0].clientY;
+            this.x = ev.touches[0].clientX;
+            this.y = ev.touches[0].clientY;
+        }
     }
     resetDeltas() {
         this.deltaX = 0;

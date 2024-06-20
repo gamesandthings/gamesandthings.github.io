@@ -12,6 +12,7 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
     ctxMenuItems!: HTMLDataListElement;
     ctxItemMap: Map<string, () => void> = new Map<string, () => void>();
     isOpen: boolean = false;
+    timesChanged: number = 0;
     constructor() {
         // Context Menu
         this.contextMenuInput = (document.createElement("input") as HTMLInputElement);
@@ -37,9 +38,26 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
                 let val: string = this.contextMenuInput.value;
                 this.contextMenuInput.value = "";
                 this.ctxItemMap.get(val)?.call(null);
+                this.timesChanged++;
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        if (this.timesChanged == 4) { // chrome is weird and closes input list after 5 times displayed in a row until next user input
+                            this.close();
+                            console.log(this.timesChanged);
+                        }
+                    });
+                });
             }
         });
-
+        this.contextMenuInput.addEventListener("focusout", (ev) => {
+            this.close();
+        });
+        this.contextMenuInput.addEventListener("close", (ev) => {
+            this.close();
+        });
+        this.contextMenuInput.addEventListener("blur", (ev) => {
+            this.close();
+        });
     }
     add(opt: ContextOption) {
         let text: string = opt.text;
@@ -94,10 +112,11 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
         this.clear();
     }
     show(options: Array<ContextOption>, x?: number, y?: number) {
-        requestAnimationFrame(()=>{
+        requestAnimationFrame(() => {
             if (!Launcher.mouse.hasClickedAtLeastOnce) return;
+            this.isOpen = true;
             this.contextOptions = options;
-    
+
             this.clear();
             options.forEach((opt) => {
                 this.add(opt);
@@ -132,7 +151,7 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
             this.contextMenuInput.style.left = "-999px";
             this.contextMenuInput.style.width = "0px";
             this.contextMenuInput.style.height = "0px";
-        });   
+        });
     }
     destroy(): void {
 

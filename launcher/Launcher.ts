@@ -375,6 +375,14 @@ export default class Launcher {
 }
 Launcher.init(new LauncherState());
 const touchHandler = (ev: Event) => {
+    if (ev.target instanceof HTMLDivElement) {
+        if (Launcher.contextMenu instanceof CustomContextMenuHandler) {
+            let customMenu = (Launcher.contextMenu as CustomContextMenuHandler);
+            if (customMenu.ctxMenu == ev.target || customMenu.ctxMenuItems == ev.target){
+                return true;
+            }
+        }
+    }
     if (ev.target instanceof HTMLIFrameElement || ev.target instanceof HTMLCanvasElement || ev.target instanceof HTMLBodyElement) {
         ev.preventDefault(); // Prevent text selection
     }

@@ -14,7 +14,7 @@ export default class LauncherState extends State {
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
     notice: SText = new SText("This is the new games and stuff, currently in very early development.\n" +
-        "\nNews:\n\n(20 June 2024)\n - Added Minecraft Beta 1.7.3 to the Minecraft versions list.\n(18 June 2024)\n - NEW GAMES: RUN 1, 2, and 3 \n - Added mobile support to Minecraft \n(17 June 2024)\n- Updated Minecraft 1.8.8 to the latest Eaglercraft version.\nYou can now use capes, and performance should be improved.", 15);
+        "\nNews:\n\n(20 June 2024)\n - Added Minecraft Beta 1.7.3 to the Minecraft versions list.\n - New Font\n(18 June 2024)\n - NEW GAMES: RUN 1, 2, and 3 \n - Added mobile support to Minecraft \n(17 June 2024)\n- Updated Minecraft 1.8.8 to the latest Eaglercraft version.\nYou can now use capes, and performance should be improved.", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
     updateTicks: number = 0;
     currentPage: number = 0;
@@ -65,13 +65,20 @@ export default class LauncherState extends State {
         this.chooseGame.screenCenter();
         let baseSizeScreen: number = (Launcher.cnv.width + Launcher.cnv.height) / 2;
         let baseSizeWidth: number = (Launcher.cnv.width);
-        this.chooseGame.y = this.logo.y + this.logo.height + baseSizeScreen * 0.020;
+
         this.notice.screenCenter();
         this.notice.y = this.chooseGame.y + this.chooseGame.height;
         this.notice.size = baseSizeScreen * 0.015;
         this.chooseGame.size = baseSizeWidth * 0.030;
+        if (this.logoPos == 'default') {
+            this.chooseGame.y = this.logo.y + this.logo.height + baseSizeScreen * 0.020;
+        }
+        else {
+            this.chooseGame.screenCenter(Axes.X);
+            this.chooseGame.y = baseSizeWidth * 0.080;
+        }
         if (this.chooseGame.y >= window.innerHeight || this.notice.overlaps(this.chooseGame)) {
-            this.chooseGame.y = this.notice.y + this.notice.height + 10;
+            this.chooseGame.y = this.notice.y + this.notice.height + baseSizeWidth * 0.010;
         }
         if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             this.chooseGame.color = "#A9A9A9";
@@ -91,6 +98,7 @@ export default class LauncherState extends State {
         this.logoPos = "default";
     }
     loadGameAssets(assets: GameAssets) {
+        this.notice.text = "";
         this.logo.loadGraphic("/assets/images/games/" + Launcher.game?.prefix.replace('/', '') + "/" + assets.logo);
         if (assets.bg != 'blank') {
             this.bg.loadGraphic("/assets/images/games/" + Launcher.game?.prefix.replace('/', '') + "/" + assets.bg);

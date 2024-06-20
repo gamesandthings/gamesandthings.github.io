@@ -17,7 +17,8 @@ export default class Sprite extends Rectangle implements IDrawable {
     public alpha: number = 1;
     public scale: Vector2 = new Vector2(1, 1);
     public graphic!: Graphic;
-    public flipX: Boolean = false;
+    public graphicPath:string = "";
+    public flipX: boolean = false;
     constructor(x: number = 0, y: number = 0) {
         super();
         this.x = x;
@@ -46,7 +47,8 @@ export default class Sprite extends Rectangle implements IDrawable {
         }
     }
     loadGraphic(path: string) {
-        this.graphic = new Graphic(path, (img, ev) => {
+        this.graphicPath = path;
+        this.graphic = new Graphic(this.graphicPath, (img, ev) => {
             this.graphic.img = img;
             this.width = img.width;
             this.height = img.height;
