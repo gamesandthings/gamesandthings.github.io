@@ -14,7 +14,7 @@ export default class LauncherState extends State {
     logoPos: 'center' | 'default' = 'default';
     bg: Sprite = new Sprite();
     notice: SText = new SText("This is the new games and stuff, currently in very early development.\n" +
-        "\nNews:\n\n(18 June 2024)\n - NEW GAMES: RUN 1, 2, and 3 \n - Added mobile support to Minecraft \n(17 June 2024)\n- Updated Minecraft 1.8.8 to the latest Eaglercraft version.\nYou can now use capes, and performance should be improved.", 15);
+        "\nNews:\n\n(20 June 2024)\n - Added Minecraft Beta 1.7.3 to the Minecraft versions list.\n(18 June 2024)\n - NEW GAMES: RUN 1, 2, and 3 \n - Added mobile support to Minecraft \n(17 June 2024)\n- Updated Minecraft 1.8.8 to the latest Eaglercraft version.\nYou can now use capes, and performance should be improved.", 15);
     chooseGame: SText = new SText("CHOOSE FROM GAME LIST", 32);
     updateTicks: number = 0;
     currentPage: number = 0;
@@ -23,7 +23,8 @@ export default class LauncherState extends State {
         this.logo.loadGraphic("/assets/images/logo.png");
         this.bg.loadGraphic('/assets/images/logo.png');
         this.bg.alpha = 0;
-        this.chooseGame.fontStyle = "bold";
+        this.chooseGame.font = "Fredoka";
+        this.chooseGame.fontStyle = 450;
         this.notice.font = "monospace";
         this.add(this.bg);
         this.add(this.logo);
@@ -61,18 +62,21 @@ export default class LauncherState extends State {
         this.bg.setGraphicSize(Math.ceil(w * Math.max(window.innerWidth / w, window.innerHeight / h)),
             Math.ceil(h * Math.max(window.innerWidth / w, window.innerHeight / h)));
         this.bg.screenCenter();
-        this.chooseGame.size = 32;
         this.chooseGame.screenCenter();
-        this.chooseGame.y -= 100;
+        let baseSizeScreen: number = (Launcher.cnv.width + Launcher.cnv.height) / 2;
+        let baseSizeWidth: number = (Launcher.cnv.width);
+        this.chooseGame.y = this.logo.y + this.logo.height + baseSizeScreen * 0.020;
         this.notice.screenCenter();
         this.notice.y = this.chooseGame.y + this.chooseGame.height;
+        this.notice.size = baseSizeScreen * 0.015;
+        this.chooseGame.size = baseSizeWidth * 0.030;
         if (this.chooseGame.y >= window.innerHeight || this.notice.overlaps(this.chooseGame)) {
             this.chooseGame.y = this.notice.y + this.notice.height + 10;
         }
         if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             this.chooseGame.color = "#A9A9A9";
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
-               this.showGameSelect();
+                this.showGameSelect();
             }
         }
         else {
@@ -114,7 +118,7 @@ export default class LauncherState extends State {
             });
         }
 
-        if (gamesCtx.length == this.amountPerPage){
+        if (gamesCtx.length == this.amountPerPage) {
             gamesCtx.push({
                 text: "Next Page",
                 font: UniFont.BOLD,
@@ -124,8 +128,8 @@ export default class LauncherState extends State {
                 }
             });
         }
-        if (this.currentPage != 0){
-            gamesCtx.splice(0,0,{
+        if (this.currentPage != 0) {
+            gamesCtx.splice(0, 0, {
                 text: "Previous Page",
                 font: UniFont.BOLD,
                 onselect: () => {

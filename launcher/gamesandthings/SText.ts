@@ -3,7 +3,7 @@ import Launcher from "../Launcher";
 import IPositionable from "./interfaces/IPositionable";
 import Rectangle from "./types/Rectangle";
 import { Axes } from "./enums/Axes";
-type FontStyle = "normal" | "italic" | "bold";
+type FontStyle = "normal" | "italic" | "bold" | number;
 export default class SText extends Rectangle implements IDrawable {
     public x: number = 0;
     public y: number = 0;

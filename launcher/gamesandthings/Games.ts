@@ -53,6 +53,10 @@ export default class Games {
                     title: "1.5.2"
                 },
                 {
+                    url: "b1.7.3",
+                    title: "b1.7.3"
+                },
+                {
                     url: "b1.3_01",
                     title: "b1.3_01"
                 },
