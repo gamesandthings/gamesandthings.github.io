@@ -77,9 +77,6 @@ export default class LauncherState extends State {
             this.chooseGame.screenCenter(Axes.X);
             this.chooseGame.y = baseSizeWidth * 0.080;
         }
-        if (this.chooseGame.y >= window.innerHeight || this.notice.overlaps(this.chooseGame)) {
-            this.chooseGame.y = this.notice.y + this.notice.height + baseSizeWidth * 0.010;
-        }
         if (this.chooseGame.overlapsPoint(Launcher.mouse.x, Launcher.mouse.y)) {
             this.chooseGame.color = "#A9A9A9";
             if (Launcher.mouse.justPressed(MouseButtons.PRIMARY)) {
