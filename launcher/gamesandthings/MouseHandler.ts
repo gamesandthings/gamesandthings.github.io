@@ -104,7 +104,6 @@ export default class MouseHandler {
             this.deltaX = ev.movementX;
             this.deltaY = ev.movementY;
         }
-        console.log(ev.type);
     }
     getPosFromTouchEvent(ev: TouchEvent) {
         if (!Launcher.contextMenu.isOpen) {

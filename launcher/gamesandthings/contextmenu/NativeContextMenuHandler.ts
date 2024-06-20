@@ -43,7 +43,6 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
                     requestAnimationFrame(() => {
                         if (this.timesChanged == 4) { // chrome is weird and closes input list after 5 times displayed in a row until next user input
                             this.close();
-                            console.log(this.timesChanged);
                         }
                     });
                 });
