@@ -45,8 +45,9 @@ export default class Launcher {
         document.body.appendChild(Launcher.iframeDiv);
         Launcher.iframeDiv.id = "iframeDiv";
         Launcher.initIframe();
+        Launcher.contextMenu = new CustomContextMenuHandler();
         // ContextMenu
-        if (navigator.userAgent.includes('Valve')) {
+       /* if (navigator.userAgent.includes('Valve')) {
             Launcher.contextMenu = new CustomContextMenuHandler();
         }
         else if ("chrome" in window) { // Chromium browsers
@@ -55,6 +56,7 @@ export default class Launcher {
         else { // anyothers
             Launcher.contextMenu = new CustomContextMenuHandler();
         }
+        */
         // Init Input and other Handlers
         document.body.style.margin = "0px";
         Launcher.mouse = new MouseHandler();
