@@ -14,6 +14,7 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
     isOpen: boolean = false;
     timesChanged: number = 0;
     constructor() {
+
         // Context Menu
         this.contextMenuInput = (document.createElement("input") as HTMLInputElement);
         this.contextMenuInput.setAttribute("type", 'list');
@@ -112,7 +113,6 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
     }
     show(options: Array<ContextOption>, x?: number, y?: number) {
         requestAnimationFrame(() => {
-            if (!Launcher.mouse.hasClickedAtLeastOnce) return;
             this.isOpen = true;
             this.contextOptions = options;
 
@@ -126,10 +126,10 @@ export default class NativeContextMenuHandler implements IPositionable, IContext
                 }
             });
             if (x == null) {
-                x = Launcher.mouse.x;
+                x = Launcher.mx;
             }
             if (y == null) {
-                y = Launcher.mouse.y;
+                y = Launcher.my;
             }
             this.contextMenuInput.style.width = "50px";
             this.contextMenuInput.style.height = "50px";

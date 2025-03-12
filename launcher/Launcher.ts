@@ -1,23 +1,15 @@
-import LauncherState from "./gamesandthings/LauncherState";
-import State from "./gamesandthings/State";
 import SettingsHandler from "./gamesandthings/SettingsHandler";
 import SaveManager from "./gamesandthings/SaveManager";
-import MouseHandler from "./gamesandthings/MouseHandler";
-import KeyboardHandler from "./gamesandthings/KeyboardHandler";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
 import ScriptInjector from "./gamesandthings/ScriptInjector";
 import NativeContextMenuHandler from "./gamesandthings/contextmenu/NativeContextMenuHandler";
 import CustomContextMenuHandler from "./gamesandthings/contextmenu/CustomContextMenuHandler";
-import { Game, GameVersion } from "./gamesandthings/Games";
+import Games, { Game, GameVersion } from "./gamesandthings/Games";
 import Vector2 from "./gamesandthings/types/Vector2";
 import IContextMenu from "./gamesandthings/contextmenu/IContextMenu";
 
 export default class Launcher {
-    public static state: State;
-    public static mouse: MouseHandler;
-    public static keyboard: KeyboardHandler;
-    public static cnv: HTMLCanvasElement;
-    public static ctx: CanvasRenderingContext2D;
+    public static cnv: HTMLDivElement;
     public static drawer: DrawerHandler;
     public static iframe: HTMLIFrameElement;
     public static iframeDiv: HTMLDivElement;
@@ -30,7 +22,10 @@ export default class Launcher {
     static gameMediaStreams: MediaStream[] = [];
     static gameLogs: string[] = [];
     public static runningInWebApp: boolean = false;
-    public static init(state: State) {
+    public static mx: number;
+    public static my: number;
+
+    public static init() {
         Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") || window.matchMedia("(display-mode: standalone)").matches;
         // canvas and iframe
         SettingsHandler.load();
@@ -46,34 +41,18 @@ export default class Launcher {
         Launcher.iframeDiv.id = "iframeDiv";
         Launcher.initIframe();
         Launcher.contextMenu = new CustomContextMenuHandler();
-        // ContextMenu
-       /* if (navigator.userAgent.includes('Valve')) {
-            Launcher.contextMenu = new CustomContextMenuHandler();
-        }
-        else if ("chrome" in window) { // Chromium browsers
-            Launcher.contextMenu = new NativeContextMenuHandler();
-        }
-        else { // anyothers
-            Launcher.contextMenu = new CustomContextMenuHandler();
-        }
-        */
-        // Init Input and other Handlers
         document.body.style.margin = "0px";
-        Launcher.mouse = new MouseHandler();
-        Launcher.mouse.init();
-        Launcher.keyboard = new KeyboardHandler();
-        Launcher.keyboard.init();
         Launcher.drawer = new DrawerHandler(document.getElementById("slidymenu") as HTMLDivElement);
         Launcher.drawer.elem.style.left = "-150px";
 
-        Launcher.cnv = (document.createElement("canvas") as HTMLCanvasElement)
+        Launcher.cnv = (document.createElement("div") as HTMLDivElement)
         Launcher.cnv.id = "cnv";
         document.body.appendChild(Launcher.cnv);
-        Launcher.ctx = (Launcher.cnv.getContext("2d", { desynchronized: true, preserveDrawingBuffer: true, willReadFrequently: false }) as CanvasRenderingContext2D);
-        Launcher.ctx.imageSmoothingEnabled = false;
-        Launcher.state = state;
-        Launcher.state.create();
-        Launcher.initInject();
+
+        window.addEventListener("pointermove", (ev) => {
+            Launcher.mx = ev.clientX;
+            Launcher.my = ev.clientY;
+        });
 
         setInterval(() => {
             SaveManager.update();
@@ -86,19 +65,21 @@ export default class Launcher {
         (window as any).gameLogs = [];
         (window as any).gameData = {};
         Launcher.gameLogs = (window as any).gameLogs;
-    }
-    public static initInject() {
-        ScriptInjector.load("/iframe_inject.js");
+        Launcher.openGame(Games.games[0]);
+        
+        alert("PLEASE READ\n\n\nDue to some rewrites and cleanup, the game list selection has temporarily moved under the settings icon in the top left corner. \n All the games and your save data have not been affected. \n The launcher will boot by default into Minecraft 1.12.2.")
     }
     public static finalInject() {
         Launcher.beginOpen();
+        ScriptInjector.inject("/iframe_inject.js");
+        if (Launcher.game != null && Launcher.game.fixScripts != null) {
+            Launcher.game.fixScripts.forEach((script) => {
+                ScriptInjector.inject(script);
+            });
+        }
         Launcher.updateInjection();
-        setTimeout(() => {
-            setInterval(Launcher.updateInjection, 1000 * 10);
-        }, 1000);
     }
     public static initIframe(recreate: boolean = true): void {
-        ScriptInjector.reload();
         //Launcher.initInject();
         if (recreate) {
             Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
@@ -110,19 +91,6 @@ export default class Launcher {
         Launcher.iframe.setAttribute('allowfullscreen', "true");
         Launcher.iframe.style.width = "100%";
         Launcher.iframe.style.height = "100%";
-        Launcher.iframe.addEventListener("load", (ev) => {
-            if (Launcher.game != null && Launcher.game.injectTime == 'load') {
-                Launcher.finalInject();
-            }
-        });
-        Launcher.iframe.addEventListener("DOMContentLoaded", (ev) => {
-            if (Launcher.game != null && Launcher.game.injectTime == 'DOMContentLoaded') {
-                Launcher.finalInject();
-            }
-        });
-        Launcher.iframe.addEventListener("beforeunload", (ev: BeforeUnloadEvent) => {
-            ScriptInjector.reload();
-        });
     }
     static lastTimestep: number = 0;
     static lastShiftTabTimeStep: number = 0;
@@ -146,77 +114,68 @@ export default class Launcher {
         if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
-        ScriptInjector.reload();
-        let scripts: Array<string> = ["/iframe_inject.js"];
-        if (game != null && game.fixScripts != null) {
-            game.fixScripts.forEach((script) => {
-                scripts.push(script);
-            });
+        Launcher.update(0);
+        if (game == null) return; // it will never be called if its null but typescript i guess
+        if (game.fixes != null) {
+            window.eval("window.gameData =" + JSON.stringify(game) + ";");
         }
-        ScriptInjector.loadMultiple(scripts, () => {
-            Launcher.update(0);
-            if (game == null) return; // it will never be called if its null but typescript i guess
-            if (game.fixes != null) {
-                window.eval("window.gameData =" + JSON.stringify(game) + ";");
-            }
-            Launcher.game = game;
-            document.title = game.title;
-            if (game.screenmode != null) {
-                Launcher.drawer.screenmode = game.screenmode;
-            }
-            else {
-                Launcher.drawer.screenmode = "window";
-            }
+        Launcher.game = game;
+        document.title = game.title;
+        if (game.screenmode != null) {
+            Launcher.drawer.screenmode = game.screenmode;
+        }
+        else {
+            Launcher.drawer.screenmode = "window";
+        }
 
-            if (this.state instanceof LauncherState) {
-                if (game.assets != null) {
-                    this.state.loadGameAssets(game.assets);
-                }
-                else
-                    this.state.loadOriginalAssets();
-            }
-            let link: string = window.location.protocol + '//' + window.location.host + "/" + game.prefix;
-            if (version == null && game.versions == null) {
-                Launcher.curVersion = "";
-                link += "/";
-            }
-            else if (version == null && game.versions != null) {
-                Launcher.curVersion = game.versions[0].title;
-                if (Launcher.curVersion != game.title)
-                    document.title += " - " + game.versions[0].title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
-                link += '/' + game.versions[0].url;
-            }
-            else if (version != null) {
-                Launcher.curVersion = version.title;
-                document.title += " - " + version.title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
-                link += '/' + version.url;
-            }
-            if (game.gameKeys != undefined || game.gameKeys != null) {
-                (window as any).gameKeys = game.gameKeys;
-            }
-            else {
-                (window as any).gameKeys = [];
-            }
-            Launcher.drawer.updateScreenMode();
-            if (game.title != "Doom")
-                link += "/";
-            Launcher.openURL(link);
-        });
+        let link: string = window.location.protocol + '//' + window.location.host + "/" + game.prefix;
+        if (version == null && game.versions == null) {
+            Launcher.curVersion = "";
+            link += "/";
+        }
+        else if (version == null && game.versions != null) {
+            Launcher.curVersion = game.versions[0].title;
+            if (Launcher.curVersion != game.title)
+                document.title += " - " + game.versions[0].title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
+            link += '/' + game.versions[0].url;
+        }
+        else if (version != null) {
+            Launcher.curVersion = version.title;
+            document.title += " - " + version.title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
+            link += '/' + version.url;
+        }
+        if (game.gameKeys != undefined || game.gameKeys != null) {
+            (window as any).gameKeys = game.gameKeys;
+        }
+        else {
+            (window as any).gameKeys = [];
+        }
+        Launcher.drawer.updateScreenMode();
+        if (game.title != "Doom")
+            link += "/";
+        Launcher.openURL(link);
+
     }
     public static openURL(url: string) {
         SaveManager.load();
+
         if (Launcher.drawer.recorder?.recording) {
             Launcher.drawer.recorder.stopRecording();
         }
         Launcher.initIframe(false);
+
         Launcher.lastURL = url;
         if (this.lastURL != "") {
             Launcher.openIframeWindow();
             Launcher.iframe.setAttribute('src', url);
         }
+        Launcher.iframe.addEventListener("load", (ev) => {
+            if (Launcher.game != null && Launcher.game.inject) {
+                Launcher.finalInject();
+            }
+        });
     }
     public static openIframeWindow() {
-        Launcher.keyboard.resetPressed();
         Launcher.iframeMode = true;
         //Launcher.drawer.isOut = false;
         // Launcher.iframe.src = url;
@@ -246,6 +205,7 @@ export default class Launcher {
         Launcher.drawer.updateScreenMode();
     }
     static update(timestep: number) {
+
         Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") || window.matchMedia("(display-mode: standalone)").matches;
         (window as any).gameConfig = SettingsHandler.data;
         if (Launcher.drawer.alpha != 0) {
@@ -301,12 +261,6 @@ export default class Launcher {
         Launcher.delta = ((timestep - Launcher.lastTimestep) / 1000);
         if (!Launcher.iframeMode) {
             document.title = "Games And Things";
-            Launcher.ctx.fillStyle = "black";
-            Launcher.ctx.fillRect(0, 0, Launcher.cnv.width, Launcher.cnv.height);
-            Launcher.state.draw();
-            Launcher.state.update(Launcher.delta);
-            Launcher.lastTimestep = timestep;
-            Launcher.mouse.resetDeltas();
             requestAnimationFrame(Launcher.update);
         }
         else if (Launcher.performanceMode) {
@@ -328,22 +282,9 @@ export default class Launcher {
     static elemsToRemove: string[] = ["title", "meta"];
 
     public static updateInjection() {
-        ScriptInjector.update();
         if (Launcher.iframe.contentDocument != null) {
             Launcher.iframe.contentDocument.querySelectorAll("*").forEach((elem) => {
                 elem.getAttribute("style")?.trim();
-                if (elem.tagName.toLowerCase() == "script") {
-                    let scriptTag: HTMLScriptElement = (elem as HTMLScriptElement);
-                    if (scriptTag.innerText.includes("window.eaglercraftXClientSignature =")
-                        && scriptTag.innerText.includes("window.eaglercraftXClientBundle =") && eval("document.getElementById('gamewin').contentWindow.window.__isEaglerX188Running") == "yes") {
-                        scriptTag.remove();
-                        return;
-                    }
-                    let type: string | null = elem.getAttribute("type")
-                    if (type != null) {
-                        elem.removeAttribute("type");
-                    }
-                }
                 if (!Launcher.elemsToOptimize.includes(elem.tagName.toLowerCase())) return;
                 let child: HTMLElement = (elem as HTMLElement);
 
@@ -371,16 +312,14 @@ export default class Launcher {
             a.remove();
         }
     }
-
-
-
 }
-Launcher.init(new LauncherState());
+
+Launcher.init();
 const touchHandler = (ev: Event) => {
     if (ev.target instanceof HTMLDivElement) {
         if (Launcher.contextMenu instanceof CustomContextMenuHandler) {
             let customMenu = (Launcher.contextMenu as CustomContextMenuHandler);
-            if (customMenu.ctxMenu == ev.target || customMenu.ctxMenuItems == ev.target){
+            if (customMenu.ctxMenu == ev.target || customMenu.ctxMenuItems == ev.target) {
                 return true;
             }
         }

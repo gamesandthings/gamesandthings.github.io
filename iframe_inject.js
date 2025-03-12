@@ -12,7 +12,6 @@ if (!("gatScriptInjected" in window)) {
         let prefix = "[" + window.top.gameData.title + "]";
         console.log(prefix);
     }
-
     window.gatScriptInjected = true;
     window.top.localStorage_gat = {};
     console.log = ((origFn) => {
@@ -77,6 +76,19 @@ if (!("gatScriptInjected" in window)) {
         document.addEventListener('touchend', touchHandler, { passive: false });
         document.addEventListener('touchcancel', touchHandler, { passive: false });
     }
+    EventTarget.prototype.addEventListener = ((origFn) => {
+        return function (type, callback, options) {
+            if (type == "mousemove" && "onpointerrawupdate" in window) {
+                if ("gameConfig" in window.top) {
+                    if (window.top.gameConfig.rawMouseInputEnabled) {
+                        type = "pointerrawupdate";
+                    }
+                }
+            }
+            console.log(type);
+            return origFn.call(this, type, callback, options);
+        };
+    })(EventTarget.prototype.addEventListener);
     HTMLCanvasElement.prototype.getContext = ((origFn) => {
         return function (type, attributes) {
             if ("fixes" in window.top.gameData) {
@@ -114,7 +126,6 @@ if (!("gatScriptInjected" in window)) {
     // Keybinding fix
     Window.prototype.addEventListener = ((origFn) => {
         return function (type, callback, options) {
-
             if (type == "keydown" || type == "keyup" || type == "keypress") {
                 callback = ((origCall) => {
                     return function (ev) {

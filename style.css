@@ -52,6 +52,7 @@ iframe {
     -moz-user-select: none;
     -o-user-select: none;
     outline: none;
+    transition: all 0.25s ease-out;
 }
 
 body {

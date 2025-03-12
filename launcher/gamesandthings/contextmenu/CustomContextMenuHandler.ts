@@ -18,6 +18,7 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
     }
     isOpen: boolean = false;
     create(): void {
+
     }
     update(elapsed: number): void {
     }
@@ -38,34 +39,36 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
             this.ctxMenuItems.style.display = 'none';
         });
     }
-    show(options: Array<ContextOption>, x?: number, y?: number) {
+    show(options: Array<ContextOption>, mx?: number, my?: number) {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 this.isOpen = true;
                 this.ctxMenu.style.display = '';
-                if (x == null) {
-                    x = Launcher.mouse.x;
+                let cx = 0;
+                let cy = 0;
+                if (mx != undefined && my != undefined) {
+                    cx = mx;
+                    cy = my;
+                    this.x = cx;
+                    this.y = cy;
                 }
-                if (y == null) {
-                    y = Launcher.mouse.y;
-                }
-                this.ctxMenu.style.left = x - 15 + 'px';
-                this.ctxMenu.style.top = y + 'px';
+                this.ctxMenu.style.left = this.x - 15 + 'px';
+                this.ctxMenu.style.top = this.y + 'px';
                 this.clear();
                 options.forEach((opt) => {
-                    this.add(opt);
+                    this.add(opt, this.x, this.y);
                 })
                 this.add({
                     text: "Close", font: UniFont.BOLD, onselect: () => {
                         this.close();
                     }
-                });
+                }, this.x, this.y);
             });
         });
         //setTimeout(() => { /this.ctxMenu.style.display = ''; }, 0);
     }
     contextOptions: Array<ContextOption> = [];
-    add(opt: ContextOption) {
+    add(opt: ContextOption, mx: number, my: number) {
         let text: string = opt.text;
         if (opt.hasSecondary != null) {
             if (opt.hasSecondary) {
@@ -77,7 +80,7 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
         }
         if (opt.title != null) {
             if (opt.title) {
-                opt.onselect = () => { this.show(this.contextOptions) };
+                opt.onselect = () => { this.show(this.contextOptions, mx, my) };
             }
         }
         this.ctxItemMap.set(text, opt.onselect);

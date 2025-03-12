@@ -6,7 +6,7 @@ export type Game = {
     title: string,
     creator: string,
     prefix: string,
-    injectTime: "DOMContentLoaded" | "load",
+    inject: boolean,
     screenmode?: string,
     forcescreenmode?: boolean,
     versions?: Array<GameVersion> | null,
@@ -35,14 +35,26 @@ export default class Games {
         {
             title: "Minecraft",
             creator: "Mojang Studios",
-            injectTime: 'load',
+            inject: false,
             prefix: "mc",
             screenmode: "window",
             fixScripts: ["/fixes/mc-mobile-fix.js"],
             versions: [
                 {
+                    url: "1.12.2",
+                    title: "1.12.2"
+                },
+                {
+                    url: "1.12.2_WASM",
+                    title: "1.12.2 (wasm)"
+                },
+                {
                     url: "1.8.8",
                     title: "1.8.8"
+                },
+                {
+                    url: "1.8.8_WASM",
+                    title: "1.8.8 (wasm)"
                 },
                 {
                     url: "1.8.8-resent",
@@ -94,7 +106,7 @@ export default class Games {
             creator: "Nintendo",
             prefix: "app-sm64",
             screenmode: "4/3",
-            injectTime: 'load',
+            inject: true,
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
@@ -180,7 +192,7 @@ export default class Games {
             prefix: "app-mari0",
             screenmode: "16/9",
             forcescreenmode: true,
-            injectTime: 'load',
+            inject: true,
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
@@ -194,7 +206,7 @@ export default class Games {
             prefix: "app-soniccd",
             screenmode: "16/9",
             forcescreenmode: true,
-            injectTime: 'load',
+            inject: true,
             fixScripts: ["/fixes/sonic-cd-save-file-fix.js"],
             fixes: {
                 preserveDrawingBuffer: true,
@@ -268,7 +280,7 @@ export default class Games {
             prefix: "app-hl/xash.html#150",
             screenmode: "16/9",
             forcescreenmode: true,
-            injectTime: 'load',
+            inject: true,
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
@@ -281,7 +293,7 @@ export default class Games {
             creator: "SYBO Games",
             prefix: "app-sbwysrf",
             screenmode: "window",
-            injectTime: 'load',
+            inject: true,
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
@@ -371,7 +383,7 @@ export default class Games {
             creator: "Halfbrick",
             prefix: "app-fruitninja",
             screenmode: "16/10",
-            injectTime: 'load',
+            inject: true,
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
@@ -385,7 +397,7 @@ export default class Games {
             prefix: "app-fnf",
             screenmode: "window",
             forcescreenmode: true,
-            injectTime: 'load',
+            inject: true,
             versions: [
                 {
                     url: "",
@@ -409,7 +421,7 @@ export default class Games {
             prefix: "app-doom",
             screenmode: "window",
             forcescreenmode: true,
-            injectTime: 'DOMContentLoaded',
+            inject: true,
             gameKeys: [
                 {
                     name: 'Forwards',
@@ -469,7 +481,7 @@ export default class Games {
             prefix: "app-flash",
             screenmode: "window",
             forcescreenmode: true,
-            injectTime: 'load',
+            inject: true,
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,

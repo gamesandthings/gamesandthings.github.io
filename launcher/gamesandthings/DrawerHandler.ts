@@ -8,7 +8,7 @@ import IPositionable from "./interfaces/IPositionable";
 import Vector2 from "./types/Vector2";
 import SettingsHandler from "./SettingsHandler";
 import SaveManager from "./SaveManager";
-
+import Games, { Game, GameVersion } from "./Games";
 export default class DrawerHandler implements IPositionable {
     buttonsPressed: Map<string, boolean> = new Map<string, boolean>();
     buttonsContextMenu: Map<string, boolean> = new Map<string, boolean>();
@@ -36,9 +36,10 @@ export default class DrawerHandler implements IPositionable {
         this.buttonsPressed.set(button.id, false);
         this.buttons.push(button);
         button.addEventListener("click", (ev) => {
-            this.clickX = ev.clientX;
-            this.clickY = ev.clientY;
-
+            if (!Launcher.contextMenu.isOpen) {
+                this.clickX = ev.clientX;
+                this.clickY = ev.clientY;
+            }
             if (this.isOut) {
                 this.buttonsPressed.set(button.id, true);
             }
@@ -76,8 +77,11 @@ export default class DrawerHandler implements IPositionable {
             this.buttonsMouseOver.set(button.id, false);
         });
         button.addEventListener("contextmenu", (ev) => {
-            this.clickX = ev.clientX;
-            this.clickY = ev.clientY;
+
+            if (!Launcher.contextMenu.isOpen) {
+                this.clickX = ev.clientX;
+                this.clickY = ev.clientY;
+            }
             this.buttonsContextMenu.set(button.id, true);
             ev.preventDefault();
         });
@@ -268,6 +272,15 @@ export default class DrawerHandler implements IPositionable {
                 else if (id == "settings") {
                     if (Launcher.iframeMode) {
                         let options: Array<ContextOption> = [];
+                        options.push(
+                            {
+                                text: "Game List",
+                                onselect: () => {
+                                    this.showGameSelect();
+
+                                },
+                                hasSecondary: true,
+                            });
                         if (!Launcher.game?.forcescreenmode) {
                             options.push(
                                 {
@@ -353,7 +366,7 @@ export default class DrawerHandler implements IPositionable {
                                         let top = gameKey.name;
                                         let bottom = "";
                                         if (!gameKey.disableOriginal) {
-                                            let key = gameKey.key.key.replace('Arrow', '').replace(' ', 'Space').replace('Left','Left ').replace('Right','Right ');
+                                            let key = gameKey.key.key.replace('Arrow', '').replace(' ', 'Space').replace('Left', 'Left ').replace('Right', 'Right ');
                                             if (key.length == 1) {
                                                 key = key.toUpperCase();
                                             }
@@ -361,11 +374,11 @@ export default class DrawerHandler implements IPositionable {
                                         }
                                         gameKey.extraKeys.forEach((exkey, i) => {
                                             if (bottom != "") {
-                                                let key = exkey.key.replace('Arrow', '').replace(' ', 'Space').replace('Left','Left ').replace('Right','Right ');
+                                                let key = exkey.key.replace('Arrow', '').replace(' ', 'Space').replace('Left', 'Left ').replace('Right', 'Right ');
                                                 if (key.length == 1) {
                                                     key = key.toUpperCase();
                                                 }
-                                                
+
                                                 bottom += ", " + key;
                                             }
                                             else {
@@ -479,7 +492,12 @@ export default class DrawerHandler implements IPositionable {
                                 }
                             });
                         }
-                        Launcher.contextMenu.show(options, this.clickX, this.clickY);
+                        if (Launcher.contextMenu.isOpen) {
+                            Launcher.contextMenu.show(options, this.clickX, this.clickY);
+                        }
+                        else {
+                            Launcher.contextMenu.show(options, Launcher.mx, Launcher.my);
+                        }
                     }
                 }
                 else if (button.id == "forum") {
@@ -490,40 +508,7 @@ export default class DrawerHandler implements IPositionable {
                             onselect: () => {
                                 window.open("https://discord.com/invite/up7VmmCPhn");
                             }
-                        },
-                        {
-                            text: "Alternate Link #1",
-                            desc: 'https://gamesandthings.vercel.app (faster loading times)',
-                            onselect: () => {
-                                let link: string = 'gamesandthings.vercel.app';
-                                if (window.location.host == link) {
-                                    window.alert('You are already using this link!');
-                                }
-                                else if (Launcher.runningInWebApp) {
-                                    window.open('https://' + link);
-                                }
-                                else {
-                                    window.location.href = 'https://' + link;
-                                }
-                            }
-                        },
-                        {
-                            text: "Alternate Link #2",
-                            desc: 'https://gamesandthings.github.io (slower loading times)',
-                            onselect: () => {
-                                let link: string = 'gamesandthings.github.io';
-                                if (window.location.host == link) {
-                                    window.alert('You are already using this link!');
-                                }
-                                else if (Launcher.runningInWebApp) {
-                                    window.open('https://' + link);
-                                }
-                                else {
-                                    window.location.href = 'https://' + link;
-                                }
-
-                            }
-                        },
+                        }
                     ]);
 
                 }
@@ -638,6 +623,47 @@ export default class DrawerHandler implements IPositionable {
         this.elem.style.opacity = String(this.alpha);
         this.elem.style.left = String(this.x) + "px";
         this.elem.style.top = String(this.y) + "px";
+    }
+    currentPage: number = 0;
+    amountPerPage: number = 5;
+    showGameSelect() {
+        let gamesCtx: Array<ContextOption> = [];
+
+        for (let i = this.currentPage * this.amountPerPage; i < (this.currentPage * this.amountPerPage) + this.amountPerPage; i++) {
+            let game: Game = Games.games[i];
+            if (game == undefined)
+                break;
+            gamesCtx.push({
+                text: game.title,
+                desc: game.creator,
+                descFont: UniFont.ITALIC,
+                onselect: () => {
+                    Launcher.openGame(game);
+                }
+            });
+        }
+
+        if (gamesCtx.length == this.amountPerPage) {
+            gamesCtx.push({
+                text: "Next Page",
+                font: UniFont.BOLD,
+                onselect: () => {
+                    this.currentPage++;
+                    this.showGameSelect();
+                }
+            });
+        }
+        if (this.currentPage != 0) {
+            gamesCtx.splice(0, 0, {
+                text: "Previous Page",
+                font: UniFont.BOLD,
+                onselect: () => {
+                    this.currentPage--;
+                    this.showGameSelect();
+                }
+            });
+        }
+        Launcher.contextMenu.show(gamesCtx);
     }
     destroy(): void {
         // throw new Error("Method not implemented.");
