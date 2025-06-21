@@ -338,7 +338,7 @@ class DrawerHandler {
                         }
                         if (Launcher_1.default.game != null && Launcher_1.default.game.versions != null && Launcher_1.default.game.versions.length > 1) {
                             options.push({
-                                text: "Set Version",
+                                text: Launcher_1.default.game.overrideVersionListName != null ? Launcher_1.default.game.overrideVersionListName : "Set Version",
                                 desc: "⚠ If you change versions, unsaved data will be lost.",
                                 descFont: UniFont_1.default.ITALIC,
                                 hasSecondary: true,
@@ -638,6 +638,9 @@ class DrawerHandler {
                 desc: game.creator,
                 descFont: UniFont_1.default.ITALIC,
                 onselect: () => {
+                    if (game.prefix == "app-dt") {
+                        alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left");
+                    }
                     Launcher_1.default.openGame(game);
                 }
             });

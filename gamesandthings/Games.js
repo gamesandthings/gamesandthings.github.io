@@ -169,6 +169,39 @@ Games.games = [
         },
     },
     {
+        title: "DELTARUNE",
+        creator: "Toby Fox",
+        prefix: "app-dt",
+        screenmode: "window",
+        forcescreenmode: true,
+        inject: true,
+        overrideVersionListName: "Chapter Select",
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: true,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+        versions: [
+            {
+                url: "chapter1",
+                title: "Chapter 1 - The Beginning"
+            },
+            {
+                url: "chapter2",
+                title: "Chapter 2 - A Cyber's World"
+            },
+            {
+                url: "chapter3",
+                title: "Chapter 3 - Late Night"
+            },
+            {
+                url: "chapter4",
+                title: "Chapter 4 - Prophecy"
+            },
+        ]
+    },
+    {
         title: "Mari0",
         creator: "Stabyourself.net",
         prefix: "app-mari0",

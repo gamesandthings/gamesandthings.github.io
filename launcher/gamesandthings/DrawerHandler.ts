@@ -329,7 +329,7 @@ export default class DrawerHandler implements IPositionable {
                         }
                         if (Launcher.game != null && Launcher.game.versions != null && Launcher.game.versions.length > 1) {
                             options.push({
-                                text: "Set Version",
+                                text: Launcher.game.overrideVersionListName != null ? Launcher.game.overrideVersionListName : "Set Version",
                                 desc: "⚠ If you change versions, unsaved data will be lost.",
                                 descFont: UniFont.ITALIC,
                                 hasSecondary: true,
@@ -638,6 +638,9 @@ export default class DrawerHandler implements IPositionable {
                 desc: game.creator,
                 descFont: UniFont.ITALIC,
                 onselect: () => {
+                    if (game.prefix == "app-dt") {
+                        alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left")
+                    }
                     Launcher.openGame(game);
                 }
             });

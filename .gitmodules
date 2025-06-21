@@ -31,3 +31,6 @@
 [submodule "app-ut"]
 	path = app-ut
 	url = https://github.com/gamesandthings/app-ut
+[submodule "app-dt"]
+	path = app-dt
+	url = https://github.com/gamesandthings/app-dt
