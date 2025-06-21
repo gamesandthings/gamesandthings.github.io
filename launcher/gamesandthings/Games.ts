@@ -235,6 +235,20 @@ export default class Games {
             ]
         },
         {
+            title: "Pizza Tower",
+            creator: "Tour De Pizza",
+            prefix: "app-pt",
+            screenmode: "window",
+            forcescreenmode: true,
+            inject: true,
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: true,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+        },
+        {
             title: "Mari0",
             creator: "Stabyourself.net",
             prefix: "app-mari0",
