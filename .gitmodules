@@ -28,3 +28,6 @@
 [submodule "app-flash"]
 	path = app-flash
 	url = https://github.com/gamesandthings/app-flash.git
+[submodule "app-ut"]
+	path = app-ut
+	url = https://github.com/gamesandthings/app-ut

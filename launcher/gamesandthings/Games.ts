@@ -187,6 +187,20 @@ export default class Games {
             ]
         },
         {
+            title: "UNDERTALE",
+            creator: "Toby Fox",
+            prefix: "app-ut",
+            screenmode: "window",
+            forcescreenmode: true,
+            inject: true,
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: true,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+        },
+        {
             title: "Mari0",
             creator: "Stabyourself.net",
             prefix: "app-mari0",

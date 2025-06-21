@@ -1,0 +1,486 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Keys_1 = __importDefault(require("./Keys"));
+class Games {
+}
+Games.games = [
+    {
+        title: "Minecraft",
+        creator: "Mojang Studios",
+        inject: false,
+        prefix: "mc",
+        screenmode: "window",
+        fixScripts: ["/fixes/mc-mobile-fix.js"],
+        versions: [
+            {
+                url: "1.12.2",
+                title: "1.12.2"
+            },
+            {
+                url: "1.12.2_WASM",
+                title: "1.12.2 (wasm)"
+            },
+            {
+                url: "1.8.8",
+                title: "1.8.8"
+            },
+            {
+                url: "1.8.8_WASM",
+                title: "1.8.8 (wasm)"
+            },
+            {
+                url: "1.8.8-resent",
+                title: "1.8.8 Resent Client"
+            },
+            {
+                url: "1.5.2",
+                title: "1.5.2"
+            },
+            {
+                url: "b1.7.3",
+                title: "b1.7.3"
+            },
+            {
+                url: "b1.3_01",
+                title: "b1.3_01"
+            },
+            {
+                url: "a1.2.6",
+                title: "a1.2.6"
+            },
+            {
+                url: "indev-20100223",
+                title: "Indev-20100223"
+            },
+            {
+                url: "c0.30",
+                title: "c0.30"
+            },
+            {
+                url: "c0.0.23a_01",
+                title: "c0.0.23a_01"
+            },
+        ],
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: false,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+        assets: {
+            bg: 'bg.png',
+            logo: 'logo.svg',
+            logoPos: 'default'
+        }
+    },
+    {
+        title: "Super Mario 64",
+        creator: "Nintendo",
+        prefix: "app-sm64",
+        screenmode: "4/3",
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: true,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+        assets: {
+            bg: 'blank',
+            logo: 'logo.png',
+            logoPos: 'center'
+        },
+        gameKeys: [
+            {
+                name: 'Forward',
+                key: Keys_1.default.W,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Back',
+                key: Keys_1.default.S,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Left',
+                key: Keys_1.default.A,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Right',
+                key: Keys_1.default.D,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Crouch (Z Trigger)',
+                key: Keys_1.default.K,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Jump (A Button)',
+                key: Keys_1.default.L,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Punch (B Button)',
+                key: Keys_1.default.COMMA,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Pause (Start Button)',
+                key: Keys_1.default.SPACE,
+                extraKeys: [
+                    Keys_1.default.ENTER,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Camera (R Button)',
+                key: Keys_1.default.RSHIFT,
+                extraKeys: [
+                    Keys_1.default.LSHIFT,
+                ],
+                disableOriginal: false,
+            },
+        ]
+    },
+    {
+        title: "UNDERTALE",
+        creator: "Toby Fox",
+        prefix: "app-ut",
+        screenmode: "window",
+        forcescreenmode: true,
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: true,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+    },
+    {
+        title: "Mari0",
+        creator: "Stabyourself.net",
+        prefix: "app-mari0",
+        screenmode: "16/9",
+        forcescreenmode: true,
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: true,
+            removeVsync: false,
+            pointerLockFix: true,
+        },
+    },
+    {
+        title: "Sonic CD",
+        creator: "Sega",
+        prefix: "app-soniccd",
+        screenmode: "16/9",
+        forcescreenmode: true,
+        inject: true,
+        fixScripts: ["/fixes/sonic-cd-save-file-fix.js"],
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: false,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+        gameKeys: [
+            {
+                name: 'Up',
+                key: Keys_1.default.UP,
+                extraKeys: [
+                    Keys_1.default.W,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Down',
+                key: Keys_1.default.DOWN,
+                extraKeys: [
+                    Keys_1.default.S,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Left',
+                key: Keys_1.default.LEFT,
+                extraKeys: [
+                    Keys_1.default.A,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Right',
+                key: Keys_1.default.RIGHT,
+                extraKeys: [
+                    Keys_1.default.D,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Select/Jump',
+                key: Keys_1.default.Z,
+                extraKeys: [
+                    Keys_1.default.SPACE,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Back/Jump',
+                key: Keys_1.default.X,
+                extraKeys: [
+                    Keys_1.default.BACKSPACE,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Select/Pause',
+                key: Keys_1.default.ENTER,
+                extraKeys: [
+                    Keys_1.default.P,
+                    Keys_1.default.ESCAPE
+                ],
+                disableOriginal: false,
+            },
+        ],
+    },
+    {
+        title: "Half-Life",
+        creator: "Valve",
+        prefix: "app-hl/xash.html#150",
+        screenmode: "16/9",
+        forcescreenmode: true,
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: true,
+            removeVsync: false,
+            pointerLockFix: true,
+        },
+    },
+    {
+        title: "Subway Surfers",
+        creator: "SYBO Games",
+        prefix: "app-sbwysrf",
+        screenmode: "window",
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: false,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+        versions: [
+            {
+                url: "zurich",
+                title: "Zurich (Easter)",
+            },
+            {
+                url: "new-orleans",
+                title: "New Orleans (Halloween)"
+            },
+            {
+                url: "london",
+                title: "London (Christmas)"
+            },
+            {
+                url: "berlin",
+                title: "Berlin"
+            },
+            {
+                url: "havana",
+                title: "Havana"
+            },
+            {
+                url: "houston",
+                title: "Houston"
+            },
+            {
+                url: "monaco",
+                title: "Monaco"
+            },
+            {
+                url: "st-petersburg",
+                title: "Saint Petersburg"
+            },
+        ],
+        gameKeys: [
+            {
+                name: 'Jump',
+                key: Keys_1.default.UP,
+                extraKeys: [
+                    Keys_1.default.W,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Duck',
+                key: Keys_1.default.DOWN,
+                extraKeys: [
+                    Keys_1.default.S,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Left',
+                key: Keys_1.default.LEFT,
+                extraKeys: [
+                    Keys_1.default.A,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Right',
+                key: Keys_1.default.RIGHT,
+                extraKeys: [
+                    Keys_1.default.D,
+                ],
+                disableOriginal: false,
+            },
+            {
+                name: 'Hoverboard',
+                key: Keys_1.default.SPACE,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+        ]
+    },
+    {
+        title: "Fruit Ninja",
+        creator: "Halfbrick",
+        prefix: "app-fruitninja",
+        screenmode: "16/10",
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: false,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+    },
+    {
+        title: "Friday Night Funkin'",
+        creator: "Funkin' Crew",
+        prefix: "app-fnf",
+        screenmode: "window",
+        forcescreenmode: true,
+        inject: true,
+        versions: [
+            {
+                url: "",
+                title: "Base v0.4.0"
+            },
+            {
+                url: "bhb",
+                title: "Blue House Bundle: DEMO v1.0"
+            }
+        ],
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: false,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+    },
+    {
+        title: "Doom",
+        creator: "id Software",
+        prefix: "app-doom",
+        screenmode: "window",
+        forcescreenmode: true,
+        inject: true,
+        gameKeys: [
+            {
+                name: 'Forwards',
+                key: Keys_1.default.W,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Backwards',
+                key: Keys_1.default.S,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Left',
+                key: Keys_1.default.A,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Right',
+                key: Keys_1.default.D,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+            {
+                name: 'Interact',
+                key: Keys_1.default.SPACE,
+                extraKeys: [],
+                disableOriginal: false,
+            },
+        ],
+        versions: [
+            {
+                url: "?bundleUrl=/app-doom/d?anonymous=1",
+                title: "Doom"
+            },
+            {
+                url: "?bundleUrl=/app-doom/d2?anonymous=1",
+                title: "Doom II"
+            }
+        ],
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: false,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+    },
+    {
+        title: "Run",
+        creator: "player03",
+        prefix: "app-flash",
+        screenmode: "window",
+        forcescreenmode: true,
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: false,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+        versions: [
+            {
+                url: "run1",
+                title: "Run (Classic)"
+            },
+            {
+                url: "run1remaster",
+                title: "Run (Remaster)"
+            },
+            {
+                url: "run2",
+                title: "Run 2"
+            },
+            {
+                url: "run3",
+                title: "Run 3"
+            },
+        ],
+    },
+];
+exports.default = Games;
