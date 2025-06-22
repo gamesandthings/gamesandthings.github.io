@@ -5,10 +5,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Keys_1 = __importDefault(require("./Keys"));
 class Games {
+    static getGameByID(id) {
+        for (let i = 0; i < Games.games.length; i++) {
+            const element = Games.games[i];
+            if (element.id == id) {
+                return element;
+            }
+        }
+        return null;
+    }
+    static getVersionByID(game, id) {
+        if (game.versions == null) {
+            return null;
+        }
+        for (let i = 0; i < game.versions.length; i++) {
+            const element = game.versions[i];
+            if (element.id == id) {
+                return element;
+            }
+        }
+        return null;
+    }
 }
 Games.games = [
     {
         title: "Minecraft",
+        id: "minecraft",
         creator: "Mojang Studios",
         inject: false,
         prefix: "mc",
@@ -17,51 +39,63 @@ Games.games = [
         versions: [
             {
                 url: "1.12.2",
-                title: "1.12.2"
+                title: "1.12.2",
+                id: "1.12.2"
             },
             {
                 url: "1.12.2_WASM",
-                title: "1.12.2 (wasm)"
+                title: "1.12.2 (wasm)",
+                id: "1.12.2-wasm"
             },
             {
                 url: "1.8.8",
-                title: "1.8.8"
+                title: "1.8.8",
+                id: "1.8.8"
             },
             {
                 url: "1.8.8_WASM",
-                title: "1.8.8 (wasm)"
+                title: "1.8.8 (wasm)",
+                id: "1.8.8-wasm"
             },
             {
                 url: "1.8.8-resent",
-                title: "1.8.8 Resent Client"
+                title: "1.8.8 Resent Client",
+                id: "1.8.8-resent"
             },
             {
                 url: "1.5.2",
-                title: "1.5.2"
+                title: "1.5.2",
+                id: "1.5.2"
             },
             {
                 url: "b1.7.3",
-                title: "b1.7.3"
+                title: "b1.7.3",
+                id: "b1.7.3"
             },
             {
                 url: "b1.3_01",
-                title: "b1.3_01"
+                title: "b1.3_01",
+                id: "b1.3_01"
             },
             {
                 url: "a1.2.6",
-                title: "a1.2.6"
+                title: "a1.2.6",
+                id: "a1.2.6"
             },
             {
                 url: "indev-20100223",
-                title: "Indev-20100223"
+                title: "Indev-20100223",
+                id: "indev-20100223"
             },
             {
                 url: "c0.30",
-                title: "c0.30"
+                title: "c0.30",
+                id: "c0.30"
             },
             {
                 url: "c0.0.23a_01",
-                title: "c0.0.23a_01"
+                title: "c0.0.23a_01",
+                id: "c0.0.23a_01"
             },
         ],
         fixes: {
@@ -78,6 +112,7 @@ Games.games = [
     },
     {
         title: "Super Mario 64",
+        id: "sm64",
         creator: "Nintendo",
         prefix: "app-sm64",
         screenmode: "4/3",
@@ -156,6 +191,7 @@ Games.games = [
     },
     {
         title: "UNDERTALE",
+        id: "undertale",
         creator: "Toby Fox",
         prefix: "app-ut",
         screenmode: "window",
@@ -170,6 +206,7 @@ Games.games = [
     },
     {
         title: "DELTARUNE",
+        id: "deltarune",
         creator: "Toby Fox",
         prefix: "app-dt",
         screenmode: "window",
@@ -185,24 +222,29 @@ Games.games = [
         versions: [
             {
                 url: "chapter1",
-                title: "Chapter 1 - The Beginning"
+                title: "Chapter 1 - The Beginning",
+                id: "chapter1"
             },
             {
                 url: "chapter2",
-                title: "Chapter 2 - A Cyber's World"
+                title: "Chapter 2 - A Cyber's World",
+                id: "chapter2"
             },
             {
                 url: "chapter3",
-                title: "Chapter 3 - Late Night"
+                title: "Chapter 3 - Late Night",
+                id: "chapter3"
             },
             {
                 url: "chapter4",
-                title: "Chapter 4 - Prophecy"
+                title: "Chapter 4 - Prophecy",
+                id: "chapter4"
             },
         ]
     },
     {
         title: "Pizza Tower",
+        id: "pizza-tower",
         creator: "Tour De Pizza",
         prefix: "app-pt",
         screenmode: "window",
@@ -217,6 +259,7 @@ Games.games = [
     },
     {
         title: "Mari0",
+        id: "mari0",
         creator: "Stabyourself.net",
         prefix: "app-mari0",
         screenmode: "16/9",
@@ -231,6 +274,7 @@ Games.games = [
     },
     {
         title: "Sonic CD",
+        id: "sonic-cd",
         creator: "Sega",
         prefix: "app-soniccd",
         screenmode: "16/9",
@@ -305,6 +349,7 @@ Games.games = [
     },
     {
         title: "Half-Life",
+        id: "hl",
         creator: "Valve",
         prefix: "app-hl/xash.html#150",
         screenmode: "16/9",
@@ -319,6 +364,7 @@ Games.games = [
     },
     {
         title: "Subway Surfers",
+        id: "subway-surfers",
         creator: "SYBO Games",
         prefix: "app-sbwysrf",
         screenmode: "window",
@@ -333,34 +379,42 @@ Games.games = [
             {
                 url: "zurich",
                 title: "Zurich (Easter)",
+                id: "zurich"
             },
             {
                 url: "new-orleans",
-                title: "New Orleans (Halloween)"
+                title: "New Orleans (Halloween)",
+                id: "new-orleans"
             },
             {
                 url: "london",
-                title: "London (Christmas)"
+                title: "London (Christmas)",
+                id: "london"
             },
             {
                 url: "berlin",
-                title: "Berlin"
+                title: "Berlin",
+                id: "berlin"
             },
             {
                 url: "havana",
-                title: "Havana"
+                title: "Havana",
+                id: "havana"
             },
             {
                 url: "houston",
-                title: "Houston"
+                title: "Houston",
+                id: "houston"
             },
             {
                 url: "monaco",
-                title: "Monaco"
+                title: "Monaco",
+                id: "monaco"
             },
             {
                 url: "st-petersburg",
-                title: "Saint Petersburg"
+                title: "Saint Petersburg",
+                id: "st-petersburg"
             },
         ],
         gameKeys: [
@@ -406,6 +460,7 @@ Games.games = [
     },
     {
         title: "Fruit Ninja",
+        id: "fruit-ninja",
         creator: "Halfbrick",
         prefix: "app-fruitninja",
         screenmode: "16/10",
@@ -419,6 +474,7 @@ Games.games = [
     },
     {
         title: "Friday Night Funkin'",
+        id: "fnf",
         creator: "Funkin' Crew",
         prefix: "app-fnf",
         screenmode: "window",
@@ -427,11 +483,13 @@ Games.games = [
         versions: [
             {
                 url: "",
-                title: "Base v0.4.0"
+                title: "Base v0.4.0",
+                id: "v0.4.0",
             },
             {
                 url: "bhb",
-                title: "Blue House Bundle: DEMO v1.0"
+                title: "Blue House Bundle: DEMO v1.0",
+                id: "bhb-demo",
             }
         ],
         fixes: {
@@ -443,6 +501,7 @@ Games.games = [
     },
     {
         title: "Doom",
+        id: "doom",
         creator: "id Software",
         prefix: "app-doom",
         screenmode: "window",
@@ -483,11 +542,13 @@ Games.games = [
         versions: [
             {
                 url: "?bundleUrl=/app-doom/d?anonymous=1",
-                title: "Doom"
+                title: "Doom",
+                id: "I",
             },
             {
                 url: "?bundleUrl=/app-doom/d2?anonymous=1",
-                title: "Doom II"
+                title: "Doom II",
+                id: "II",
             }
         ],
         fixes: {
@@ -499,6 +560,7 @@ Games.games = [
     },
     {
         title: "Run",
+        id: "run",
         creator: "player03",
         prefix: "app-flash",
         screenmode: "window",
@@ -513,19 +575,23 @@ Games.games = [
         versions: [
             {
                 url: "run1",
-                title: "Run (Classic)"
+                title: "Run (Classic)",
+                id: "run",
             },
             {
                 url: "run1remaster",
-                title: "Run (Remaster)"
+                title: "Run (Remaster)",
+                id: "run-remaster",
             },
             {
                 url: "run2",
-                title: "Run 2"
+                title: "Run 2",
+                id: "run2",
             },
             {
                 url: "run3",
-                title: "Run 3"
+                title: "Run 3",
+                id: "run3",
             },
         ],
     },

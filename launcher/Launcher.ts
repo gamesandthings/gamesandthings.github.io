@@ -65,9 +65,44 @@ export default class Launcher {
         (window as any).gameLogs = [];
         (window as any).gameData = {};
         Launcher.gameLogs = (window as any).gameLogs;
-        Launcher.openGame(Games.games[0]);
-        
-        alert("PLEASE READ\n\n\nDue to some rewrites and cleanup, the game list selection has temporarily moved under the settings icon in the top left corner. \n All the games and your save data have not been affected. \n The launcher will boot by default into Minecraft 1.12.2.")
+
+        // url parsing
+        function parseQuery(queryString: string) {
+            var query = {};
+            var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                (query as any)[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+            }
+            return query;
+        }
+
+        let shouldOpenDefault = true;
+
+        if (window.location.search != "") {
+            let args = parseQuery(window.location.search.substring(1));
+            if ("game" in args) {
+                let game = Games.getGameByID(args.game as string);
+                if (game != null) {
+                    shouldOpenDefault = false;
+                    if ("version" in args) {
+                        let version = Games.getVersionByID(game, args.version as string)
+                        if (version != null) {
+                            Launcher.openGame(game, version);
+                        }
+                    }
+                    else {
+                        Launcher.openGame(game);
+                    }
+                }
+            }
+
+        }
+        if (shouldOpenDefault) {
+            Launcher.openGame(Games.games[0]);
+
+            alert("PLEASE READ\n\n\nDue to some rewrites and cleanup, the game list selection has temporarily moved under the settings icon in the top left corner. \n All the games and your save data have not been affected. \n The launcher will boot by default into Minecraft 1.12.2.")
+        }
     }
     public static finalInject() {
         Launcher.beginOpen();
@@ -155,6 +190,11 @@ export default class Launcher {
             link += "/";
         Launcher.openURL(link);
 
+        let URL: string = window.location.origin + `/?game=${encodeURIComponent(game.id)}`;
+        if (version != null) {
+            URL += `&version=${encodeURIComponent(version.id)}`
+        }
+        window.history.replaceState(null, "", URL)
     }
     public static openURL(url: string) {
         SaveManager.load();
