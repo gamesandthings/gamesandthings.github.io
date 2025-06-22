@@ -37,3 +37,6 @@
 [submodule "app-pt"]
 	path = app-pt
 	url = https://github.com/gamesandthings/app-pt
+[submodule "app-osu"]
+	path = app-osu
+	url = https://github.com/gamesandthings/app-osu/
