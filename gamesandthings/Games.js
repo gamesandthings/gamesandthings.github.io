@@ -258,6 +258,21 @@ Games.games = [
         },
     },
     {
+        title: "osu! (web)",
+        id: "osu",
+        creator: "ppy",
+        prefix: "app-osu",
+        screenmode: "window",
+        forcescreenmode: true,
+        inject: true,
+        fixes: {
+            preserveDrawingBuffer: true,
+            runsAtSetFrameRate: true,
+            removeVsync: false,
+            pointerLockFix: false,
+        },
+    },
+    {
         title: "Mari0",
         id: "mari0",
         creator: "Stabyourself.net",
