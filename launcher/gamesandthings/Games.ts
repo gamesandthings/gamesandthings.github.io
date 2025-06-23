@@ -247,7 +247,7 @@ export default class Games {
 
                 },
                 {
-                    url: "chapter2",
+                    url: "chapter2-v2",
                     title: "Chapter 2 - A Cyber's World",
                     id: "chapter2"
                 },
