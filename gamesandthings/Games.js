@@ -226,7 +226,7 @@ Games.games = [
                 id: "chapter1"
             },
             {
-                url: "chapter2-v2",
+                url: "chapter2-v3",
                 title: "Chapter 2 - A Cyber's World",
                 id: "chapter2"
             },
