@@ -3,9 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const UniFont_1 = __importDefault(require("../UniFont"));
-class CustomContextMenuHandler {
-    constructor(x = 0, y = 0) {
+var UniFont_1 = __importDefault(require("../UniFont"));
+var CustomContextMenuHandler = /** @class */ (function () {
+    function CustomContextMenuHandler(x, y) {
+        if (x === void 0) { x = 0; }
+        if (y === void 0) { y = 0; }
         this.ctxItemMap = new Map();
         this.isOpen = false;
         this.contextOptions = [];
@@ -14,86 +16,89 @@ class CustomContextMenuHandler {
         this.ctxMenu = document.getElementById("ctxmenu");
         this.ctxMenuItems = document.getElementById("ctxbox");
     }
-    create() {
-    }
-    update(elapsed) {
-    }
-    destroy() {
-    }
-    clear() {
+    CustomContextMenuHandler.prototype.create = function () {
+    };
+    CustomContextMenuHandler.prototype.update = function (elapsed) {
+    };
+    CustomContextMenuHandler.prototype.destroy = function () {
+    };
+    CustomContextMenuHandler.prototype.clear = function () {
         this.ctxItemMap.clear();
         this.ctxMenuItems.remove();
         this.ctxMenuItems = document.createElement('div');
         this.ctxMenuItems.id = 'ctxbox';
         this.ctxMenu.appendChild(this.ctxMenuItems);
-    }
-    close() {
-        requestAnimationFrame(() => {
-            this.isOpen = false;
-            this.clear();
-            this.ctxMenu.style.display = 'none';
-            this.ctxMenuItems.style.display = 'none';
+    };
+    CustomContextMenuHandler.prototype.close = function () {
+        var _this = this;
+        requestAnimationFrame(function () {
+            _this.isOpen = false;
+            _this.clear();
+            _this.ctxMenu.style.display = 'none';
+            _this.ctxMenuItems.style.display = 'none';
         });
-    }
-    show(options, mx, my) {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                this.isOpen = true;
-                this.ctxMenu.style.display = '';
-                let cx = 0;
-                let cy = 0;
+    };
+    CustomContextMenuHandler.prototype.show = function (options, mx, my) {
+        var _this = this;
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                _this.isOpen = true;
+                _this.ctxMenu.style.display = '';
+                var cx = 0;
+                var cy = 0;
                 if (mx != undefined && my != undefined) {
                     cx = mx;
                     cy = my;
-                    this.x = cx;
-                    this.y = cy;
+                    _this.x = cx;
+                    _this.y = cy;
                 }
-                this.ctxMenu.style.left = this.x - 15 + 'px';
-                this.ctxMenu.style.top = this.y + 'px';
-                this.clear();
-                options.forEach((opt) => {
-                    this.add(opt, this.x, this.y);
+                _this.ctxMenu.style.left = _this.x - 15 + 'px';
+                _this.ctxMenu.style.top = _this.y + 'px';
+                _this.clear();
+                options.forEach(function (opt) {
+                    _this.add(opt, _this.x, _this.y);
                 });
-                this.add({
-                    text: "Close", font: UniFont_1.default.BOLD, onselect: () => {
-                        this.close();
+                _this.add({
+                    text: "Close", font: UniFont_1.default.BOLD, onselect: function () {
+                        _this.close();
                     }
-                }, this.x, this.y);
+                }, _this.x, _this.y);
             });
         });
         //setTimeout(() => { /this.ctxMenu.style.display = ''; }, 0);
-    }
-    add(opt, mx, my) {
-        let text = opt.text;
+    };
+    CustomContextMenuHandler.prototype.add = function (opt, mx, my) {
+        var _this = this;
+        var text = opt.text;
         if (opt.hasSecondary != null) {
             if (opt.hasSecondary) {
                 text = "\u2630\u2001" + text;
             }
         }
         if (opt.onselect == null) {
-            opt.onselect = () => { };
+            opt.onselect = function () { };
         }
         if (opt.title != null) {
             if (opt.title) {
-                opt.onselect = () => { this.show(this.contextOptions, mx, my); };
+                opt.onselect = function () { _this.show(_this.contextOptions, mx, my); };
             }
         }
         this.ctxItemMap.set(text, opt.onselect);
-        let optElem = document.createElement("div");
-        optElem.addEventListener("mouseup", (ev) => {
+        var optElem = document.createElement("div");
+        optElem.addEventListener("mouseup", function (ev) {
             if (opt.onselect == undefined)
                 return;
             opt.onselect();
             if (opt.hasSecondary == undefined || opt.hasSecondary != true) {
-                this.close();
+                _this.close();
             }
         });
-        optElem.addEventListener("touchend", (ev) => {
+        optElem.addEventListener("touchend", function (ev) {
             if (opt.onselect == undefined)
                 return;
             opt.onselect();
             if (opt.hasSecondary == undefined || opt.hasSecondary != true) {
-                this.close();
+                _this.close();
             }
         });
         optElem.setAttribute("class", "ctxitem");
@@ -111,6 +116,7 @@ class CustomContextMenuHandler {
             optElem.innerText = text;
         }
         this.ctxMenuItems.appendChild(optElem);
-    }
-}
+    };
+    return CustomContextMenuHandler;
+}());
 exports.default = CustomContextMenuHandler;

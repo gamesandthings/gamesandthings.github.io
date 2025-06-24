@@ -3,10 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Launcher_1 = __importDefault(require("../../Launcher"));
-const UniFont_1 = __importDefault(require("../UniFont"));
-class NativeContextMenuHandler {
-    constructor() {
+var Launcher_1 = __importDefault(require("../../Launcher"));
+var UniFont_1 = __importDefault(require("../UniFont"));
+var NativeContextMenuHandler = /** @class */ (function () {
+    function NativeContextMenuHandler() {
+        var _this = this;
         this.x = 0;
         this.y = 0;
         this.ctxItemMap = new Map();
@@ -31,52 +32,53 @@ class NativeContextMenuHandler {
         this.contextMenuInput.style.top = "-999px";
         this.contextMenuInput.style.left = "-999px";
         // On input  
-        this.contextMenuInput.addEventListener("input", (ev) => {
+        this.contextMenuInput.addEventListener("input", function (ev) {
             var _a;
-            if (this.contextMenuInput.value != null) {
-                let val = this.contextMenuInput.value;
-                this.contextMenuInput.value = "";
-                (_a = this.ctxItemMap.get(val)) === null || _a === void 0 ? void 0 : _a.call(null);
-                this.timesChanged++;
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        if (this.timesChanged == 4) { // chrome is weird and closes input list after 5 times displayed in a row until next user input
-                            this.close();
+            if (_this.contextMenuInput.value != null) {
+                var val = _this.contextMenuInput.value;
+                _this.contextMenuInput.value = "";
+                (_a = _this.ctxItemMap.get(val)) === null || _a === void 0 ? void 0 : _a.call(null);
+                _this.timesChanged++;
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        if (_this.timesChanged == 4) { // chrome is weird and closes input list after 5 times displayed in a row until next user input
+                            _this.close();
                         }
                     });
                 });
             }
         });
-        this.contextMenuInput.addEventListener("focusout", (ev) => {
-            this.close();
+        this.contextMenuInput.addEventListener("focusout", function (ev) {
+            _this.close();
         });
-        this.contextMenuInput.addEventListener("close", (ev) => {
-            this.close();
+        this.contextMenuInput.addEventListener("close", function (ev) {
+            _this.close();
         });
-        this.contextMenuInput.addEventListener("blur", (ev) => {
-            this.close();
+        this.contextMenuInput.addEventListener("blur", function (ev) {
+            _this.close();
         });
     }
-    add(opt) {
-        let text = opt.text;
+    NativeContextMenuHandler.prototype.add = function (opt) {
+        var _this = this;
+        var text = opt.text;
         if (opt.hasSecondary != null) {
             if (opt.hasSecondary) {
                 text = "\u2630\u2001" + text;
             }
         }
         if (opt.onselect == null) {
-            opt.onselect = () => { };
+            opt.onselect = function () { };
         }
         if (opt.title != null) {
             if (opt.title) {
-                opt.onselect = () => { this.show(this.contextOptions); };
+                opt.onselect = function () { _this.show(_this.contextOptions); };
             }
         }
         if (opt.font != null) {
             text = UniFont_1.default.make(text, opt.font);
         }
         this.ctxItemMap.set(text, opt.onselect);
-        let optElem = document.createElement("option");
+        var optElem = document.createElement("option");
         optElem.value = text;
         if (opt.desc != null && opt.desc != "") {
             if (opt.descFont != null) {
@@ -85,10 +87,10 @@ class NativeContextMenuHandler {
             optElem.innerHTML = opt.desc;
         }
         this.ctxMenuItems.appendChild(optElem);
-    }
-    create() { }
-    update(delta) { }
-    clear() {
+    };
+    NativeContextMenuHandler.prototype.create = function () { };
+    NativeContextMenuHandler.prototype.update = function (delta) { };
+    NativeContextMenuHandler.prototype.clear = function () {
         try {
             document.body.removeChild(this.ctxMenuItems);
         }
@@ -98,22 +100,23 @@ class NativeContextMenuHandler {
         this.contextMenuInput.setAttribute("list", this.ctxMenuItems.id);
         document.body.appendChild(this.ctxMenuItems);
         this.ctxItemMap.clear();
-    }
-    close() {
+    };
+    NativeContextMenuHandler.prototype.close = function () {
         this.isOpen = false;
         this.clear();
-    }
-    show(options, x, y) {
-        requestAnimationFrame(() => {
-            this.isOpen = true;
-            this.contextOptions = options;
-            this.clear();
-            options.forEach((opt) => {
-                this.add(opt);
+    };
+    NativeContextMenuHandler.prototype.show = function (options, x, y) {
+        var _this = this;
+        requestAnimationFrame(function () {
+            _this.isOpen = true;
+            _this.contextOptions = options;
+            _this.clear();
+            options.forEach(function (opt) {
+                _this.add(opt);
             });
-            this.add({
-                text: "Close", font: UniFont_1.default.BOLD, onselect: () => {
-                    this.close();
+            _this.add({
+                text: "Close", font: UniFont_1.default.BOLD, onselect: function () {
+                    _this.close();
                 }
             });
             if (x == null) {
@@ -122,13 +125,13 @@ class NativeContextMenuHandler {
             if (y == null) {
                 y = Launcher_1.default.my;
             }
-            this.contextMenuInput.style.width = "50px";
-            this.contextMenuInput.style.height = "50px";
-            this.contextMenuInput.style.left = x - 20 + "px";
-            this.contextMenuInput.style.top = y - 50 + "px";
+            _this.contextMenuInput.style.width = "50px";
+            _this.contextMenuInput.style.height = "50px";
+            _this.contextMenuInput.style.left = x - 20 + "px";
+            _this.contextMenuInput.style.top = y - 50 + "px";
             try {
-                if ("showPicker" in this.contextMenuInput) {
-                    this.contextMenuInput.showPicker();
+                if ("showPicker" in _this.contextMenuInput) {
+                    _this.contextMenuInput.showPicker();
                 }
                 else {
                     alert("Your browser does not support context menus at the moment,\n");
@@ -137,13 +140,14 @@ class NativeContextMenuHandler {
             }
             catch (_a) { }
             // go away so it doesnt interfere with user input
-            this.contextMenuInput.style.top = "-999px";
-            this.contextMenuInput.style.left = "-999px";
-            this.contextMenuInput.style.width = "0px";
-            this.contextMenuInput.style.height = "0px";
+            _this.contextMenuInput.style.top = "-999px";
+            _this.contextMenuInput.style.left = "-999px";
+            _this.contextMenuInput.style.width = "0px";
+            _this.contextMenuInput.style.height = "0px";
         });
-    }
-    destroy() {
-    }
-}
+    };
+    NativeContextMenuHandler.prototype.destroy = function () {
+    };
+    return NativeContextMenuHandler;
+}());
 exports.default = NativeContextMenuHandler;

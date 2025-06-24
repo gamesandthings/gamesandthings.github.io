@@ -241,7 +241,7 @@ export default class Games {
             },
             versions: [
                 {
-                    url: "chapter1",
+                    url: "chapter1-v2",
                     title: "Chapter 1 - The Beginning",
                     id: "chapter1"
 
