@@ -45,6 +45,7 @@ var CanvasRecorder_1 = __importDefault(require("./CanvasRecorder"));
 var Vector2_1 = __importDefault(require("./types/Vector2"));
 var SettingsHandler_1 = __importDefault(require("./SettingsHandler"));
 var Games_1 = __importDefault(require("./Games"));
+var FilterHandler_1 = __importDefault(require("./FilterHandler"));
 var DrawerHandler = /** @class */ (function () {
     function DrawerHandler(elem) {
         var _this = this;
@@ -404,10 +405,69 @@ var DrawerHandler = /** @class */ (function () {
                                 }
                             });
                         }
+                        options.push({
+                            text: "Filters",
+                            onselect: function () {
+                                Launcher_1.default.contextMenu.show([
+                                    {
+                                        text: "Blur: " + Launcher_1.default.iframeFilterHandler.blur,
+                                        onselect: function () {
+                                            var value = prompt("Blur: ", Launcher_1.default.iframeFilterHandler.blur + "");
+                                            if (value != null)
+                                                Launcher_1.default.iframeFilterHandler.blur = parseFloat(value);
+                                        }
+                                    },
+                                    {
+                                        text: "Grayscale: " + (Launcher_1.default.iframeFilterHandler.grayscale ? "Yes" : "No"),
+                                        onselect: function () {
+                                            Launcher_1.default.iframeFilterHandler.grayscale = !Launcher_1.default.iframeFilterHandler.grayscale;
+                                        }
+                                    },
+                                    {
+                                        text: "Saturation: " + Launcher_1.default.iframeFilterHandler.saturate,
+                                        onselect: function () {
+                                            var value = prompt("Saturation: ", Launcher_1.default.iframeFilterHandler.saturate + "");
+                                            if (value != null)
+                                                Launcher_1.default.iframeFilterHandler.saturate = parseFloat(value);
+                                        }
+                                    },
+                                    {
+                                        text: "Contrast: " + Launcher_1.default.iframeFilterHandler.contrast,
+                                        onselect: function () {
+                                            var value = prompt("Contrast: ", Launcher_1.default.iframeFilterHandler.contrast + "");
+                                            if (value != null)
+                                                Launcher_1.default.iframeFilterHandler.contrast = parseFloat(value);
+                                        }
+                                    },
+                                    {
+                                        text: "Sepia: " + Launcher_1.default.iframeFilterHandler.sepia,
+                                        onselect: function () {
+                                            var value = prompt("Sepia: ", Launcher_1.default.iframeFilterHandler.sepia + "");
+                                            if (value != null)
+                                                Launcher_1.default.iframeFilterHandler.sepia = parseFloat(value);
+                                        }
+                                    },
+                                    {
+                                        text: "Invert: " + (Launcher_1.default.iframeFilterHandler.invert ? "Yes" : "No"),
+                                        onselect: function () {
+                                            Launcher_1.default.iframeFilterHandler.invert = !Launcher_1.default.iframeFilterHandler.invert;
+                                        }
+                                    },
+                                    {
+                                        text: "Reset",
+                                        onselect: function () {
+                                            Launcher_1.default.iframeFilterHandler = new FilterHandler_1.default();
+                                        }
+                                    },
+                                ]);
+                            },
+                            hasSecondary: true,
+                        });
                         if (((_c = Launcher_1.default.game) === null || _c === void 0 ? void 0 : _c.gameKeys) != undefined) {
                             options.push({
                                 text: "Controls",
                                 desc: "(rebinding coming soon!)",
+                                hasSecondary: true,
                                 onselect: function () {
                                     var _a, _b;
                                     var controls = [];
@@ -434,8 +494,8 @@ var DrawerHandler = /** @class */ (function () {
                                             }
                                         });
                                         controls.push({
-                                            text: top,
-                                            desc: bottom,
+                                            text: top + " - " + bottom,
+                                            //  desc: bottom,
                                         });
                                         Launcher_1.default.contextMenu.show(controls);
                                     });

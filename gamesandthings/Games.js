@@ -1,40 +1,34 @@
-import { GameKey } from "./types/GameKey";
-import { Key } from "./types/Key";
-import Keys from "./Keys";
-
-export type Game = {
-    title: string,
-    id: string,
-    creator: string,
-    prefix: string,
-    inject: boolean,
-    screenmode?: string,
-    forcescreenmode?: boolean,
-    versions?: Array<GameVersion> | null,
-    fixes?: Fixes | null,
-    assets?: GameAssets,
-    overrideVersionListName?: string,
-    gameKeys?: Array<GameKey>,
-    fixScripts?: Array<string>
-}
-export type GameAssets = {
-    bg: string,
-    logo: string,
-    logoPos: 'center' | 'default',
-}
-export type GameVersion = {
-    url: string,
-    title: string,
-    id: string,
-}
-export type Fixes = {
-    runsAtSetFrameRate: boolean,
-    preserveDrawingBuffer: boolean,
-    removeVsync: boolean,
-    pointerLockFix: boolean,
-}
-export default class Games {
-    public static games: Array<Game> = [
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var Keys_1 = __importDefault(require("./Keys"));
+var Games = /** @class */ (function () {
+    function Games() {
+    }
+    Games.getGameByID = function (id) {
+        for (var i = 0; i < Games.games.length; i++) {
+            var element = Games.games[i];
+            if (element.id == id) {
+                return element;
+            }
+        }
+        return null;
+    };
+    Games.getVersionByID = function (game, id) {
+        if (game.versions == null) {
+            return null;
+        }
+        for (var i = 0; i < game.versions.length; i++) {
+            var element = game.versions[i];
+            if (element.id == id) {
+                return element;
+            }
+        }
+        return null;
+    };
+    Games.games = [
         {
             title: "Minecraft",
             id: "minecraft",
@@ -68,19 +62,16 @@ export default class Games {
                     url: "1.8.8-resent",
                     title: "1.8.8 Resent Client",
                     id: "1.8.8-resent"
-
                 },
                 {
                     url: "1.5.2",
                     title: "1.5.2",
                     id: "1.5.2"
-
                 },
                 {
                     url: "b1.7.3",
                     title: "b1.7.3",
                     id: "b1.7.3"
-
                 },
                 {
                     url: "b1.3_01",
@@ -91,7 +82,6 @@ export default class Games {
                     url: "a1.2.6",
                     title: "a1.2.6",
                     id: "a1.2.6"
-
                 },
                 {
                     url: "indev-20100223",
@@ -102,13 +92,11 @@ export default class Games {
                     url: "c0.30",
                     title: "c0.30",
                     id: "c0.30"
-
                 },
                 {
                     url: "c0.0.23a_01",
                     title: "c0.0.23a_01",
                     id: "c0.0.23a_01"
-
                 },
             ],
             fixes: {
@@ -144,66 +132,59 @@ export default class Games {
             gameKeys: [
                 {
                     name: 'Forward',
-                    key: Keys.W,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.W,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Back',
-                    key: Keys.S,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.S,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Left',
-                    key: Keys.A,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.A,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Right',
-                    key: Keys.D,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.D,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Crouch (Z Trigger)',
-                    key: Keys.K,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.K,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Jump (A Button)',
-                    key: Keys.L,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.L,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Punch (B Button)',
-                    key: Keys.COMMA,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.COMMA,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Pause (Start Button)',
-                    key: Keys.SPACE,
+                    key: Keys_1.default.SPACE,
                     extraKeys: [
-                        Keys.ENTER,
+                        Keys_1.default.ENTER,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Camera (R Button)',
-                    key: Keys.RSHIFT,
+                    key: Keys_1.default.RSHIFT,
                     extraKeys: [
-                        Keys.LSHIFT,
+                        Keys_1.default.LSHIFT,
                     ],
                     disableOriginal: false,
                 },
@@ -244,7 +225,6 @@ export default class Games {
                     url: "chapter1-v2",
                     title: "Chapter 1 - The Beginning",
                     id: "chapter1"
-
                 },
                 {
                     url: "chapter2-v4",
@@ -326,58 +306,58 @@ export default class Games {
             gameKeys: [
                 {
                     name: 'Up',
-                    key: Keys.UP,
+                    key: Keys_1.default.UP,
                     extraKeys: [
-                        Keys.W,
+                        Keys_1.default.W,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Down',
-                    key: Keys.DOWN,
+                    key: Keys_1.default.DOWN,
                     extraKeys: [
-                        Keys.S,
+                        Keys_1.default.S,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Left',
-                    key: Keys.LEFT,
+                    key: Keys_1.default.LEFT,
                     extraKeys: [
-                        Keys.A,
+                        Keys_1.default.A,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Right',
-                    key: Keys.RIGHT,
+                    key: Keys_1.default.RIGHT,
                     extraKeys: [
-                        Keys.D,
+                        Keys_1.default.D,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Select/Jump',
-                    key: Keys.Z,
+                    key: Keys_1.default.Z,
                     extraKeys: [
-                        Keys.SPACE,
+                        Keys_1.default.SPACE,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Back/Jump',
-                    key: Keys.X,
+                    key: Keys_1.default.X,
                     extraKeys: [
-                        Keys.BACKSPACE,
+                        Keys_1.default.BACKSPACE,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Select/Pause',
-                    key: Keys.ENTER,
+                    key: Keys_1.default.ENTER,
                     extraKeys: [
-                        Keys.P,
-                        Keys.ESCAPE
+                        Keys_1.default.P,
+                        Keys_1.default.ESCAPE
                     ],
                     disableOriginal: false,
                 },
@@ -401,7 +381,6 @@ export default class Games {
         {
             title: "Subway Surfers",
             id: "subway-surfers",
-
             creator: "SYBO Games",
             prefix: "app-sbwysrf",
             screenmode: "window",
@@ -417,94 +396,83 @@ export default class Games {
                     url: "zurich",
                     title: "Zurich (Easter)",
                     id: "zurich"
-
                 },
                 {
                     url: "new-orleans",
                     title: "New Orleans (Halloween)",
                     id: "new-orleans"
-
                 },
                 {
                     url: "london",
                     title: "London (Christmas)",
                     id: "london"
-
                 },
                 {
                     url: "berlin",
                     title: "Berlin",
                     id: "berlin"
-
                 },
                 {
                     url: "havana",
                     title: "Havana",
                     id: "havana"
-
                 },
                 {
                     url: "houston",
                     title: "Houston",
                     id: "houston"
-
                 },
                 {
                     url: "monaco",
                     title: "Monaco",
                     id: "monaco"
-
                 },
                 {
                     url: "st-petersburg",
                     title: "Saint Petersburg",
                     id: "st-petersburg"
-
                 },
-
             ],
             gameKeys: [
                 {
                     name: 'Jump',
-                    key: Keys.UP,
+                    key: Keys_1.default.UP,
                     extraKeys: [
-                        Keys.W,
+                        Keys_1.default.W,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Duck',
-                    key: Keys.DOWN,
+                    key: Keys_1.default.DOWN,
                     extraKeys: [
-                        Keys.S,
+                        Keys_1.default.S,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Left',
-                    key: Keys.LEFT,
+                    key: Keys_1.default.LEFT,
                     extraKeys: [
-                        Keys.A,
+                        Keys_1.default.A,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Right',
-                    key: Keys.RIGHT,
+                    key: Keys_1.default.RIGHT,
                     extraKeys: [
-                        Keys.D,
+                        Keys_1.default.D,
                     ],
                     disableOriginal: false,
                 },
                 {
                     name: 'Hoverboard',
-                    key: Keys.SPACE,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.SPACE,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
             ]
-
         },
         {
             title: "Fruit Ninja",
@@ -558,36 +526,32 @@ export default class Games {
             gameKeys: [
                 {
                     name: 'Forwards',
-                    key: Keys.W,
-
+                    key: Keys_1.default.W,
                     extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Backwards',
-                    key: Keys.S,
+                    key: Keys_1.default.S,
                     extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Left',
-                    key: Keys.A,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.A,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Right',
-                    key: Keys.D,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.D,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
                 {
                     name: 'Interact',
-                    key: Keys.SPACE,
-                    extraKeys: [
-                    ],
+                    key: Keys_1.default.SPACE,
+                    extraKeys: [],
                     disableOriginal: false,
                 },
             ],
@@ -596,7 +560,6 @@ export default class Games {
                     url: "?bundleUrl=/app-doom/d?anonymous=1",
                     title: "Doom",
                     id: "I",
-
                 },
                 {
                     url: "?bundleUrl=/app-doom/d2?anonymous=1",
@@ -630,19 +593,16 @@ export default class Games {
                     url: "run1",
                     title: "Run (Classic)",
                     id: "run",
-
                 },
                 {
                     url: "run1remaster",
                     title: "Run (Remaster)",
                     id: "run-remaster",
-
                 },
                 {
                     url: "run2",
                     title: "Run 2",
                     id: "run2",
-
                 },
                 {
                     url: "run3",
@@ -652,27 +612,6 @@ export default class Games {
             ],
         },
     ];
-
-    public static getGameByID(id: string): Game | null {
-        for (let i = 0; i < Games.games.length; i++) {
-            const element = Games.games[i];
-            if (element.id == id) {
-                return element;
-            }
-        }
-        return null;
-    }
-
-    public static getVersionByID(game: Game, id: string): GameVersion | null {
-        if (game.versions == null) {
-            return null;
-        }
-        for (let i = 0; i < game.versions.length; i++) {
-            const element = game.versions[i];
-            if (element.id == id) {
-                return element;
-            }
-        }
-        return null;
-    }
-}
+    return Games;
+}());
+exports.default = Games;

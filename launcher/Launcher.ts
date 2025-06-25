@@ -1,4 +1,5 @@
 import SettingsHandler from "./gamesandthings/SettingsHandler";
+import FilterHandler from "./gamesandthings/FilterHandler";
 import SaveManager from "./gamesandthings/SaveManager";
 import DrawerHandler from "./gamesandthings/DrawerHandler";
 import ScriptInjector from "./gamesandthings/ScriptInjector";
@@ -12,6 +13,7 @@ export default class Launcher {
     public static cnv: HTMLDivElement;
     public static drawer: DrawerHandler;
     public static iframe: HTMLIFrameElement;
+    public static iframeFilterHandler: FilterHandler;
     public static iframeDiv: HTMLDivElement;
     public static game: Game | null;
     public static contextMenu: IContextMenu;
@@ -44,6 +46,8 @@ export default class Launcher {
         document.body.style.margin = "0px";
         Launcher.drawer = new DrawerHandler(document.getElementById("slidymenu") as HTMLDivElement);
         Launcher.drawer.elem.style.left = "-150px";
+
+
 
         Launcher.cnv = (document.createElement("div") as HTMLDivElement)
         Launcher.cnv.id = "cnv";
@@ -118,6 +122,7 @@ export default class Launcher {
         //Launcher.initInject();
         if (recreate) {
             Launcher.iframe = (document.createElement("iframe") as HTMLIFrameElement);
+            Launcher.iframeFilterHandler = new FilterHandler();
             Launcher.iframeDiv.appendChild(Launcher.iframe);
         }
 
@@ -219,9 +224,12 @@ export default class Launcher {
         Launcher.iframeMode = true;
         //Launcher.drawer.isOut = false;
         // Launcher.iframe.src = url;
+        Launcher.iframeFilterHandler.blur = 0.0;
+
     }
     public static closeIframe(): void {
         Launcher.iframeMode = false;
+        Launcher.iframeFilterHandler.blur = 1.5;
     }
     public static forceQuit(): void {
         (window as any).gameData = {};
@@ -288,9 +296,6 @@ export default class Launcher {
             Launcher.cnv.style.display = "none";
             Launcher.cnv.style.top = "0px";
             Launcher.iframe.style.opacity = "1";
-            Launcher.iframe.style.filter = "";
-
-            //this.y = 
         }
         else {
             Launcher.cnv.style.display = "flex";
@@ -299,9 +304,7 @@ export default class Launcher {
 
             Launcher.iframe.style.display = "flex";
             Launcher.iframe.style.opacity = "0.5";
-
-            Launcher.iframe.style.filter = "blur(1.5rem)";
-          //  Launcher.iframe.style.top = "0px";
+            //  Launcher.iframe.style.top = "0px";
         }
 
         //Launcher.ctx.reset();
