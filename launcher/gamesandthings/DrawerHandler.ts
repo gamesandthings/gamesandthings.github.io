@@ -589,14 +589,7 @@ export default class DrawerHandler implements IPositionable {
                             desc: "⚠ Unsaved data will be lost.",
                             descFont: UniFont.ITALIC,
                             onselect: () => {
-                                (window as any).gameData = {};
-                                Launcher.curVersion = "";
-                                if (this.recorder?.recording) {
-                                    this.recorder.stopRecording();
-                                }
-                                Launcher.iframeDiv.removeChild(Launcher.iframe);
-                                Launcher.initIframe();
-                                Launcher.closeIframe();
+                                Launcher.forceQuit();
                             }
                         }], this.clickX, this.clickY);
                     }

@@ -223,6 +223,17 @@ export default class Launcher {
     public static closeIframe(): void {
         Launcher.iframeMode = false;
     }
+    public static forceQuit(): void {
+        (window as any).gameData = {};
+        Launcher.curVersion = "";
+        if (this.drawer.recorder?.recording) {
+            this.drawer.recorder.stopRecording();
+        }
+        Launcher.iframeDiv.removeChild(Launcher.iframe);
+        Launcher.initIframe();
+        Launcher.closeIframe();
+        window.history.replaceState(null, "", window.location.origin);
+    }
     public static toggleFullscreen(): void {
         let elem: HTMLElement = document.body;
         if (!!elem.requestFullscreen) {
@@ -269,14 +280,16 @@ export default class Launcher {
             Launcher.fullscreen = false;
         }
 
+        Launcher.iframe.style.top = String(((document.body.offsetHeight - Launcher.iframe.offsetHeight) / 2)) + "px";
+        Launcher.iframe.style.left = String((document.body.offsetWidth - Launcher.iframe.offsetWidth) / 2) + "px";
 
         if (Launcher.iframeMode) {
             Launcher.iframe.contentWindow?.focus();
             Launcher.cnv.style.display = "none";
             Launcher.cnv.style.top = "0px";
             Launcher.iframe.style.opacity = "1";
-            Launcher.iframe.style.top = String(((document.body.offsetHeight - Launcher.iframe.offsetHeight) / 2)) + "px";
-            Launcher.iframe.style.left = String((document.body.offsetWidth - Launcher.iframe.offsetWidth) / 2) + "px";
+            Launcher.iframe.style.filter = "";
+
             //this.y = 
         }
         else {
@@ -285,8 +298,10 @@ export default class Launcher {
             Launcher.cnv.style.left = "0";
 
             Launcher.iframe.style.display = "flex";
-            Launcher.iframe.style.opacity = "0";
-            Launcher.iframe.style.top = "0px";
+            Launcher.iframe.style.opacity = "0.5";
+
+            Launcher.iframe.style.filter = "blur(1.5rem)";
+          //  Launcher.iframe.style.top = "0px";
         }
 
         //Launcher.ctx.reset();

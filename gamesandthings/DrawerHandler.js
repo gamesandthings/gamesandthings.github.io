@@ -642,15 +642,7 @@ var DrawerHandler = /** @class */ (function () {
                                 desc: "⚠ Unsaved data will be lost.",
                                 descFont: UniFont_1.default.ITALIC,
                                 onselect: function () {
-                                    var _a;
-                                    window.gameData = {};
-                                    Launcher_1.default.curVersion = "";
-                                    if ((_a = _this.recorder) === null || _a === void 0 ? void 0 : _a.recording) {
-                                        _this.recorder.stopRecording();
-                                    }
-                                    Launcher_1.default.iframeDiv.removeChild(Launcher_1.default.iframe);
-                                    Launcher_1.default.initIframe();
-                                    Launcher_1.default.closeIframe();
+                                    Launcher_1.default.forceQuit();
                                 }
                             }], _this.clickX, _this.clickY);
                     }
