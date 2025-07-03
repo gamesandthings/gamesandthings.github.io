@@ -124,6 +124,28 @@ export default class Games {
             }
         },
         {
+            title: "Pokémon Black",
+            id: "pkmn-bw",
+            creator: "The Pokemon Company",
+            prefix: "app-ejs",
+            screenmode: "window",
+            forcescreenmode: true,
+            inject: true,
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: true,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+            versions: [
+                {
+                    url: "ds/pkb/",
+                    title: "Pokémon Black",
+                    id: "Pokémon Black"
+                },
+            ]
+        },
+        {
             title: "Super Mario 64",
             id: "sm64",
             creator: "Nintendo",

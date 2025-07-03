@@ -40,3 +40,6 @@
 [submodule "app-osu"]
 	path = app-osu
 	url = https://github.com/gamesandthings/app-osu/
+[submodule "app-ejs"]
+	path = app-ejs
+	url = https://github.com/gamesandthings/app-ejs.git
