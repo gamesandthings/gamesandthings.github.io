@@ -100,7 +100,9 @@ export default class CustomContextMenuHandler implements IPositionable, IContext
             }
         });
         optElem.setAttribute("class", "ctxitem");
-
+        if (opt.desc != null) {
+            optElem.setAttribute("title", opt.desc);
+        }
         if (opt.font == UniFont.BOLD) {
             optElem.innerHTML = "<b>" + text + "</b>";
         }

@@ -278,7 +278,6 @@ export default class DrawerHandler implements IPositionable {
                                 text: "Game List",
                                 onselect: () => {
                                     this.showGameSelect();
-
                                 },
                                 hasSecondary: true,
                             },
@@ -458,7 +457,7 @@ export default class DrawerHandler implements IPositionable {
 
                         options.push({
                             text: switcherText,
-                            desc: 'Makes your mouse more accurate by removing mouse accel when pointer-locked.',
+                            desc: 'Makes your mouse more accurate by removing mouse acceleration when pointer-locked.',
                             onselect: () => {
                                 SettingsHandler.data.rawMouseInputEnabled = !SettingsHandler.data.rawMouseInputEnabled;
                                 SettingsHandler.save();
@@ -685,12 +684,9 @@ export default class DrawerHandler implements IPositionable {
                 break;
             gamesCtx.push({
                 text: game.title,
-                desc: game.creator,
+                desc: "created by " + game.creator,
                 descFont: UniFont.ITALIC,
                 onselect: () => {
-                    //if (game.prefix == "app-dt") {
-                    //    alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left")
-                    //}
                     if (game.showVersionSelectOnLaunch != null && game.showVersionSelectOnLaunch == true) {
                         this.showVersionList(game);
                     }

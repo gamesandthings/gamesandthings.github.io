@@ -102,6 +102,9 @@ var CustomContextMenuHandler = /** @class */ (function () {
             }
         });
         optElem.setAttribute("class", "ctxitem");
+        if (opt.desc != null) {
+            optElem.setAttribute("title", opt.desc);
+        }
         if (opt.font == UniFont_1.default.BOLD) {
             optElem.innerHTML = "<b>" + text + "</b>";
         }

@@ -502,7 +502,7 @@ var DrawerHandler = /** @class */ (function () {
                         }
                         options.push({
                             text: switcherText,
-                            desc: 'Makes your mouse more accurate by removing mouse accel when pointer-locked.',
+                            desc: 'Makes your mouse more accurate by removing mouse acceleration when pointer-locked.',
                             onselect: function () {
                                 SettingsHandler_1.default.data.rawMouseInputEnabled = !SettingsHandler_1.default.data.rawMouseInputEnabled;
                                 SettingsHandler_1.default.save();
@@ -735,12 +735,9 @@ var DrawerHandler = /** @class */ (function () {
                 return "break";
             gamesCtx.push({
                 text: game.title,
-                desc: game.creator,
+                desc: "created by " + game.creator,
                 descFont: UniFont_1.default.ITALIC,
                 onselect: function () {
-                    //if (game.prefix == "app-dt") {
-                    //    alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left")
-                    //}
                     if (game.showVersionSelectOnLaunch != null && game.showVersionSelectOnLaunch == true) {
                         _this.showVersionList(game);
                     }
