@@ -102,6 +102,11 @@ if (!("gatScriptInjected" in window)) {
                         preserveDrawingBuffer: true,
                     });
                 }
+                if (window.top.gameData.fixes.alpha != undefined) {
+                    attributes = Object.assign({}, attributes, {
+                        alpha: window.top.gameData.fixes.alpha,
+                    });
+                }
                 if (window.top.gameData.fixes.removeVsync) {
                     attributes = Object.assign({}, attributes, {
                         desynchronized: true,
@@ -162,16 +167,39 @@ if (!("gatScriptInjected" in window)) {
 
         };
     })(Window.prototype.addEventListener);
-    function raf(timestep) {
+
+    let lastTime = 0;
+
+    requestAnimationFrame = ((origFn) => {
+        return function (callback) {
+            let v = document.timeline.currentTime - lastTime;
+            if (v != 0) {
+                window.top.gat_delta = v;
+            }
+            lastTime = document.timeline.currentTime;
+            return origFn.call(this, callback);
+        };
+    })(requestAnimationFrame);
+
+    setTimeout = ((origFn) => {
+        return function (callback, time) {
+            return origFn.call(this, callback, time);
+        };
+    })(setTimeout);
+
+
+    // Save data storing (we save it to indexeddb)
+    function saveData_Gat() {
         Object.keys(window.localStorage).forEach((key) => {
             let item = window.localStorage.getItem(key);
             if (item != null && key != 'gat_settings') {
                 window.top.localStorage_gat[key] = item;
             }
         });
-        requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+        console.info("storage update");
+
+    };
+    setInterval(saveData_Gat, 1000 / 5);
 
     var style = document.createElement('style');
     document.head.appendChild(style);

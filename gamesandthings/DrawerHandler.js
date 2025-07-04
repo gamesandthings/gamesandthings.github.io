@@ -63,7 +63,7 @@ var DrawerHandler = /** @class */ (function () {
         this.clickY = 0;
         this.screenmode = "window";
         this.currentPage = 0;
-        this.amountPerPage = 5;
+        this.amountPerPage = 10;
         this.elem = elem;
         this.addMouseListeners(elem);
         elem.querySelectorAll("*").forEach(function (b) {
@@ -383,25 +383,7 @@ var DrawerHandler = /** @class */ (function () {
                                 descFont: UniFont_1.default.ITALIC,
                                 hasSecondary: true,
                                 onselect: function () {
-                                    var _a;
-                                    var versions = [];
-                                    if (Launcher_1.default.game != null && ((_a = Launcher_1.default.game) === null || _a === void 0 ? void 0 : _a.versions) != null) {
-                                        Launcher_1.default.game.versions.forEach(function (version) {
-                                            versions.push({
-                                                text: version.title,
-                                                onselect: function () {
-                                                    var _a;
-                                                    if ((_a = _this.recorder) === null || _a === void 0 ? void 0 : _a.recording) {
-                                                        _this.recorder.stopRecording();
-                                                    }
-                                                    Launcher_1.default.iframeDiv.removeChild(Launcher_1.default.iframe);
-                                                    Launcher_1.default.initIframe();
-                                                    Launcher_1.default.openGame(Launcher_1.default.game, version);
-                                                }
-                                            });
-                                        });
-                                        Launcher_1.default.contextMenu.show(versions);
-                                    }
+                                    _this.showVersionList(Launcher_1.default.game);
                                 }
                             });
                         }
@@ -523,6 +505,18 @@ var DrawerHandler = /** @class */ (function () {
                             desc: 'Makes your mouse more accurate by removing mouse accel when pointer-locked.',
                             onselect: function () {
                                 SettingsHandler_1.default.data.rawMouseInputEnabled = !SettingsHandler_1.default.data.rawMouseInputEnabled;
+                                SettingsHandler_1.default.save();
+                            }
+                        });
+                        switcherText = "Enable FPS Counter";
+                        if (SettingsHandler_1.default.data.enableFpsCounter) {
+                            switcherText = "Disable FPS Counter";
+                        }
+                        options.push({
+                            text: switcherText,
+                            desc: 'Shows an FPS counter on your screen.',
+                            onselect: function () {
+                                SettingsHandler_1.default.data.enableFpsCounter = !SettingsHandler_1.default.data.enableFpsCounter;
                                 SettingsHandler_1.default.save();
                             }
                         });
@@ -744,10 +738,15 @@ var DrawerHandler = /** @class */ (function () {
                 desc: game.creator,
                 descFont: UniFont_1.default.ITALIC,
                 onselect: function () {
-                    if (game.prefix == "app-dt") {
-                        alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left");
+                    //if (game.prefix == "app-dt") {
+                    //    alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left")
+                    //}
+                    if (game.showVersionSelectOnLaunch != null && game.showVersionSelectOnLaunch == true) {
+                        _this.showVersionList(game);
                     }
-                    Launcher_1.default.openGame(game);
+                    else {
+                        Launcher_1.default.openGame(game);
+                    }
                 }
             });
         };
@@ -777,6 +776,27 @@ var DrawerHandler = /** @class */ (function () {
             });
         }
         Launcher_1.default.contextMenu.show(gamesCtx);
+    };
+    DrawerHandler.prototype.showVersionList = function (game) {
+        var _this = this;
+        var versions = [];
+        if (game != null && (game === null || game === void 0 ? void 0 : game.versions) != null) {
+            game.versions.forEach(function (version) {
+                versions.push({
+                    text: version.title,
+                    onselect: function () {
+                        var _a;
+                        if ((_a = _this.recorder) === null || _a === void 0 ? void 0 : _a.recording) {
+                            _this.recorder.stopRecording();
+                        }
+                        Launcher_1.default.iframeDiv.removeChild(Launcher_1.default.iframe);
+                        Launcher_1.default.initIframe();
+                        Launcher_1.default.openGame(game, version);
+                    }
+                });
+            });
+            Launcher_1.default.contextMenu.show(versions);
+        }
     };
     DrawerHandler.prototype.destroy = function () {
         // throw new Error("Method not implemented.");

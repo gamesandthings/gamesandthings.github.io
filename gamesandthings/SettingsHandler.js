@@ -8,6 +8,7 @@ var SettingsHandler = /** @class */ (function () {
         var defaults = {
             performanceModeEnabled: true,
             rawMouseInputEnabled: true,
+            enableFpsCounter: false,
         };
         if (settingsData == null || settingsData == 'undefined' || settingsData == undefined) {
             SettingsHandler.data = defaults;

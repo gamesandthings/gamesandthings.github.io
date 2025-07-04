@@ -336,25 +336,7 @@ export default class DrawerHandler implements IPositionable {
                                 descFont: UniFont.ITALIC,
                                 hasSecondary: true,
                                 onselect: () => {
-                                    let versions: Array<ContextOption> = [];
-                                    if (Launcher.game != null && Launcher.game?.versions != null) {
-                                        Launcher.game.versions.forEach((version) => {
-                                            versions.push(
-                                                {
-                                                    text: version.title,
-                                                    onselect: () => {
-                                                        if (this.recorder?.recording) {
-                                                            this.recorder.stopRecording();
-                                                        }
-                                                        Launcher.iframeDiv.removeChild(Launcher.iframe);
-                                                        Launcher.initIframe();
-                                                        Launcher.openGame(Launcher.game, version);
-                                                    }
-                                                }
-                                            );
-                                        })
-                                        Launcher.contextMenu.show(versions);
-                                    }
+                                    this.showVersionList(Launcher.game);
                                 }
                             });
                         }
@@ -400,7 +382,7 @@ export default class DrawerHandler implements IPositionable {
                                                 Launcher.iframeFilterHandler.sepia = parseFloat(value);
                                         }
                                     },
-                                                                        {
+                                    {
                                         text: "Invert: " + (Launcher.iframeFilterHandler.invert ? "Yes" : "No"),
                                         onselect: () => {
                                             Launcher.iframeFilterHandler.invert = !Launcher.iframeFilterHandler.invert;
@@ -479,6 +461,20 @@ export default class DrawerHandler implements IPositionable {
                             desc: 'Makes your mouse more accurate by removing mouse accel when pointer-locked.',
                             onselect: () => {
                                 SettingsHandler.data.rawMouseInputEnabled = !SettingsHandler.data.rawMouseInputEnabled;
+                                SettingsHandler.save();
+                            }
+                        });
+
+                        switcherText = "Enable FPS Counter";
+                        if (SettingsHandler.data.enableFpsCounter) {
+                            switcherText = "Disable FPS Counter";
+                        }
+
+                        options.push({
+                            text: switcherText,
+                            desc: 'Shows an FPS counter on your screen.',
+                            onselect: () => {
+                                SettingsHandler.data.enableFpsCounter = !SettingsHandler.data.enableFpsCounter;
                                 SettingsHandler.save();
                             }
                         });
@@ -679,7 +675,7 @@ export default class DrawerHandler implements IPositionable {
         this.elem.style.top = String(this.y) + "px";
     }
     currentPage: number = 0;
-    amountPerPage: number = 5;
+    amountPerPage: number = 10;
     showGameSelect() {
         let gamesCtx: Array<ContextOption> = [];
 
@@ -692,10 +688,15 @@ export default class DrawerHandler implements IPositionable {
                 desc: game.creator,
                 descFont: UniFont.ITALIC,
                 onselect: () => {
-                    if (game.prefix == "app-dt") {
-                        alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left")
+                    //if (game.prefix == "app-dt") {
+                    //    alert("NOTE: DO NOT CLICK CHAPTER SELECT IN GAME!\n\nChapter Select is available under the ⚙ Settings menu in the top left")
+                    //}
+                    if (game.showVersionSelectOnLaunch != null && game.showVersionSelectOnLaunch == true) {
+                        this.showVersionList(game);
                     }
-                    Launcher.openGame(game);
+                    else {
+                        Launcher.openGame(game);
+                    }
                 }
             });
         }
@@ -721,6 +722,27 @@ export default class DrawerHandler implements IPositionable {
             });
         }
         Launcher.contextMenu.show(gamesCtx);
+    }
+    showVersionList(game: Game | null) {
+        let versions: Array<ContextOption> = [];
+        if (game != null && game?.versions != null) {
+            game.versions.forEach((version) => {
+                versions.push(
+                    {
+                        text: version.title,
+                        onselect: () => {
+                            if (this.recorder?.recording) {
+                                this.recorder.stopRecording();
+                            }
+                            Launcher.iframeDiv.removeChild(Launcher.iframe);
+                            Launcher.initIframe();
+                            Launcher.openGame(game, version);
+                        }
+                    }
+                );
+            })
+            Launcher.contextMenu.show(versions);
+        }
     }
     destroy(): void {
         // throw new Error("Method not implemented.");

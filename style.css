@@ -79,6 +79,16 @@ input {
 }
 
 /* Drawer */
+#fps {
+    z-index: 9;
+    position: fixed;
+    user-select: none;
+    pointer-events: none;
+    font-family: "MS Gothic", monospace;
+    top: 0px;
+    right: 0px;
+    background-color: rgba(255, 0, 255);
+}
 
 #slidymenu {
     z-index: 6;
@@ -94,6 +104,7 @@ input {
     color: white;
     position: fixed;
 }
+
 
 .material-symbols-outlined {
     height: 25px;

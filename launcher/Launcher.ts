@@ -175,8 +175,13 @@ export default class Launcher {
         }
         else if (version == null && game.versions != null) {
             Launcher.curVersion = game.versions[0].title;
-            if (Launcher.curVersion != game.title)
-                document.title += " - " + game.versions[0].title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
+            if (game.onlyShowVersionNameInTabTitle != undefined && game.onlyShowVersionNameInTabTitle == true) {
+                document.title = game.versions[0].title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
+            }
+            else {
+                if (Launcher.curVersion != game.title)
+                    document.title += " - " + game.versions[0].title.replace(game.title + " ", "").replace(game.title, "").replace("(", "").replace(")", "");
+            }
             link += '/' + game.versions[0].url;
         }
         else if (version != null) {
@@ -265,6 +270,27 @@ export default class Launcher {
     }
     static update(timestep: number) {
 
+        let fps = document.getElementById("fps");
+        if (SettingsHandler.data.enableFpsCounter) {
+            if (fps == null) {
+                fps = document.createElement("p");
+                fps.id = "#fps";
+                document.body.appendChild(fps);
+            }
+            fps.style.display = "initial";
+
+            if ("gat_delta" in window) {
+                fps.innerText = `fps: ${Math.floor(1000 / (window as any).gat_delta)}`
+            }
+            else {
+                fps.innerText = "fps: -";
+            }
+        }
+        else {
+            if (fps != null) {
+                fps.style.display = "none";
+            }
+        }
         Launcher.runningInWebApp = "standalone" in window.navigator || document.referrer.includes("android-app://") || window.matchMedia("(display-mode: standalone)").matches;
         (window as any).gameConfig = SettingsHandler.data;
         if (Launcher.drawer.alpha != 0) {

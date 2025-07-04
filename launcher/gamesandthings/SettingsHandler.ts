@@ -11,6 +11,7 @@ export default class SettingsHandler {
         let defaults: ISettingsData = {
             performanceModeEnabled: true,
             rawMouseInputEnabled: true,
+            enableFpsCounter: false,
         };
 
         if (settingsData == null || settingsData == 'undefined' || settingsData == undefined) {

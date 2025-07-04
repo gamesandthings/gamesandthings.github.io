@@ -14,6 +14,8 @@ export type Game = {
     fixes?: Fixes | null,
     assets?: GameAssets,
     overrideVersionListName?: string,
+    showVersionSelectOnLaunch?: boolean
+    onlyShowVersionNameInTabTitle?: boolean,
     gameKeys?: Array<GameKey>,
     fixScripts?: Array<string>
 }
@@ -32,6 +34,7 @@ export type Fixes = {
     preserveDrawingBuffer: boolean,
     removeVsync: boolean,
     pointerLockFix: boolean,
+    alpha?: boolean
 }
 export default class Games {
     public static games: Array<Game> = [
@@ -123,7 +126,7 @@ export default class Games {
                 logoPos: 'default'
             }
         },
-         {
+        {
             title: "New Super Mario Bros.",
             id: "nsmb",
             creator: "Nintendo",
@@ -132,30 +135,92 @@ export default class Games {
             forcescreenmode: true,
             inject: true,
             fixes: {
-                preserveDrawingBuffer: true,
-                runsAtSetFrameRate: true,
-                removeVsync: false,
+                preserveDrawingBuffer: false,
+                runsAtSetFrameRate: false,
+                removeVsync: true,
                 pointerLockFix: false,
+                alpha: false,
             },
             versions: [
                 {
                     url: "ds/nsmb/",
                     title: "New Super Mario Bros.",
-                    id: "New Super Mario Bros."
+                    id: "nsmb"
                 },
             ]
         },
-        {
-            title: "Pokémon Black",
-            id: "pkmn-bw",
-            creator: "The Pokemon Company",
+                {
+            title: "MarioKart",
+            id: "mk",
+            creator: "Nintendo",
             prefix: "app-ejs",
             screenmode: "window",
             forcescreenmode: true,
             inject: true,
+            showVersionSelectOnLaunch: true,
+            fixes: {
+                preserveDrawingBuffer: false,
+                runsAtSetFrameRate: false,
+                removeVsync: true,
+                pointerLockFix: false,
+                alpha: false,
+            },
+            versions: [
+                {
+                    url: "ds/mk/",
+                    title: "MarioKart DS",
+                    id: "mkds"
+                },
+            ]
+        },
+        {
+            title: "Pokémon Gen Ⅰ (GB)",
+            id: "pkmn-gen1",
+            creator: "The Pokémon Company",
+            overrideVersionListName: "Change Edition",
+            prefix: "app-ejs",
+            screenmode: "window",
+            forcescreenmode: true,
+            onlyShowVersionNameInTabTitle: true,
+            showVersionSelectOnLaunch: true,
+            inject: true,
             fixes: {
                 preserveDrawingBuffer: true,
-                runsAtSetFrameRate: true,
+                runsAtSetFrameRate: false,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+            versions: [
+                {
+                    url: "gb/pky/",
+                    title: "Pokémon Yellow",
+                    id: "pky"
+                },
+                {
+                    url: "gb/pkr/",
+                    title: "Pokémon Red",
+                    id: "pkr"
+                },
+                {
+                    url: "gb/pkb/",
+                    title: "Pokémon Blue",
+                    id: "pkb"
+                },
+            ]
+        },
+        {
+            title: "Pokémon Gen Ⅴ (DS)",
+            id: "pkmn-gen5",
+            creator: "The Pokémon Company",
+            prefix: "app-ejs",
+            screenmode: "window",
+            forcescreenmode: true,
+            onlyShowVersionNameInTabTitle: true,
+            showVersionSelectOnLaunch: true,
+            inject: true,
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
                 removeVsync: false,
                 pointerLockFix: false,
             },
@@ -163,7 +228,12 @@ export default class Games {
                 {
                     url: "ds/pkb/",
                     title: "Pokémon Black",
-                    id: "Pokémon Black"
+                    id: "pkb"
+                },
+                {
+                    url: "ds/pkw/",
+                    title: "Pokémon White",
+                    id: "pkw"
                 },
             ]
         },
@@ -277,6 +347,7 @@ export default class Games {
             forcescreenmode: true,
             inject: true,
             overrideVersionListName: "Chapter Select",
+            showVersionSelectOnLaunch: true,
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: true,
