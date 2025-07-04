@@ -112,6 +112,28 @@ var Games = /** @class */ (function () {
             }
         },
         {
+            title: "New Super Mario Bros.",
+            id: "nsmb",
+            creator: "Nintendo",
+            prefix: "app-ejs",
+            screenmode: "window",
+            forcescreenmode: true,
+            inject: true,
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: true,
+                removeVsync: false,
+                pointerLockFix: false,
+            },
+            versions: [
+                {
+                    url: "ds/nsmb/",
+                    title: "New Super Mario Bros.",
+                    id: "New Super Mario Bros."
+                },
+            ]
+        },
+        {
             title: "Pokémon Black",
             id: "pkmn-bw",
             creator: "The Pokemon Company",
