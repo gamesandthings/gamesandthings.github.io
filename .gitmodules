@@ -43,3 +43,6 @@
 [submodule "app-ejs"]
 	path = app-ejs
 	url = https://github.com/gamesandthings/app-ejs.git
+[submodule "app-hk"]
+	path = app-hk
+	url = https://github.com/gamesandthings/app-hk/

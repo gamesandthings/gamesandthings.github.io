@@ -687,6 +687,9 @@ export default class DrawerHandler implements IPositionable {
                 desc: "created by " + game.creator,
                 descFont: UniFont.ITALIC,
                 onselect: () => {
+                    if (game.id == "hk") {
+                        alert("PLEASE NOTE: \n\n This is incredibly buggy and mostly untested.\n Please make sure your blur quality in settings is on high so you are able to see the background.")
+                    }
                     if (game.showVersionSelectOnLaunch != null && game.showVersionSelectOnLaunch == true) {
                         this.showVersionList(game);
                     }

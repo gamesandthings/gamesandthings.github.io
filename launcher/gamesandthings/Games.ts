@@ -149,7 +149,24 @@ export default class Games {
                 },
             ]
         },
-                {
+        {
+            title: "Hollow Knight",
+            id: "hk",
+            creator: "Team Cherry",
+            prefix: "app-hk",
+            screenmode: "16/9",
+            forcescreenmode: true,
+            inject: true,
+            showVersionSelectOnLaunch: false,
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync: true,
+                pointerLockFix: false,
+                alpha: true,
+            }
+        },
+        {
             title: "MarioKart",
             id: "mk",
             creator: "Nintendo",
