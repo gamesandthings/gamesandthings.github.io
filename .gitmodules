@@ -46,3 +46,6 @@
 [submodule "app-hk"]
 	path = app-hk
 	url = https://github.com/gamesandthings/app-hk/
+[submodule "app-ks"]
+	path = app-ks
+	url = https://github.com/gamesandthings/app-ks
