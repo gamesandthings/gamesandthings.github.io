@@ -161,7 +161,7 @@ export default class Games {
             fixes: {
                 preserveDrawingBuffer: true,
                 runsAtSetFrameRate: false,
-                removeVsync: true,
+                removeVsync: false,
                 pointerLockFix: false,
                 alpha: true,
             }
@@ -253,6 +253,23 @@ export default class Games {
                     id: "pkw"
                 },
             ]
+        },
+        {
+            title: "Karlson",
+            id: "ks",
+            creator: "DaniDev",
+            prefix: "app-ks",
+            screenmode: "16/9",
+            forcescreenmode: true,
+            inject: true,
+            showVersionSelectOnLaunch: false,
+            fixes: {
+                preserveDrawingBuffer: true,
+                runsAtSetFrameRate: false,
+                removeVsync: false,
+                pointerLockFix: false,
+                alpha: true,
+            }
         },
         {
             title: "Super Mario 64",

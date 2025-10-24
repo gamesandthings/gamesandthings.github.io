@@ -60,8 +60,14 @@ if (!("gatScriptInjected" in window)) {
                         });
                     }
                 }
-                //console.log(options);
-                return origFn.call(this, options);
+
+                return new Promise((resolve, reject) => {
+                    origFn.call(this, options).then(() => {
+                        resolve();
+                    }).catch(() => {
+                        resolve(origFn.call(this, {}));
+                    });
+                });
             };
         })(HTMLCanvasElement.prototype.requestPointerLock);
     }
