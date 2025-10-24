@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@rspack/cli": "^1.5.8",
     "dexie": "^3.2.5",
     "fix-webm-duration": "^1.0.5",
     "ts-loader": "^9.5.1"
